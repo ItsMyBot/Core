@@ -1,49 +1,47 @@
-**Custom Software License Agreement**
+Custom Software License Agreement
 
-**Version 1.0**
-
-**Preamble:**
+Preamble:
 This license agreement is intended to establish the terms under which the ItsMyBot core software can be used, modified, and contributed to by third parties. The goal is to ensure that the core software remains free for personal use while preventing unauthorized commercial use and redistribution.
 
-**1. Definitions:**
+1. Definitions:
 - "Software" refers to the ItsMyBot core software available on GitHub.
 - "You" refers to the individual or entity using the Software.
 - "We," "Us," and "Our" refer to ItsMe.to.
 - "Contribution" refers to any code, documentation, or other content submitted to Us for inclusion in the Software.
 - "Plugin" refers to any add-on software developed to extend the functionality of the ItsMyBot core software.
 
-**2. Grant of License:**
+2. Grant of License:
 We grant you a non-exclusive, non-transferable, non-sublicensable license to use, modify, and contribute to the Software, subject to the following terms:
 
-**3. Restrictions:**
-a. **No Redistribution:** You may not redistribute, share, or transfer the Software, in whole or in part, in any form.
-b. **No Commercial Use:** You may not use the Software, in whole or in part, for any commercial purpose without explicit written permission from Us.
-c. **Contribution License:** By contributing to the Software, you agree that your Contributions will be licensed under the same terms as this agreement.
+3. Restrictions:
+a. No Redistribution: You may not redistribute, share, or transfer the Software, in whole or in part, in any form.
+b. No Commercial Use: You may not use the Software, in whole or in part, for any commercial purpose without explicit written permission from Us.
+c. Contribution License: By contributing to the Software, you agree that your Contributions will be licensed under the same terms as this agreement.
 
-**4. Plugins and Commercial Licensing:**
-a. **Free Plugins:** You may develop and distribute free plugins for the Software without any additional licensing.
-b. **Paid Plugins:** If you wish to develop and distribute paid plugins, you must obtain a Commercial Developer License from Us.
-c. **Commercial Developer License:** The Commercial Developer License grants you the right to create and sell plugins for the Software. Terms and pricing for the Commercial Developer License can be obtained by contacting Us at [Your Contact Information].
+4. Plugins and Commercial Licensing:
+a. Free Plugins: You may develop and distribute free plugins for the Software without any additional licensing.
+b. Paid Plugins: If you wish to develop and distribute paid plugins, you must obtain a Commercial Developer License from Us.
+c. Commercial Developer License: The Commercial Developer License grants you the right to create and sell plugins for the Software. Terms and pricing for the Commercial Developer License can be obtained by contacting Us at [Your Contact Information].
 
-**5. Contributions:**
+5. Contributions:
 a. All Contributions must be submitted under the terms of this agreement.
 b. You represent and warrant that you have the right to grant Us all rights in your Contributions.
 
-**6. Ownership:**
+6. Ownership:
 All rights, title, and interest in the Software, including any Contributions incorporated therein, shall remain with Us.
 
-**7. Disclaimer of Warranty:**
+7. Disclaimer of Warranty:
 The Software is provided "as is," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall We be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the Software or the use or other dealings in the Software.
 
-**8. Limitation of Liability:**
+8. Limitation of Liability:
 In no event shall We be liable for any indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services, loss of use, data, or profits, or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of the Software, even if advised of the possibility of such damage.
 
-**9. Termination:**
+9. Termination:
 We may terminate this license at any time if you violate any terms of this agreement. Upon termination, you must cease all use of the Software and destroy any copies of it in your possession.
 
-**10. Miscellaneous:**
+10. Miscellaneous:
 a. This agreement constitutes the entire agreement between the parties regarding the use of the Software.
 b. If any provision of this agreement is held to be unenforceable, such provision shall be reformed only to the extent necessary to make it enforceable, and the remaining provisions shall continue in full force and effect.
 
-**Contact Information:**
+Contact Information:
 For permissions, questions, or other inquiries, please contact [Your Contact Information].
