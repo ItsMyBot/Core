@@ -1,0 +1,134 @@
+import { Type } from 'class-transformer';
+import { IsString, IsArray, IsBoolean, IsOptional, IsDefined, ValidateNested } from 'class-validator';
+import { ComponentValidator } from '@contracts';
+
+class MessageComponentValidator {
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @IsArray()
+  @Type(() => ComponentValidator)
+  1: ComponentValidator[]
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @IsArray()
+  @Type(() => ComponentValidator)
+  2: ComponentValidator[]
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @IsArray()
+  @Type(() => ComponentValidator)
+  3: ComponentValidator[]
+
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @IsArray()
+  @Type(() => ComponentValidator)
+  4: ComponentValidator[]
+
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @IsArray()
+  @Type(() => ComponentValidator)
+  5: ComponentValidator[]
+}
+
+class MessageEmbedFieldValidator {
+  @IsDefined()
+  @IsString()
+  name: string
+
+  @IsDefined()
+  @IsString()
+  value: string
+
+  @IsOptional()
+  @IsBoolean()
+  inline: boolean
+}
+
+
+class MessageEmbedValidator {
+  @IsOptional()
+  @IsString({ each: true })
+  title: string | string[]
+
+  @IsOptional()
+  @IsString({ each: true })
+  description: string | string[]
+
+  @IsOptional()
+  @IsString({ each: true })
+  url: string
+
+  @IsOptional()
+  @IsString({ each: true })
+  color: string | string[]
+
+  @IsOptional()
+  @IsBoolean()
+  timestamp: boolean
+
+  @IsOptional()
+  @IsString({ each: true })
+  footer: string | string[]
+
+  @IsOptional()
+  @IsString({ each: true })
+  footerIcon: string | string[]
+
+  @IsOptional()
+  @IsString({ each: true })
+  image: string | string[]
+
+  @IsOptional()
+  @IsString({ each: true })
+  thumbnail: string | string[]
+
+  @IsOptional()
+  @IsString({ each: true })
+  author: string | string[]
+
+  @IsOptional()
+  @IsString({ each: true })
+  authorIcon: string | string[]
+
+  @IsOptional()
+  @IsString({ each: true })
+  authorUrl: string | string[]
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => MessageEmbedFieldValidator)
+  fields: MessageEmbedFieldValidator[]
+}
+
+export class MessageValidator {
+  @IsOptional()
+  @IsString({ each: true })
+  content: string | string[]
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => MessageEmbedValidator)
+  embeds: MessageEmbedValidator[]
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => MessageComponentValidator)
+  components: MessageComponentValidator
+
+  @IsOptional()
+  @IsBoolean()
+  ephemeral: boolean
+
+  @IsOptional()
+  @IsBoolean()
+  disableMentions: boolean
+}
+

@@ -1,0 +1,62 @@
+#################################################################################################
+#
+#    ██╗████████╗███████╗███╗   ███╗██╗   ██╗██████╗  ██████╗ ████████╗
+#    ██║╚══██╔══╝██╔════╝████╗ ████║╚██╗ ██╔╝██╔══██╗██╔═══██╗╚══██╔══╝
+#    ██║   ██║   ███████╗██╔████╔██║ ╚████╔╝ ██████╔╝██║   ██║   ██║
+#    ██║   ██║   ╚════██║██║╚██╔╝██║  ╚██╔╝  ██╔══██╗██║   ██║   ██║
+#    ██║   ██║   ███████║██║ ╚═╝ ██║   ██║   ██████╔╝╚██████╔╝   ██║
+#    ╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝   ╚═╝   ╚═════╝  ╚═════╝    ╚═╝
+#
+#      Contact: @itsme.to
+#      Support: https://gg.itsme.to/
+#      Documentation: https://docs.itsme.to/itsmybot
+#
+#################################################################################################
+
+# Tutorial for Discord Bot Settings in Developer Portal
+# 1. Create a New Application in the Discord Developer Portal. https://discord.com/developers/applications
+# 2. In the application, navigate to the 'Bot' section and click 'Add Bot'.
+# 3. After creating the bot, locate the 'TOKEN' section and click 'Copy' to get your bot token.
+#
+# Important Bot Settings:
+# - Disable 'PUBLIC BOT'
+# - Enable 'PRESENCE INTENT'
+# - Enable 'SERVER MEMBERS INTENT'
+# - Enable 'MESSAGE CONTENT INTENT'
+#
+# Remember to keep your bot token secure and never share it publicly.
+
+# Insert your Discord Bot Token here. 
+token: "BOT_TOKEN"
+
+# The primary guild ID for the bot
+primary-guild: "GUILD_ID"
+
+# Default color for embeds
+default-color: "#7443C2"
+
+# Debug mode (currently does nothing)
+debug: true
+
+# Bot presence settings
+presence:
+  interval: 5 # Interval in seconds between each status change
+  status: "online"  # Bot status (online, idle, dnd, invisible)
+
+  # Activities the bot can display
+  activities:
+    - text: "Guild Members: %guild_members%"
+      type: "Custom" # Activity type. Options: 'Playing', 'Listening', 'Watching', 'Streaming', 'Custom'.
+    - text: "anwsering your questions"
+      type: "Playing"
+    - text: "Created by @itsme.to"
+      type: "Custom"
+
+database:
+  type: "sqlite" # Database type (sqlite, mysql, mariadb)
+  host: "localhost" # Database host
+  port: 3306 # Database port
+  username: "root" # Database username
+  password: "password" # Database password
+  database: "database" # Database name
+  debug: false # Debug mode for database

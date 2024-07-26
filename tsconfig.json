@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "outDir": "./build",
+    "noUnusedLocals": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "strict": true,
+    "lib": [
+      "ES2023"
+    ],
+    "baseUrl": "./src/",
+    "paths": {
+      "@utils": [
+        "./core/utils/index.js"
+      ],
+      "@itsmybot": [
+        "./core/index.js"
+      ],
+      "@builders": [
+        "./core/builders/index.js"
+      ],
+      "@contracts": [
+        "./core/contracts/index.js"
+      ]
+    }
+  }
+}

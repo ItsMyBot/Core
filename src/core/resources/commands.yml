@@ -1,0 +1,26 @@
+plugin:
+  permission: "ADMINISTRATOR"
+  description: "Manage plugins."
+  subcommands:
+    list:
+      description: "Show the list of plugins."
+    enable: 
+      description: "Enable a plugin."
+      options:
+        plugin: "The plugin to enable."
+    disable:
+      description: "Disable a plugin."
+      options:
+        plugin: "The plugin to disable."
+
+server-info:
+  description: "Show information about the server."
+
+parse: 
+  description: "Parse a text."
+  options:
+    text: "The text to parse."
+    user: "The user to parse the text for."
+
+leaderboard:
+  description: "Show the leaderboard."
