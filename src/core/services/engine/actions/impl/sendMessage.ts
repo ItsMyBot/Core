@@ -17,6 +17,8 @@ export default class SendMessageAction extends Action {
     const newContext: Context = {
       ...context,
       message,
+      content: message.content,
+      channel: message.channel
     };
 
     this.triggerActions(script, newContext, variables);

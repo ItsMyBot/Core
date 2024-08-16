@@ -16,6 +16,15 @@ export default class StartThreadAction extends Action {
       autoArchiveDuration: script.args.getNumberOrNull("duration") || 60
     }
 
-    context.message!.startThread(args);
+    const thread = await context.message!.startThread(args);
+
+    const newContext: Context = {
+      ...context,
+      message: await thread.fetchStarterMessage() || context.message,
+      content: thread.name,
+      channel: thread
+    };
+
+    this.triggerActions(script, newContext, variables);
   }
 }
