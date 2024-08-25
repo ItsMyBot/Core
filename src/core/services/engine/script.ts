@@ -2,9 +2,10 @@ import EngineService from './engineService.js';
 import { Logger } from '@utils';
 import { Config, ActionScript } from '@itsmybot';
 import { Context } from '@contracts';
+import { ScriptCondition } from './actionScript.js';
 
 export class Script {
-  conditions?: Config[];
+  conditions: ScriptCondition[];
   actions: ActionScript[];
   logger: Logger;
   engine: EngineService;
@@ -13,8 +14,20 @@ export class Script {
     this.logger = logger;
     this.engine = engine
 
-    this.conditions = data.getSubsectionsOrNull("conditions");
+    this.conditions = this.loadConditions(data.getSubsectionsOrNull("conditions"))
     this.actions = data.getSubsections("actions").map((actionData: Config) => new ActionScript(actionData, logger, engine));
+  }
+
+  private loadConditions(conditions: Config[] | undefined): ScriptCondition[] {
+    if (!conditions) return [];
+
+    return conditions.map(condition => {
+      const id = condition.getString("id");
+      const args = condition.getSubsection("args");
+      const notMetActions = condition.has("args.not-met-actions") ? condition.getSubsections("args.not-met-actions").map((actionData: Config) => new ActionScript(actionData, this.logger, this.engine)) : [];
+
+      return { id, args, notMetActions }
+    })
   }
 
   handleTrigger(trigger: string, context: Context) {
@@ -40,7 +53,7 @@ export class Script {
     if (!this.conditions) return true;
 
     for (const condition of this.conditions) {
-      const isMet = await this.engine.condition!.isConditionMet(condition, this, context);
+      const isMet = await this.engine.condition!.isConditionMet(condition, this, context, []);
 
       if (!isMet) return false;
     }

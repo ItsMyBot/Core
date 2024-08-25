@@ -2,7 +2,6 @@ import { Collection, Role, ApplicationCommandOptionType, ChannelType } from 'dis
 import Utils from '@utils';
 
 import { ActionHandler } from './actions/actionHandler.js';
-import { FilterHandler } from './filters/filterHandler.js';
 import { ConditionHandler } from './conditions/conditionHandler.js';
 
 import { Manager, Script, CustomCommand, Command, User } from '@itsmybot';
@@ -24,7 +23,6 @@ export default class EngineService {
   customCommands: Collection<string, CustomCommand> = new Collection();
 
   action: ActionHandler
-  filter: FilterHandler
   condition: ConditionHandler
   mutator: MutatorHandler
 
@@ -37,7 +35,6 @@ export default class EngineService {
   async initialize() {
     this.manager.logger.info('Script engine initialized.');
     this.action = await Utils.serviceFactory.createService(ActionHandler, this.manager);
-    this.filter = await Utils.serviceFactory.createService(FilterHandler, this.manager);
     this.condition = await Utils.serviceFactory.createService(ConditionHandler, this.manager);
     this.mutator = await Utils.serviceFactory.createService(MutatorHandler, this.manager)
 

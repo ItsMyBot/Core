@@ -5,7 +5,6 @@ import { join, resolve } from 'path';
 import { readFileSync } from 'fs';
 import { Manager } from './manager.js';
 import { Logger } from '@utils';
-export { Filter } from './services/engine/filters/filter.js';
 export { Action } from './services/engine/actions/action.js';
 export { Condition } from './services/engine/conditions/condition.js';
 export { Mutator } from './services/engine/mutators/mutator.js'

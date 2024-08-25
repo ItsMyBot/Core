@@ -1,4 +1,4 @@
-import { APIEmbedField, ColorResolvable, EmbedBuilder } from 'discord.js';
+import { ColorResolvable, EmbedBuilder } from 'discord.js';
 import manager from '@itsmybot';
 import { Config } from '@itsmybot';
 import Utils from '@utils';
@@ -20,7 +20,7 @@ export async function setupEmbed(settings: EmbedSettings) {
   let url = settings.config.getStringOrNull("url");
   let title = settings.config.getStringOrNull("title");
   let description = settings.config.getStringOrNull("description");
-  const fields = settings.config.getStringOrNull("fields");
+  const fields = settings.config.getSubsectionsOrNull("fields");
   let footer = settings.config.getStringOrNull("footer");
   let footerIcon = settings.config.getStringOrNull("footer-icon");
   let thumbnail = settings.config.getStringOrNull("thumbnail");
@@ -60,11 +60,12 @@ export async function setupEmbed(settings: EmbedSettings) {
 
   if (Array.isArray(fields) && fields.length) {
     for (const field of fields) {
+
       embed.addFields({
         name: await Utils.applyVariables(field.getString("name"), variables, context),
         value: await Utils.applyVariables(field.getString("value"), variables, context),
         inline: field.getBoolOrNull("inline") || false,
-      } as APIEmbedField);
+      });
     }
   }
 

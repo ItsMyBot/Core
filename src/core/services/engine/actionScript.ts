@@ -3,15 +3,20 @@ import { Config } from '@itsmybot';
 import EngineService from './engineService';
 import { Context, Variable } from '@contracts';
 
+export interface ScriptCondition {
+  id: string;
+  args: Config;
+  notMetActions: ActionScript[];
+}
+
 export class ActionScript {
   logger: Logger;
   engine: EngineService;
 
   id?: string;
   args: Config;
-  filters?: Config;
   triggers?: string[];
-  conditions?: Config[];
+  conditions?: ScriptCondition[];
   mutators?: Config[];
   subActions: ActionScript[];
   triggerActions: ActionScript[];
@@ -24,12 +29,23 @@ export class ActionScript {
 
     this.id = data.getStringOrNull("id");
     this.args = data.getSubsectionOrNull("args") || data.empty();
-    this.filters = data.getSubsectionOrNull("filters");
     this.triggers = data.getStringsOrNull("triggers");
-    this.conditions = data.getSubsectionsOrNull("conditions");
+    this.conditions = this.loadConditions(data.getSubsectionsOrNull("conditions"))
     this.mutators = data.getSubsectionsOrNull("mutators");
     this.subActions = data.has("actions") ? data.getSubsections("actions").map((actionData: Config) => new ActionScript(actionData, logger, engine)) : [];
     this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionScript(actionData, logger, engine)) : [];
+  }
+
+  private loadConditions(conditions: Config[] | undefined): ScriptCondition[] {
+    if (!conditions) return [];
+
+    return conditions.map(condition => {
+      const id = condition.getString("id");
+      const args = condition.getSubsection("args");
+      const notMetActions = condition.has("args.not-met-actions") ? condition.getSubsections("args.not-met-actions").map((actionData: Config) => new ActionScript(actionData, this.logger, this.engine)) : [];
+
+      return { id, args, notMetActions }
+    })
   }
 
   async handleTrigger(trigger: string, context: Context, variable: Variable[] = []) {
@@ -40,7 +56,7 @@ export class ActionScript {
 
   async run(context: Context, variables: Variable[] = []) {
 
-    if (!await this.shouldExecute(context)) return;
+    if (!await this.shouldExecute(context, variables)) return;
 
     const variablesCopy = [...variables];
     const updatedContext = await this.applyMutators(context, variables)
@@ -77,11 +93,8 @@ export class ActionScript {
     return context
   }
 
-  async shouldExecute(context: Context) {
-    const passesFilters = await this.passesFilters(context);
-    if (!passesFilters) return false;
-
-    const meetsConditions = await this.meetsConditions(context);
+  async shouldExecute(context: Context, variables: Variable[]) {
+    const meetsConditions = await this.meetsConditions(context, variables);
     if (!meetsConditions) return false;
 
     this.executionCounter++;
@@ -93,23 +106,13 @@ export class ActionScript {
     return true;
   }
 
-  async passesFilters(context: Context) {
-    if (!this.filters) return true;
-
-    for (const [filterName, filterValue] of this.filters.values) {
-      const isMet = await this.engine.filter.isFilterMet(filterName, this, context, filterValue);
-
-      if (!isMet) return false;
-    }
-
-    return true;
-  }
-
-  async meetsConditions(context: Context) {
+  async meetsConditions(context: Context, variables: Variable[] = []) {
     if (!this.conditions) return true;
 
+    console.log(this.conditions);
+
     for (const condition of this.conditions) {
-      const isMet = await this.engine.condition.isConditionMet(condition, this, context);
+      const isMet = await this.engine.condition.isConditionMet(condition, this, context, variables);
 
       if (!isMet) return false;
     }

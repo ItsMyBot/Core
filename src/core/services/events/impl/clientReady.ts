@@ -12,7 +12,6 @@ export default class ClientReadyEvent extends Event {
     this.manager.services.command.deployCommands();
 
     this.manager.logger.info(`Engine Actions registered: ${this.manager.services.engine.action.actions.size}`);
-    this.manager.logger.info(`Engine Filters registered: ${this.manager.services.engine.filter.filters.size}`);
     this.manager.logger.info(`Engine Conditions registered: ${this.manager.services.engine.condition.conditions.size}`);
     this.manager.logger.info(`Engine Mutators registered: ${this.manager.services.engine.mutator.mutators.size}`);
     this.manager.logger.info(`Commands registered: ${this.manager.commands.size}`);
