@@ -1,51 +1,24 @@
 import { Logger } from '@utils';
-import { Config } from '@itsmybot';
+import { Config, BaseScript } from '@itsmybot';
 import EngineService from './engineService';
 import { Context, Variable } from '@contracts';
 
-export interface ScriptCondition {
-  id: string;
-  args: Config;
-  notMetActions: ActionScript[];
-}
-
-export class ActionScript {
-  logger: Logger;
-  engine: EngineService;
-
+export class ActionScript extends BaseScript {
   id?: string;
   args: Config;
   triggers?: string[];
-  conditions?: ScriptCondition[];
   mutators?: Config[];
-  subActions: ActionScript[];
   triggerActions: ActionScript[];
   executionCounter: number = 0;
   lastExecutionTime: number = 0;
 
   constructor(data: Config, logger: Logger, engine: EngineService) {
-    this.logger = logger;
-    this.engine = engine;
-
+    super(data, logger, engine);
     this.id = data.getStringOrNull("id");
     this.args = data.getSubsectionOrNull("args") || data.empty();
     this.triggers = data.getStringsOrNull("triggers");
-    this.conditions = this.loadConditions(data.getSubsectionsOrNull("conditions"))
     this.mutators = data.getSubsectionsOrNull("mutators");
-    this.subActions = data.has("actions") ? data.getSubsections("actions").map((actionData: Config) => new ActionScript(actionData, logger, engine)) : [];
     this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionScript(actionData, logger, engine)) : [];
-  }
-
-  private loadConditions(conditions: Config[] | undefined): ScriptCondition[] {
-    if (!conditions) return [];
-
-    return conditions.map(condition => {
-      const id = condition.getString("id");
-      const args = condition.getSubsection("args");
-      const notMetActions = condition.has("args.not-met-actions") ? condition.getSubsections("args.not-met-actions").map((actionData: Config) => new ActionScript(actionData, this.logger, this.engine)) : [];
-
-      return { id, args, notMetActions }
-    })
   }
 
   async handleTrigger(trigger: string, context: Context, variable: Variable[] = []) {
@@ -69,11 +42,11 @@ export class ActionScript {
   }
 
   executeActions(context: Context, variables: Variable[]) {
-    if (!this.subActions.length) {
+    if (!this.actions.length) {
       this.engine.action.triggerAction(this, context, variables);
     }
     else {
-      this.subActions.forEach(subAction => subAction.run(context, variables));
+      this.actions.forEach(subAction => subAction.run(context, variables));
     }
 
     this.lastExecutionTime = Date.now();

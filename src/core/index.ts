@@ -8,6 +8,7 @@ import { Logger } from '@utils';
 export { Action } from './services/engine/actions/action.js';
 export { Condition } from './services/engine/conditions/condition.js';
 export { Mutator } from './services/engine/mutators/mutator.js'
+export { BaseScript } from './services/engine/baseScript.js';
 export { Script } from './services/engine/script.js';
 export { ActionScript } from './services/engine/actionScript.js';
 export { Plugin } from './services/plugins/plugin.js';
@@ -16,6 +17,7 @@ export { User } from './services/users/user.model.js';
 export { Event } from './services/events/event.js';
 export { Config } from './contracts/config/config.js'
 export { Command } from './services/commands/command.js';
+export { Component } from './services/components/component.js';
 export { Leaderboard } from './services/leaderboards/leaderboard.js';
 export { CustomCommand } from './services/engine/customCommand.js';
 export { Manager };

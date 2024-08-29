@@ -1,13 +1,14 @@
 import { Collection } from 'discord.js';
-import { ActionScript, Manager, Script, Condition, CustomCommand } from '@itsmybot';
+import { Manager, Condition } from '@itsmybot';
 import { Context, Variable } from '@contracts';
-import { ScriptCondition } from '../actionScript.js';
+import { BaseScript } from '@itsmybot';
 
 import { AboveMembersCondition } from './impl/aboveMembers.js';
 import { BellowMembersCondition } from './impl/bellowMembers.js';
 import { ContentCondition } from './impl/content.js';
 import { ContentContainsCondition } from './impl/contentContains.js';
 import { IsBotCondition } from './impl/isBot.js';
+import { ScriptCondition } from '../baseScript.js';
 
 export class ConditionHandler {
   manager: Manager;
@@ -24,7 +25,7 @@ export class ConditionHandler {
     this.conditions.set(id, condition);
   }
 
-  async isConditionMet(conditionData: ScriptCondition, script: ActionScript | Script | CustomCommand, context: Context, variables: Variable[]) {
+  async isConditionMet(conditionData: ScriptCondition, script: BaseScript, context: Context, variables: Variable[]) {
     const condition = this.conditions.get(conditionData.id);
     if (!condition) {
       this.manager.logger.warn(`No condition found for ID: ${conditionData.id}`);

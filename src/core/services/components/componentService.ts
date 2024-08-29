@@ -1,13 +1,13 @@
 import { join } from 'path';
 import { sync } from 'glob';
-import { Manager, Plugin } from '@itsmybot';
+import { Component, Manager, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
 
 export default class ComponentService {
   manager: Manager;
-  buttons: Collection<string, any>;
-  selectMenus: Collection<string, any>;
-  modals: Collection<string, any>;
+  buttons: Collection<string, Component>;
+  selectMenus: Collection<string, Component>;
+  modals: Collection<string, Component>;
 
   constructor(manager: Manager) {
     this.manager = manager;
@@ -65,11 +65,10 @@ export default class ComponentService {
     };
   }
 
-  async registerButton(Button: any) {
+  async registerButton(Button: Component) {
     const logger = Button.plugin ? Button.plugin.logger : this.manager.logger;
 
     try {
-      if (!Button.name) throw new Error("Button needs a name.");
       if (this.buttons.has(Button.name)) throw new Error("Button already exists.");
 
       this.buttons.set(Button.name, Button);
@@ -78,11 +77,10 @@ export default class ComponentService {
     }
   }
 
-  async registerSelectMenu(SelectMenu: any) {
+  async registerSelectMenu(SelectMenu: Component) {
     const logger = SelectMenu.plugin ? SelectMenu.plugin.logger : this.manager.logger;
 
     try {
-      if (!SelectMenu.name) throw new Error("SelectMenu needs a name.");
       if (this.selectMenus.has(SelectMenu.name)) throw new Error("SelectMenu already exists.");
 
       this.selectMenus.set(SelectMenu.name, SelectMenu);
@@ -91,11 +89,10 @@ export default class ComponentService {
     }
   }
 
-  async registerModal(Modal: any) {
+  async registerModal(Modal: Component) {
     const logger = Modal.plugin ? Modal.plugin.logger : this.manager.logger;
 
     try {
-      if (!Modal.name) throw new Error("Modal needs a name.");
       if (this.modals.has(Modal.name)) throw new Error("Modal already exists.");
 
       this.modals.set(Modal.name, Modal);
@@ -103,5 +100,4 @@ export default class ComponentService {
       logger.error(`Error initializing modal '${Modal.name}'`, e.stack);
     }
   }
-
 }
