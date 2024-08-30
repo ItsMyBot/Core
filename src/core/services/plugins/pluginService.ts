@@ -5,7 +5,7 @@ import { sync } from 'glob';
 import { Manager, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
 import { Logger } from '@utils';
-import { PluginModel } from './plugin.model.js';
+import PluginModel from './plugin.model.js';
 
 export default class PluginService {
   manager: Manager;

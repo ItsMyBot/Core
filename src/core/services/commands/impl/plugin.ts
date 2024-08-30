@@ -4,7 +4,7 @@ import Utils from '@utils';
 import { CommandBuilder } from '@builders';
 import { Pagination } from '@utils';
 import { Manager, Config, Command, User, Plugin } from '@itsmybot';
-import { PluginModel } from '../../plugins/plugin.model.js';
+import PluginModel from '../../plugins/plugin.model.js';
 
 export default class PluginCommand extends Command {
   lang: Config;

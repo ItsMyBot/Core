@@ -46,13 +46,9 @@ export class ConditionHandler {
 
     let isMet = condition.isMet(script, context, conditionData.args);
 
-    console.log(isMet);
-
     if (conditionData.args.getBoolOrNull("inverse")) {
       isMet = !isMet;
     }
-
-    console.log(isMet);
 
     if (!isMet) {
       conditionData.notMetActions.forEach(subAction => subAction.run(context, variables));

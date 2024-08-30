@@ -82,8 +82,6 @@ export class ActionScript extends BaseScript {
   async meetsConditions(context: Context, variables: Variable[] = []) {
     if (!this.conditions) return true;
 
-    console.log(this.conditions);
-
     for (const condition of this.conditions) {
       const isMet = await this.engine.condition.isConditionMet(condition, this, context, variables);
 

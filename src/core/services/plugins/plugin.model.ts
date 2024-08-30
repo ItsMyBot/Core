@@ -10,7 +10,7 @@ interface PluginAttributes {
 interface PluginCreationAttributes extends Optional<PluginAttributes, 'name'> { }
 
 @Table
-export class PluginModel extends Model<PluginAttributes, PluginCreationAttributes> {
+export default class Plugin extends Model<PluginAttributes, PluginCreationAttributes> {
   @Column({
     type: DataTypes.STRING,
     primaryKey: true

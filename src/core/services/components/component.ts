@@ -7,6 +7,7 @@ export abstract class Component {
   public manager: Manager;
   public plugin?: Plugin;
   public logger: Logger
+
   public abstract name: string;
   public abstract data: ComponentBuilder;
 
