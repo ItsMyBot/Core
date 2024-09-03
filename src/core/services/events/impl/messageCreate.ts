@@ -22,6 +22,6 @@ export default class MessageCreateEvent extends Event {
 
     await user.increment('messages');
 
-    this.manager.services.engine.handleEvent('messageCreate', context);
+    this.manager.services.engine.event.emit('messageCreate', context);
   }
 };

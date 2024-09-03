@@ -32,7 +32,7 @@ export default class RawEvent extends Event {
     const context = await this.createContextFromPacket(packet);
     if (!context) return;
 
-    this.manager.services.engine.handleEvent(event, context);
+    this.manager.services.engine.event.emit(event, context);
   }
 
   async createContextFromPacket(packet: RawEventPacket): Promise<Context | undefined> {

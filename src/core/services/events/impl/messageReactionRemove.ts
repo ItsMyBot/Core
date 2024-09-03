@@ -21,6 +21,6 @@ export default class MessageReactionRemoveEvent extends Event {
 
     if (member) context.member = member;
 
-    this.manager.services.engine.handleEvent('messageReactionRemove', context);
+    this.manager.services.engine.event.emit('messageReactionRemove', context);
   }
 };

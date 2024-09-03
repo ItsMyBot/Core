@@ -20,7 +20,6 @@ export class BaseScript {
     this.logger = logger;
     this.engine = engine
     this.data = data;
-
     this.conditions = this.loadConditions(data.getSubsectionsOrNull("conditions"))
     this.actions = data.has("actions") ? data.getSubsections("actions").map((actionData: Config) => new ActionScript(actionData, logger, engine)) : [];
   }

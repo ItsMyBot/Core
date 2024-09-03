@@ -15,6 +15,6 @@ export default class ChannelDeleteEvent extends Event {
       content: channel.name,
     };
 
-    this.manager.services.engine.handleEvent('channelDelete', context);
+    this.manager.services.engine.event.emit('channelDelete', context);
   }
 };

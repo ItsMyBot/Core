@@ -6,12 +6,13 @@ import { ConditionHandler } from './conditions/conditionHandler.js';
 
 import { Manager, Script, CustomCommand, Command, User } from '@itsmybot';
 import { Logger } from '@utils';
-import { Context, BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction } from '@contracts';
+import { BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction } from '@contracts';
 
 import ScriptConfig from '../../resources/engine/script.js';
 import CustomCommandConfig from '../../resources/engine/customCommand.js';
 import { CommandBuilder } from '@builders';
 import { MutatorHandler } from './mutators/mutatorHandler.js';
+import EngineEventEmitter from './eventEmitter.js';
 
 export default class EngineService {
   manager: Manager
@@ -21,6 +22,8 @@ export default class EngineService {
 
   customCommandDir: string
   customCommands: Collection<string, CustomCommand> = new Collection();
+  
+  event = new EngineEventEmitter()
 
   action: ActionHandler
   condition: ConditionHandler
@@ -49,12 +52,6 @@ export default class EngineService {
 
     for (const filePath of customCommands) {
       this.registerCustomCommand(filePath[0], filePath[1]);
-    }
-  }
-
-  handleEvent(event: string, context: Context) {
-    for (const script of this.scripts.values()) {
-      script.handleTrigger(event, context);
     }
   }
 
@@ -110,6 +107,8 @@ export default class EngineService {
     if (this.scripts.has(id)) return logger.warn(`Script ${id} is already registered`);
 
     const scriptClass = new Script(script, logger, this);
+    scriptClass.loadTriggers();
+
     this.scripts.set(id, scriptClass);
   }
 

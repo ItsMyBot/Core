@@ -11,6 +11,6 @@ export default class EveryMinuteEvent extends Event {
       guild: guild,
     };
 
-    this.manager.services.engine.handleEvent('everyMinute', context);
+    this.manager.services.engine.event.emit('everyMinute', context);
   }
 };

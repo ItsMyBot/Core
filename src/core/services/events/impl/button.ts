@@ -17,6 +17,6 @@ export default class ButtonEvent extends Event {
       interaction: interaction
     };
 
-    this.manager.services.engine.handleEvent('button', context);
+    this.manager.services.engine.event.emit('button', context);
   }
 };

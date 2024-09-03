@@ -1,24 +1,24 @@
-import { Context } from '@contracts';
-import { BaseScript } from '@itsmybot';
+import { Context, Variable } from '@contracts';
+import { ActionScript, BaseScript } from '@itsmybot';
+import { Collection } from 'discord.js';
 
 export class Script extends BaseScript {
+  triggers = new Collection<string, ActionScript[]>();
 
-  handleTrigger(trigger: string, context: Context) {
-    if (!this.hasTrigger(trigger)) return;
-
-    this.run(trigger, context)
-  }
-
-  async run(trigger: string, context: Context) {
-    if (!await this.meetsConditions(context, [])) return;
-
-    this.actions.forEach(action => action.handleTrigger(trigger, context));
-  }
-
-  hasTrigger(trigger: string) {
+  loadTriggers() {
     for (const action of this.actions) {
-      if (action.hasTrigger(trigger)) return true;
+      for (const trigger of action.triggers || []) {
+        if (!this.triggers.has(trigger)) this.triggers.set(trigger, []);
+        this.triggers.get(trigger)?.push(action);
+      }
     }
-    return false;
+
+    for (const [trigger, actions] of this.triggers) {
+      this.engine.event.on(trigger, async (context: Context, variables: Variable[]) => {
+        if (!await this.meetsConditions(context, [])) return;
+
+        actions.forEach(action => action.run(context, variables));
+      })
+    }
   }
 }

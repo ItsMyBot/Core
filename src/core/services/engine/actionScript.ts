@@ -21,12 +21,6 @@ export class ActionScript extends BaseScript {
     this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionScript(actionData, logger, engine)) : [];
   }
 
-  async handleTrigger(trigger: string, context: Context, variable: Variable[] = []) {
-    if (!this.hasTrigger(trigger)) return;
-
-    this.run(context, variable)
-  }
-
   async run(context: Context, variables: Variable[] = []) {
 
     if (!await this.shouldExecute(context, variables)) return;
@@ -42,18 +36,13 @@ export class ActionScript extends BaseScript {
   }
 
   executeActions(context: Context, variables: Variable[]) {
-    if (!this.actions.length) {
+    if (this.id) {
       this.engine.action.triggerAction(this, context, variables);
-    }
-    else {
+    } else {
       this.actions.forEach(subAction => subAction.run(context, variables));
     }
 
     this.lastExecutionTime = Date.now();
-  }
-
-  hasTrigger(trigger: string) {
-    return !this.triggers || this.triggers.includes(trigger);
   }
 
   async applyMutators(context: Context, variables: Variable[]) {
@@ -75,18 +64,6 @@ export class ActionScript extends BaseScript {
     if (this.args.has("every") && this.executionCounter % this.args.getNumber("every") !== 0) return false;
     if (this.args.has("cooldown") && this.lastExecutionTime && (Date.now() - this.lastExecutionTime) < this.args.getNumber("cooldown") * 1000) return false;
     if (this.args.has("chance") && Math.floor(Math.random() * 100) + 1 > this.args.getNumber("chance")) return false;
-
-    return true;
-  }
-
-  async meetsConditions(context: Context, variables: Variable[] = []) {
-    if (!this.conditions) return true;
-
-    for (const condition of this.conditions) {
-      const isMet = await this.engine.condition.isConditionMet(condition, this, context, variables);
-
-      if (!isMet) return false;
-    }
 
     return true;
   }

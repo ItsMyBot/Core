@@ -17,6 +17,6 @@ export default class GuildMemberAddEvent extends Event {
       content: member.displayName
     };
 
-    this.manager.services.engine.handleEvent('guildMemberAdd', context);
+    this.manager.services.engine.event.emit('guildMemberAdd', context);
   }
 };

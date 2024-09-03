@@ -16,6 +16,6 @@ export default class GuildMemberRemoveEvent extends Event {
       content: member.displayName
     };
 
-    this.manager.services.engine.handleEvent('guildMemberRemove', context);
+    this.manager.services.engine.event.emit('guildMemberRemove', context);
   }
 };
