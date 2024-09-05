@@ -1,7 +1,6 @@
 import { GatewayIntentBits, Partials } from 'discord.js'
 import CommandService from 'core/services/commands/commandService'
 import ComponentService from 'core/services/components/componentService'
-import DatabaseService from 'core/services/database/databaseService'
 import EngineService from 'core/services/engine/engineService'
 import EventService from 'core/services/events/eventService'
 import ExpansionService from 'core/services/expansions/expansionService'
@@ -21,8 +20,8 @@ export interface ManagerOptions {
     base: string,
     configs: string,
     plugins: string,
-    commands: string,
-    events: string,
+    coreCommands: string,
+    coreEvents: string,
     scripts: string,
     customCommands: string,
     logs: string
@@ -35,7 +34,6 @@ export interface Services {
   command: CommandService,
   engine: EngineService,
   plugin: PluginService,
-  database: DatabaseService,
   expansion: ExpansionService,
   component: ComponentService,
   leaderboard: LeaderboardService

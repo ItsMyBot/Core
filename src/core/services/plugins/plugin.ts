@@ -49,8 +49,6 @@ export abstract class Plugin {
     for (const type of componentTypes) {
       const dir = join(this.path, type);
       if (sync(`${dir}/*`).length) {
-        const componentType = type.slice(0, -1); // remove plural 's' for singular type name
-
         switch (type) {
           case 'commands':
             await this.manager.services.command.registerFromDir(dir, this);
@@ -61,6 +59,7 @@ export abstract class Plugin {
           case 'buttons':
           case 'selectMenus':
           case 'modals':
+            const componentType = type.slice(0, -1); // remove plural 's' for singular type name
             await this.manager.services.component.registerFromDir(dir, componentType, this);
             break;
         }
@@ -72,7 +71,7 @@ export abstract class Plugin {
     for (const model of sync(join(this.path, '/**/*.model.js'))) {
       const { default: Model } = await import(model);
 
-      this.manager.services.database.sequelize.addModels([Model]);
+      this.manager.database.addModels([Model]);
       await Model.sync({ alter: true });
     }
   }
@@ -85,13 +84,24 @@ export abstract class Plugin {
     const pluginFolder = join(this.manager.managerOptions.dir.configs, this.name);
     if (!existsSync(pluginFolder)) mkdirSync(pluginFolder);
 
-    return new BaseConfig({ ConfigClass: config, logger: this.logger, configFilePath: join('configs', this.name, configFilePath), defaultFilePath: join("build", "plugins", this.name, "resources", configFilePath), update: update }).initialize();
+    return new BaseConfig({
+      ConfigClass: config,
+      logger: this.logger,
+      configFilePath: join('configs', this.name, configFilePath),
+      defaultFilePath: join("build", "plugins", this.name, "resources", configFilePath),
+      update: update
+    }).initialize();
   }
 
   async createConfigSection(config: any, configFolderPath: string): Promise<Collection<string, BaseConfig>> {
     const pluginFolder = join(this.manager.managerOptions.dir.configs, this.name);
     if (!existsSync(pluginFolder)) mkdirSync(pluginFolder);
 
-    return new BaseConfigSection(config, this.logger, join('configs', this.name, configFolderPath), join("build", "plugins", this.name, "resources", configFolderPath)).initialize();
+    return new BaseConfigSection(
+      config,
+      this.logger,
+      join('configs', this.name, configFolderPath),
+      join("build", "plugins", this.name, "resources", configFolderPath)
+    ).initialize();
   }
 }

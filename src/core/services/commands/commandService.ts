@@ -11,7 +11,7 @@ export default class CommandService {
 
   constructor(manager: Manager) {
     this.manager = manager;
-    this.commandsDir = manager.managerOptions.dir.commands;
+    this.commandsDir = manager.managerOptions.dir.coreCommands;
     this.commands = manager.commands;
   }
 

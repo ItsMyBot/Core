@@ -17,7 +17,7 @@ export default class PluginService {
     this.pluginsDir = manager.managerOptions.dir.plugins;
     this.plugins = manager.plugins;
 
-    this.manager.services.database.sequelize.addModels([PluginModel]);
+    this.manager.database.addModels([PluginModel]);
 
   }
 

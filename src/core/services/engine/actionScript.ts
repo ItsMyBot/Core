@@ -22,7 +22,6 @@ export class ActionScript extends BaseScript {
   }
 
   async run(context: Context, variables: Variable[] = []) {
-
     if (!await this.shouldExecute(context, variables)) return;
 
     const variablesCopy = [...variables];
@@ -36,7 +35,7 @@ export class ActionScript extends BaseScript {
   }
 
   executeActions(context: Context, variables: Variable[]) {
-    if (this.id) {
+    if (!this.actions.length) {
       this.engine.action.triggerAction(this, context, variables);
     } else {
       this.actions.forEach(subAction => subAction.run(context, variables));

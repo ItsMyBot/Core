@@ -10,7 +10,7 @@ export default class EventService {
 
   constructor(manager: Manager) {
     this.manager = manager;
-    this.eventsDir = manager.managerOptions.dir.events;
+    this.eventsDir = manager.managerOptions.dir.coreEvents;
     this.events = manager.events;
   }
 
