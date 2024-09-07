@@ -1,4 +1,4 @@
-import { Collection, Role, ApplicationCommandOptionType, ChannelType } from 'discord.js';
+import { Collection, ApplicationCommandOptionType, ChannelType } from 'discord.js';
 import Utils from '@utils';
 
 import { ActionHandler } from './actions/actionHandler.js';
@@ -84,10 +84,10 @@ export default class EngineService {
           break;
 
         case option.role != null || option.role != undefined:
-          variables.push(...Utils.roleVariables(option.role as Role, `option_${option.name}`))
+          variables.push(...Utils.roleVariables(option.role, `option_${option.name}`))
           break;
 
-        case option.channel != null || option.role != undefined:
+        case option.channel != null || option.channel != undefined:
           variables.push(...Utils.channelVariables(option.channel, `option_${option.name}`))
           break;
 

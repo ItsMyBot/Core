@@ -27,7 +27,7 @@
       ],
       "@contracts": [
         "./core/contracts/index.js"
-      ]
+      ],
     }
   }
 }

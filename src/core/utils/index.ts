@@ -86,6 +86,15 @@ export default {
     return str.replace(/-./g, (x) => x[1].toUpperCase());
   },
 
+  isValidURL(url: string) {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  },
+
   getRandom(array: any[]) {
     return array[Math.floor(Math.random() * array.length)]
   },

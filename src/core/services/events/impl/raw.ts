@@ -21,7 +21,7 @@ export default class RawEvent extends Event {
   name = Events.Raw;
 
   async execute(packet: RawEventPacket) {
-    const eventMapping: any = {
+    const eventMapping: { [key: string]: string } = {
       'MESSAGE_REACTION_ADD': 'messageReactionAdd',
       'MESSAGE_REACTION_REMOVE': 'messageReactionRemove'
     };
@@ -46,14 +46,16 @@ export default class RawEvent extends Event {
     if (!message) return;
 
     const emojiKey = (data.emoji.id) ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name;
-    const member = channel.isDMBased() ? undefined : await channel.guild.members.cache.get(data.user_id);
+    const member = channel.isDMBased() ? undefined : channel.guild.members.cache.get(data.user_id);
+    const user = member ? await this.manager.services.user.findOrCreate(member) : await this.manager.services.user.findOrNull(data.user_id);
 
     const context: Context = {
       guild: channel.isDMBased() ? undefined : channel.guild,
       message: message,
       channel: message.channel,
       content: emojiKey,
-      member: member || undefined
+      member: member,
+      user: user || undefined
     };
 
     return context;

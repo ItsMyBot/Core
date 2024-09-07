@@ -78,7 +78,6 @@ export async function setupMessage(settings: MessageSettings) {
         variables: variables,
         context: context,
       });
-
       if (!buildComponent) continue;
       row.addComponents(buildComponent);
     }

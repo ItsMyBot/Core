@@ -45,6 +45,14 @@ export async function setupButton(settings: ButtonSettings) {
     .setDisabled(disabled);
 
   if (url) {
+    if (!Utils.isValidURL(url)) {
+      button.setStyle(ButtonStyle.Danger);
+      button.setLabel("Invalid URL");
+      button.setDisabled(true);
+
+      return button;
+    }
+
     button.setStyle(ButtonStyle.Link);
     button.setURL(url);
   } else {

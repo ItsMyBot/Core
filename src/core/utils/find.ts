@@ -1,4 +1,4 @@
-import { Guild, GuildBasedChannel, TextChannel, Role } from 'discord.js';
+import { Guild, GuildBasedChannel, TextChannel, Channel, Role } from 'discord.js';
 import manager from '@itsmybot';
 
 /**
@@ -51,8 +51,8 @@ export async function findChannel(identifier: string, guild?: Guild): Promise<Gu
   return undefined
 }
 
-function isGuildTextBasedChannel(channel: any): channel is TextChannel {
-  return channel && typeof channel.isTextBased === 'function' && channel.guild !== undefined;
+function isGuildTextBasedChannel(channel?: Channel): channel is TextChannel {
+  return channel && channel.isTextBased() && !channel.isDMBased() || false
 }
 
 /**

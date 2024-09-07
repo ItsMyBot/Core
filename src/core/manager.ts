@@ -2,7 +2,7 @@ import { Client, Collection } from 'discord.js';
 import { existsSync, mkdirSync } from 'fs';
 import Utils from '@utils';
 import { Logger } from '@utils';
-import { Command, Expansion, Leaderboard, Plugin } from '@itsmybot'
+import { Command, Component, Expansion, Leaderboard, Plugin } from '@itsmybot'
 import { ClientOptions, ManagerOptions, Services, ManagerConfigs, BaseConfig } from '@contracts';
 import { Sequelize } from 'sequelize-typescript';
 
@@ -19,7 +19,7 @@ import CommandConfig from 'core/resources/commands.js';
 import LangConfig from 'core/resources/lang.js';
 
 export class Manager {
-  public client: Client;
+  public client: Client<true>;
   public services: Services = {} as Services;
   public configs: ManagerConfigs = {} as ManagerConfigs;
   public database: Sequelize;
@@ -31,9 +31,9 @@ export class Manager {
   public expansions = new Collection<string, Expansion>();
   public leaderboards = new Collection<string, Leaderboard>();
   public components = {
-    buttons: new Collection<string, any>(),
-    selectMenus: new Collection<string, any>(),
-    modals: new Collection<string, any>()
+    buttons: new Collection<string, Component>(),
+    selectMenus: new Collection<string, Component>(),
+    modals: new Collection<string, Component>()
   }
   public logger = new Logger();
   public primaryGuildId: string;
