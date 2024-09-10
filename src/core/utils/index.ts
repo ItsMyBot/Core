@@ -95,7 +95,7 @@ export default {
     }
   },
 
-  getRandom(array: any[]) {
+  getRandom<T>(array: T[]): T {
     return array[Math.floor(Math.random() * array.length)]
   },
 

@@ -17,6 +17,7 @@ server-info:
   description: "Show information about the server."
 
 parse: 
+  permission: "ADMINISTRATOR"
   description: "Parse a text."
   options:
     text: "The text to parse."

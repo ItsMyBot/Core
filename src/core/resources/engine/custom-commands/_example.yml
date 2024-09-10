@@ -1,0 +1,39 @@
+# This is an example of a custom command
+# This file is not loaded since it's starting with an underscore
+
+name: "add-role" # Command name
+description: "Add a role to a user" # Command description
+options: 
+  - name: user # Option name
+    type: "user" # Option type
+    description: "The user to add the role" # Option description
+    required: true # Option required
+  - name: role
+    type: "role"
+    description: "Role to add"
+    required: true
+
+# Custom command uses scripting, you can find more information here:
+# https://docs.itsme.to/itsmybot/scripting
+
+actions: 
+  - id: reply
+    args:
+      content: "Hello %user_mention%, you used the role %option_role_name% and user %option_user_displayname%"
+  - actions:
+    - id: addRole
+      args:
+        role: "%option_role_id%"
+    - id: reply
+      args:
+        delay: 3
+        content: "Role %option_role_mention% added to %user_mention%"
+    mutators:
+      - id: member
+        args:
+          member: "%option_user_id%"
+
+conditions:
+  - id: hasRole
+    args:
+      role: "118488015502"

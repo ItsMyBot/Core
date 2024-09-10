@@ -37,7 +37,7 @@ export async function setupMessage(settings: MessageSettings) {
   const variables = settings.variables || [];
   const context = settings.context;
 
-  let content = settings.config.getStringOrNull("content");
+  let content = settings.config.getStringOrNull("content") || settings.config.getStringsOrNull("content");
   if (content) {
     if (Array.isArray(content)) content = Utils.getRandom(content);
     content = await Utils.applyVariables(content, variables, context);

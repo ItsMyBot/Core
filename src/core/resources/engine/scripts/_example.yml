@@ -1,10 +1,15 @@
+# This is an example of a script
+# This file is not loaded since it's starting with an underscore
 
-
+# You can find more information about scripting here:
+# https://docs.itsme.to/itsmybot/scripting
 actions:
   - triggers:
       - guildMemberAdd
-    filters:
-      isBot: false
+    conditions:
+      - id: isBot
+        args:
+          inverse: true
     actions:
       - id: sendMessage
         args:

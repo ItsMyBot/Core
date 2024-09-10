@@ -1,6 +1,6 @@
 import { Event } from '@itsmybot';
 import { GuildMember } from 'discord.js';
-import { Context, Events } from '@contracts';
+import { Events } from '@contracts';
 
 export default class GuildMemberAddEvent extends Event {
   name = Events.GuildMemberAdd;
@@ -8,15 +8,6 @@ export default class GuildMemberAddEvent extends Event {
 
   async execute(member: GuildMember) {
     if (member.guild.id !== this.manager.primaryGuildId) return;
-    const user = await this.manager.services.user.findOrCreate(member);
-
-    const context: Context = {
-      member: member,
-      user: user,
-      guild: member.guild,
-      content: member.displayName
-    };
-
-    this.manager.services.engine.event.emit('guildMemberAdd', context);
+    await this.manager.services.user.findOrCreate(member);
   }
 };

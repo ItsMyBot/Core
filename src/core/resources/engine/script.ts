@@ -83,6 +83,19 @@ class ActionArgValidator extends MessageValidator {
   @Min(0)
   @Max(100)
   chance: number
+
+  @IsOptional()
+  @IsString()
+  name: string
+
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  duration: number
+
+  @IsOptional()
+  @IsString()
+  form: string
 }
 
 export class ActionValidator {

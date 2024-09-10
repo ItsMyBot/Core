@@ -40,7 +40,7 @@ export default class PluginCommand extends Command {
     interaction.reply(await Utils.setupMessage({
       config: this.lang.getSubsection("parsed"),
       variables: [
-        { searchFor: "%text%", replaceWith: text },
+        { searchFor: "%parsed_text%", replaceWith: text },
       ],
       context: context,
     }))
