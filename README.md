@@ -2,7 +2,7 @@
 
 ItsMyBot is a self-hosted modular Discord bot. Developed with TypeScript and Node.js, it is designed to be easily modifiable through a plugin system. The core of the bot has limited functionalities to allow room for plugins. It is frequently updated to enhance its features and fix bugs. Feel free to join our Discord server to share your suggestions and report any issues.
 
-[Documentation](https://docs.itsme.to/itsmybot) - [Support](https://discord.gg/XBdgHfYHKM) - [Official Plugins](https://www.itsmybot.xyz/category/plugins)
+[Documentation](https://docs.itsme.to/itsmybot) - [Support](https://discord.gg/XBdgHfYHKM) - [Purchase](https://builtbybit.com/resources/51606/) - [Official Plugins](https://builtbybit.com/itsmybot)
 
 ## Introduction
 
