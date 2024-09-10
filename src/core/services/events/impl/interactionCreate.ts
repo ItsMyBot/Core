@@ -1,133 +1,93 @@
 import Utils from '@utils';
-import { Command, Event, User } from '@itsmybot';
+import { Command, Component, Event, User } from '@itsmybot';
 import { Events, Context } from '@contracts';
-import { Interaction, RepliableInteraction } from 'discord.js';
+import { CommandInteraction, Interaction, ButtonInteraction, RepliableInteraction, AnySelectMenuInteraction, ModalSubmitInteraction } from 'discord.js';
+
+
 export default class InteractionCreateEvent extends Event {
   name = Events.InteractionCreate;
 
   public async execute(interaction: Interaction<'cached'>) {
 
-    const user = interaction.member ? await this.manager.services.user.findOrCreate(interaction.member)
+    const user = interaction.member
+      ? await this.manager.services.user.findOrCreate(interaction.member)
       : await this.manager.services.user.findOrNull(interaction.user.id) as User;
-    if (interaction.isChatInputCommand()) {
+
+    if (interaction.isCommand() || interaction.isContextMenuCommand()) {
       const command = this.manager.services.command.getCommand(interaction.commandName);
-      if (!command) return
+      if (!command) return;
 
-      const requirementsMet = await this.checkRequirements(interaction, command, user);
-      if (!requirementsMet) return;
-
-      try {
-        await command.execute(interaction, user);
-      } catch (error: any) {
-        this.manager.logger.error(`Error executing command '${command.data.name}'`, error, error.stack)
-      }
-
-      command.data.cooldown.setCooldown(interaction.user.id);
-    } else if (interaction.isMessageContextMenuCommand()) {
-      const command = this.manager.services.command.getCommand(interaction.commandName);
-
-      if (!command) return
-      try {
-        await command.execute(interaction, user);
-      } catch (error: any) {
-        this.manager.logger.error(`Error executing command '${command.data.name}'`, error, error.stack)
-      }
-
+      this.handleInteraction(interaction, command, user);
     } else if (interaction.isAutocomplete()) {
       const command = this.manager.services.command.getCommand(interaction.commandName);
-
       if (!command || !command.autocomplete) return
 
       try {
-        await command.autocomplete(interaction);
+        await command.autocomplete(interaction)
       } catch (error: any) {
-        this.manager.logger.error(`Error autocomplete command '${command.data.name}'`, error.stack)
+        this.manager.logger.error(`Error executing autocomplete command '${command.data.name}`, error, error.stack);
       }
     } else if (interaction.isButton()) {
       const button = this.manager.services.component.getButton(interaction.customId);
       if (!button) return this.manager.client.emit(Events.Button, interaction, user);
 
-      const requirementsMet = await this.checkRequirements(interaction, button, user);
-      if (!requirementsMet) return;
-
-      if (!button.data.public) {
-        if (interaction.guildId !== this.manager.primaryGuildId)
-          return interaction.reply(await Utils.setupMessage({
-            config: this.manager.configs.lang.getSubsection("only-in-primary-guild"),
-            context: {
-              user
-            }
-          }));
-      }
-
-      try {
-        await button.execute(interaction, user);
-      } catch (error: any) {
-        this.manager.logger.error(`Error executing button '${button.name}'`, error, error.stack)
-      }
-
-      button.data.cooldown.setCooldown(interaction.user.id);
-    } else if (interaction.isStringSelectMenu()) {
+      this.handleInteraction(interaction, button, user)
+    } else if (interaction.isAnySelectMenu()) {
       const selectMenu = this.manager.services.component.getSelectMenu(interaction.customId);
       if (!selectMenu) return this.manager.client.emit(Events.SelectMenu, interaction, user);
 
-      const requirementsMet = await this.checkRequirements(interaction, selectMenu, user);
-      if (!requirementsMet) return;
-
-      if (!selectMenu.data.public) {
-        if (interaction.guildId !== this.manager.primaryGuildId)
-          return interaction.reply(await Utils.setupMessage({
-            config: this.manager.configs.lang.getSubsection("only-in-primary-guild"),
-            context: {
-              user
-            }
-          }));
-      }
-
-      try {
-        await selectMenu.execute(interaction, user);
-      } catch (error: any) {
-        this.manager.logger.error(`Error executing selectMenu '${selectMenu.name}'`, error, error.stack)
-      }
-
-      selectMenu.data.cooldown.setCooldown(interaction.user.id);
+      this.handleInteraction(interaction, selectMenu, user);
     } else if (interaction.isModalSubmit()) {
       const modal = this.manager.services.component.getModal(interaction.customId);
       if (!modal) return this.manager.client.emit(Events.ModalSubmit, interaction, user);
 
-      const requirementsMet = await this.checkRequirements(interaction, modal, user);
-      if (!requirementsMet) return;
-
-      if (!modal.data.public) {
-        if (interaction.guildId !== this.manager.primaryGuildId)
-          return interaction.reply(await Utils.setupMessage({
-            config: this.manager.configs.lang.getSubsection("only-in-primary-guild"),
-            context: {
-              user,
-            }
-          }));
-      }
-
-      try {
-        await modal.execute(interaction, user);
-      } catch (error: any) {
-        this.manager.logger.error(`Error executing modal '${modal.name}'`, error, error.stack)
-      }
-
-      modal.data.cooldown.setCooldown(interaction.user.id);
+      this.handleInteraction(interaction, modal, user);
     }
   }
 
-  async checkRequirements(interaction: RepliableInteraction<'cached'>, component: Command, user: User) {
-    if (!interaction.member) return true;
-    if (!interaction.channel) return true;
-    if (interaction.channel.isDMBased()) return true;
+  private async handleInteraction(
+    interaction: CommandInteraction<'cached'>,
+    component: Command,
+    user: User
+  ): Promise<void>;
 
-    const member = interaction.member;
+  private async handleInteraction(
+    interaction: ButtonInteraction<'cached'> | AnySelectMenuInteraction<'cached'> | ModalSubmitInteraction<'cached'>,
+    component: Component,
+    user: User
+  ): Promise<void>;
+
+  private async handleInteraction<T extends Command | Component>(
+    interaction: any,
+    component: T,
+    user: User
+  ) {
+
+    if (!component.data.public && interaction.guildId && interaction.guildId !== this.manager.primaryGuildId) {
+      return interaction.reply(await Utils.setupMessage({
+        config: this.manager.configs.lang.getSubsection("only-in-primary-guild"),
+        context: { user }
+      }));
+    }
+
+    const requirementsMet = await this.checkRequirements(interaction, component, user);
+    if (!requirementsMet) return;
+
+    try {
+      await component.execute(interaction, user);
+    } catch (error: any) {
+      this.manager.logger.error(`Error executing ${component.data.name}`, error, error.stack);
+    }
+
+    component.data.cooldown.setCooldown(interaction.user.id);
+  }
+
+  async checkRequirements(interaction: RepliableInteraction<'cached'>, component: Command | Component, user: User) {
+    if (!interaction.member || !interaction.channel) return true;
 
     const context: Context = {
       user: user,
-      member: member,
+      member: interaction.member,
       guild: interaction.guild || undefined,
       channel: interaction.channel || undefined
     }
@@ -143,15 +103,6 @@ export default class InteractionCreateEvent extends Event {
       return false;
     }
 
-    const hasRole = await Utils.hasRole(member, component.data.requiredRoles, component.data.inherited);
-    if (component.data.requiredRoles.length && !hasRole) {
-      await interaction.reply(await Utils.setupMessage({
-        config: this.manager.configs.lang.getSubsection("interaction.no-permission"),
-        context
-      }));
-      return false;
-    }
-
     if (component.data.requiredUsers.length) {
       const userId = interaction.user.id;
       const username = interaction.user.username.toLowerCase();
@@ -159,6 +110,33 @@ export default class InteractionCreateEvent extends Event {
       if (!component.data.requiredUsers.some((requiredUser: string) =>
         requiredUser === userId || requiredUser.toLowerCase() === username)) {
 
+        await interaction.reply(await Utils.setupMessage({
+          config: this.manager.configs.lang.getSubsection("interaction.no-permission"),
+          context
+        }));
+        return false;
+      }
+    }
+
+    if (!interaction.channel.isDMBased()) {
+      const hasRole = await Utils.hasRole(interaction.member, component.data.requiredRoles, component.data.inherited);
+      if (component.data.requiredRoles.length && !hasRole) {
+        await interaction.reply(await Utils.setupMessage({
+          config: this.manager.configs.lang.getSubsection("interaction.no-permission"),
+          context
+        }));
+        return false;
+      }
+    }
+
+    if (component.data.permissions.length) {
+      const permissions = component.data.permissions
+      if (component.data.permission) permissions.push(component.data.permission);
+
+      const memberPermissions = interaction.member.permissionsIn(interaction.channel);
+      const missingPermissions = component.data.permissions.filter((permission: bigint) => !memberPermissions.has(permission));
+
+      if (missingPermissions.length) {
         await interaction.reply(await Utils.setupMessage({
           config: this.manager.configs.lang.getSubsection("interaction.no-permission"),
           context
@@ -183,19 +161,6 @@ export default class InteractionCreateEvent extends Event {
           variables: [
             { searchFor: "%channels%", replaceWith: channels },
           ],
-          context
-        }));
-        return false;
-      }
-    }
-
-    if (component.data.permissions.length) {
-      const permissions = member.permissionsIn(interaction.channel);
-
-      const missingPermissions = component.data.permissions.filter((permission: bigint) => !permissions.has(permission));
-      if (missingPermissions.length) {
-        await interaction.reply(await Utils.setupMessage({
-          config: this.manager.configs.lang.getSubsection("interaction.no-permission"),
           context
         }));
         return false;

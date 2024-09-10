@@ -1,9 +1,14 @@
 import { Collection } from 'discord.js';
-import { ActionScript, Config, Manager, Script, Condition, CustomCommand } from '@itsmybot';
-import { Context } from '@contracts';
+import { Manager, Condition } from '@itsmybot';
+import { Context, Variable } from '@contracts';
+import { BaseScript } from '@itsmybot';
 
 import { AboveMembersCondition } from './impl/aboveMembers.js';
 import { BellowMembersCondition } from './impl/bellowMembers.js';
+import { ContentCondition } from './impl/content.js';
+import { ContentContainsCondition } from './impl/contentContains.js';
+import { IsBotCondition } from './impl/isBot.js';
+import { ScriptCondition } from '../baseScript.js';
 
 export class ConditionHandler {
   manager: Manager;
@@ -20,30 +25,43 @@ export class ConditionHandler {
     this.conditions.set(id, condition);
   }
 
-  async isConditionMet(conditionData: Config, script: ActionScript | Script | CustomCommand, context: Context) {
-    const condition = this.conditions.get(conditionData.getString("id"));
+  async isConditionMet(conditionData: ScriptCondition, script: BaseScript, context: Context, variables: Variable[]) {
+    const condition = this.conditions.get(conditionData.id);
     if (!condition) {
-      this.manager.logger.warn(`No condition found for ID: ${conditionData.getString("id")}`);
+      this.manager.logger.warn(`No condition found for ID: ${conditionData.id}`);
       return false;
     }
 
     const conditionParameters = condition.parameters().filter(param => !(param in context));
     for (const param of conditionParameters) {
-      this.manager.logger.error(`${conditionData.getString("id")} need the parameter '${param}'`);
+      this.manager.logger.error(`${conditionData.id} need the parameter '${param}'`);
       return false;
     }
 
-    const conditionArguments = condition.arguments().filter(argument => !conditionData.has(`args.${argument}`));
+    const conditionArguments = condition.arguments().filter(argument => !conditionData.args.has(`${argument}`));
     for (const argument of conditionArguments) {
-      this.manager.logger.error(`${conditionData.getString("id")} need the argument '${argument}'`);
+      this.manager.logger.error(`${conditionData.id} need the argument '${argument}'`);
       return false;
     }
 
-    return condition.isMet(script, context, conditionData.getSubsection("args"));
+    let isMet = condition.isMet(script, context, conditionData.args);
+
+    if (conditionData.args.getBoolOrNull("inverse")) {
+      isMet = !isMet;
+    }
+
+    if (!isMet) {
+      conditionData.notMetActions.forEach(subAction => subAction.run(context, variables));
+    }
+
+    return isMet;
   }
 
   initialize() {
     this.registerCondition("aboveMembers", new AboveMembersCondition(this.manager));
     this.registerCondition("bellowMembers", new BellowMembersCondition(this.manager));
+    this.registerCondition("content", new ContentCondition(this.manager));
+    this.registerCondition("contentContains", new ContentContainsCondition(this.manager));
+    this.registerCondition("isBot", new IsBotCondition(this.manager));
   }
 }

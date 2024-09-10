@@ -1,18 +1,18 @@
-import { Collection, Role, ApplicationCommandOptionType, ChannelType } from 'discord.js';
+import { Collection, ApplicationCommandOptionType, ChannelType } from 'discord.js';
 import Utils from '@utils';
 
 import { ActionHandler } from './actions/actionHandler.js';
-import { FilterHandler } from './filters/filterHandler.js';
 import { ConditionHandler } from './conditions/conditionHandler.js';
 
 import { Manager, Script, CustomCommand, Command, User } from '@itsmybot';
 import { Logger } from '@utils';
-import { Context, BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction } from '@contracts';
+import { BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction } from '@contracts';
 
 import ScriptConfig from '../../resources/engine/script.js';
 import CustomCommandConfig from '../../resources/engine/customCommand.js';
 import { CommandBuilder } from '@builders';
 import { MutatorHandler } from './mutators/mutatorHandler.js';
+import EngineEventEmitter from './eventEmitter.js';
 
 export default class EngineService {
   manager: Manager
@@ -22,9 +22,10 @@ export default class EngineService {
 
   customCommandDir: string
   customCommands: Collection<string, CustomCommand> = new Collection();
+  
+  event = new EngineEventEmitter()
 
   action: ActionHandler
-  filter: FilterHandler
   condition: ConditionHandler
   mutator: MutatorHandler
 
@@ -37,7 +38,6 @@ export default class EngineService {
   async initialize() {
     this.manager.logger.info('Script engine initialized.');
     this.action = await Utils.serviceFactory.createService(ActionHandler, this.manager);
-    this.filter = await Utils.serviceFactory.createService(FilterHandler, this.manager);
     this.condition = await Utils.serviceFactory.createService(ConditionHandler, this.manager);
     this.mutator = await Utils.serviceFactory.createService(MutatorHandler, this.manager)
 
@@ -52,12 +52,6 @@ export default class EngineService {
 
     for (const filePath of customCommands) {
       this.registerCustomCommand(filePath[0], filePath[1]);
-    }
-  }
-
-  handleEvent(event: string, context: Context) {
-    for (const script of this.scripts.values()) {
-      script.handleTrigger(event, context);
     }
   }
 
@@ -90,10 +84,10 @@ export default class EngineService {
           break;
 
         case option.role != null || option.role != undefined:
-          variables.push(...Utils.roleVariables(option.role as Role, `option_${option.name}`))
+          variables.push(...Utils.roleVariables(option.role, `option_${option.name}`))
           break;
 
-        case option.channel != null || option.role != undefined:
+        case option.channel != null || option.channel != undefined:
           variables.push(...Utils.channelVariables(option.channel, `option_${option.name}`))
           break;
 
@@ -113,6 +107,8 @@ export default class EngineService {
     if (this.scripts.has(id)) return logger.warn(`Script ${id} is already registered`);
 
     const scriptClass = new Script(script, logger, this);
+    scriptClass.loadTriggers();
+
     this.scripts.set(id, scriptClass);
   }
 

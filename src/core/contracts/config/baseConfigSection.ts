@@ -56,11 +56,9 @@ export class BaseConfigSection {
   }
 
   async loadConfigs() {
-    const files = await glob('**/*.yml', { cwd: this.relConfigFolderPath, dot: true });
+    const files = await glob('**/!(_)*.yml', { cwd: this.relConfigFolderPath, dot: true });
 
     for (const file of files) {
-      if (file.startsWith('_') || file.includes('/_')) continue;
-
       const destPath = join(this.configFolderPath, file);
       const id = file.slice(0, -4); // remove .yml extension
 

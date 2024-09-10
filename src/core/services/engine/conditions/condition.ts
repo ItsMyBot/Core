@@ -1,6 +1,7 @@
-import { Manager, Plugin, ActionScript, Config, Script, CustomCommand } from '@itsmybot';
+import { Manager, Plugin, Config } from '@itsmybot';
 import { Logger } from '@utils';
 import { Context } from '@contracts';
+import { BaseScript } from '../baseScript';
 
 export abstract class Condition {
   public manager: Manager;
@@ -21,5 +22,5 @@ export abstract class Condition {
     return [];
   }
 
-  abstract isMet(script: ActionScript | Script | CustomCommand, context: Context, args: Config): Promise<boolean> | boolean
+  abstract isMet(script: BaseScript, context: Context, args: Config): Promise<boolean> | boolean
 }

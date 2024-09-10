@@ -4,7 +4,7 @@ import Utils from '@utils';
 import { CommandBuilder } from '@builders';
 import { Pagination } from '@utils';
 import { Manager, Config, Command, User, Plugin } from '@itsmybot';
-import { PluginModel } from '../../plugins/plugin.model.js';
+import PluginModel from '../../plugins/plugin.model.js';
 
 export default class PluginCommand extends Command {
   lang: Config;
@@ -136,10 +136,10 @@ export default class PluginCommand extends Command {
 
         const plugins = this.manager.services.plugin.plugins.map(getPluginDetails);
 
-        new Pagination(this.manager, interaction, plugins, this.lang.getSubsection("plugin.list"))
+        new Pagination(interaction, plugins, this.lang.getSubsection("plugin.list"))
           .setContext({
             user: user,
-            guild: interaction.guild || undefined,
+            guild: interaction.guild,
             channel: interaction.channel || undefined
           })
           .send();

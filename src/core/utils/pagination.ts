@@ -1,6 +1,7 @@
 import Utils from '@utils';
 import { ActionRowBuilder, MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuInteraction, ButtonBuilder, RepliableInteraction, InteractionResponse, InteractionCollector, CollectedMessageInteraction } from 'discord.js';
-import { Manager, Config } from '@itsmybot';
+import { Config } from '@itsmybot';
+import manager from '@itsmybot'
 import { Context, Variable, PaginationType } from '@contracts';
 
 interface Item {
@@ -19,7 +20,6 @@ interface Category {
 }
 
 export class Pagination {
-  manager: Manager
   interaction: RepliableInteraction
 
   type: PaginationType = PaginationType.SelectMenu
@@ -42,15 +42,14 @@ export class Pagination {
   time: number = 100000;
   collector: InteractionCollector<CollectedMessageInteraction>
 
-  constructor(manager: Manager, interaction: RepliableInteraction, items: Item[], config: Config) {
-    this.manager = manager;
+  constructor(interaction: RepliableInteraction, items: Item[], config: Config) {
     this.interaction = interaction;
     this.config = config
     this.filteredItems = items;
     this.defaultItems = items;
 
-    this.placeholderText = this.manager.configs.lang.getString("pagination.placeholder");
-    this.lang = this.manager.configs.lang.getSubsection("pagination");
+    this.placeholderText = manager.configs.lang.getString("pagination.placeholder");
+    this.lang = manager.configs.lang.getSubsection("pagination");
 
     return this;
   }

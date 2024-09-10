@@ -4,7 +4,7 @@ import { Config } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 
 interface ComponentSettings {
-  config: Config | any,
+  config: Config,
   variables?: Variable[],
   context: Context,
 }
@@ -27,7 +27,7 @@ export async function setupComponent(settings: ComponentSettings) {
       let placeholder = component.getStringOrNull("placeholder");
       let minSelect = component.getNumberOrNull("min-values") || 0;
       let maxSelect = component.getNumberOrNull("max-values") || 1;
-      let options = component.getSubsectionsOrNull("options") || [];
+      let options = component.getSubsectionsOrNull("options");
 
       if (customId) {
         const selectMenu = new StringSelectMenuBuilder()

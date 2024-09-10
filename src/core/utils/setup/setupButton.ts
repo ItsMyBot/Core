@@ -21,13 +21,14 @@ interface ButtonSettings {
 export async function setupButton(settings: ButtonSettings) {
   const variables = settings.variables || []
   const context = settings.context;
+  const config = settings.config;
 
-  let style = settings.style || settings.config.getStringOrNull("style");
-  let customId = settings.customId || settings.config.getStringOrNull("custom-id");
-  let disabled = settings.disabled || settings.config.getBoolOrNull("disabled") || false;
-  let label = settings.config.getStringOrNull("label")
-  let emoji = settings.config.getStringOrNull("emoji");
-  let url = settings.url || settings.config.getStringOrNull("url");
+  let style = settings.style || config.getStringOrNull("style") || config.getStringsOrNull("style");
+  let customId = settings.customId || config.getStringOrNull("custom-id") || config.getStringsOrNull("custom-id");
+  let disabled = settings.disabled || config.getBoolOrNull("disabled") || false;
+  let label = settings.config.getStringOrNull("label") || config.getStringsOrNull("label");
+  let emoji = settings.config.getStringOrNull("emoji") || config.getStringsOrNull("emoji");
+  let url = settings.url || settings.config.getStringOrNull("url") || config.getStringsOrNull("url");
 
   if (Array.isArray(style)) style = Utils.getRandom(style);
   if (Array.isArray(customId)) customId = Utils.getRandom(customId);
@@ -45,6 +46,14 @@ export async function setupButton(settings: ButtonSettings) {
     .setDisabled(disabled);
 
   if (url) {
+    if (!Utils.isValidURL(url)) {
+      button.setStyle(ButtonStyle.Danger);
+      button.setLabel("Invalid URL");
+      button.setDisabled(true);
+
+      return button;
+    }
+
     button.setStyle(ButtonStyle.Link);
     button.setURL(url);
   } else {

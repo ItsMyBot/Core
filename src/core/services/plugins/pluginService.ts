@@ -5,7 +5,7 @@ import { sync } from 'glob';
 import { Manager, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
 import { Logger } from '@utils';
-import { PluginModel } from './plugin.model.js';
+import PluginModel from './plugin.model.js';
 
 export default class PluginService {
   manager: Manager;
@@ -17,7 +17,7 @@ export default class PluginService {
     this.pluginsDir = manager.managerOptions.dir.plugins;
     this.plugins = manager.plugins;
 
-    this.manager.services.database.sequelize.addModels([PluginModel]);
+    this.manager.database.addModels([PluginModel]);
 
   }
 

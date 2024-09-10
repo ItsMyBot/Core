@@ -15,6 +15,6 @@ export default class ChannelCreateEvent extends Event {
       content: channel.name,
     };
 
-    this.manager.services.engine.handleEvent('channelCreate', context);
+    this.manager.services.engine.event.emit('channelCreate', context);
   }
 };

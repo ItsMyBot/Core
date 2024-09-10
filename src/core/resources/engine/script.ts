@@ -1,14 +1,39 @@
 import { Type } from 'class-transformer';
-import { IsString, IsInt, ValidateNested, IsOptional, IsDefined, Max, Min, IsPositive, IsArray } from 'class-validator';
+import { IsString, IsInt, ValidateNested, IsOptional, IsDefined, Max, Min, IsPositive, IsArray, IsBoolean, IsNumber } from 'class-validator';
 import { MessageValidator } from '@contracts';
+
+export class ConditionArgValidator {
+  @IsOptional()
+  @IsBoolean()
+  inverse: boolean
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ActionValidator)
+  notMetActions: ActionValidator[]
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  text: string[]
+
+  @IsOptional()
+  @IsNumber()
+  amount: number
+}
+
 export class ConditionValidator {
   @IsDefined()
   @IsString()
   id: string
 
-  @IsDefined()
-  args: any
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ConditionArgValidator)
+  args: ConditionArgValidator
 }
+
 
 export class MutatorValidator {
   @IsDefined()
@@ -58,6 +83,19 @@ class ActionArgValidator extends MessageValidator {
   @Min(0)
   @Max(100)
   chance: number
+
+  @IsOptional()
+  @IsString()
+  name: string
+
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  duration: number
+
+  @IsOptional()
+  @IsString()
+  form: string
 }
 
 export class ActionValidator {
@@ -75,9 +113,6 @@ export class ActionValidator {
   @ValidateNested()
   @Type(() => ActionArgValidator)
   args: ActionArgValidator
-
-  @IsOptional()
-  filters: any
 
   @IsOptional()
   @IsArray()

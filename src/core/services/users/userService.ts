@@ -7,7 +7,7 @@ export default class UserService {
   constructor(manager: Manager) {
     this.manager = manager;
 
-    this.manager.services.database.sequelize.addModels([User]);
+    this.manager.database.addModels([User]);
     User.sync({ alter: true });
   }
 

@@ -1,4 +1,4 @@
-import { channelMention, roleMention, userMention, time, Role, Guild } from 'discord.js';
+import { channelMention, roleMention, userMention, time, Role, Guild, Channel, ClientUser } from 'discord.js';
 import { User } from '@itsmybot';
 
 export const timeVariables = (timestamp: number, prefix = "time") => {
@@ -57,13 +57,13 @@ export const userVariables = (user: User, prefix = "user") => {
   }]
 }
 
-export const channelVariables = (channel: any, prefix = "channel") => {
+export const channelVariables = (channel: Channel, prefix = "channel") => {
   return [{
     searchFor: `%${prefix}_id%`,
     replaceWith: channel.id,
   }, {
     searchFor: `%${prefix}_name%`,
-    replaceWith: channel.name,
+    replaceWith: channel.isDMBased() ? "DM" : channel.name,
   }, {
     searchFor: `%${prefix}_mention%`,
     replaceWith: channelMention(channel.id),
@@ -72,10 +72,10 @@ export const channelVariables = (channel: any, prefix = "channel") => {
     replaceWith: channel.type,
   }, {
     searchFor: `%${prefix}_createdate%`,
-    replaceWith: time(Math.round(channel.createdTimestamp / 1000), "D"),
+    replaceWith: channel.createdTimestamp ? time(Math.round(channel.createdTimestamp / 1000), "D") : "Unknown",
   }, {
     searchFor: `%${prefix}_topic%`,
-    replaceWith: channel.topic,
+    replaceWith: !channel.isDMBased() && !channel.isThread() && !channel.isVoiceBased() && channel.isTextBased() ? channel.topic : "None"
   }, {
     searchFor: `%${prefix}_url%`,
     replaceWith: channel.url,
@@ -156,7 +156,7 @@ export const guildVariables = (guild: Guild) => {
   }]
 }
 
-export const botVariables = (bot: any) => {
+export const botVariables = (bot: ClientUser) => {
   return [{
     searchFor: `%bot_id%`,
     replaceWith: bot.id ?? "Unknown",

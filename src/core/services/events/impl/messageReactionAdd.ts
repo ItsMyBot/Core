@@ -22,6 +22,6 @@ export default class MessageReactionAddEvent extends Event {
 
     if (member) context.member = member;
 
-    this.manager.services.engine.handleEvent('messageReactionAdd', context);
+    this.manager.services.engine.event.emit('messageReactionAdd', context);
   }
 };

@@ -65,7 +65,7 @@ export default class LeaderboardService {
     const leaderboardData = await leaderboard.getData();
 
 
-    new Pagination(this.manager, interaction, leaderboardData.map(item => { return { message: item } }), this.manager.configs.lang.getSubsection('leaderboard'))
+    new Pagination(interaction, leaderboardData.map(item => { return { message: item } }), this.manager.configs.lang.getSubsection('leaderboard'))
       .setType(PaginationType.Button)
       .setVariables([{ searchFor: "%leaderboard_name%", replaceWith: leaderboard.name }])
       .setItemsPerPage(10)

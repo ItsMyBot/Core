@@ -1,6 +1,6 @@
 import { Manager, Plugin, User } from '@itsmybot';
 import { Logger } from '@utils';
-import { AutocompleteInteraction, MessageContextMenuCommandInteraction } from 'discord.js';
+import { AutocompleteInteraction, ContextMenuCommandInteraction } from 'discord.js';
 import { CommandInteraction } from "@contracts";
 
 export abstract class Command {
@@ -19,5 +19,5 @@ export abstract class Command {
     throw new Error('Method not implemented.');
   }
 
-  public abstract execute(interaction: CommandInteraction | MessageContextMenuCommandInteraction<'cached'>, user: User): Promise<void | any>
+  public abstract execute(interaction: CommandInteraction | ContextMenuCommandInteraction<'cached'>, user: User): Promise<void | any>
 }

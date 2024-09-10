@@ -112,6 +112,9 @@ server-info:
 parsed:
   embeds:
     - description: |
-        Text parsed:
+        Parsing the text for %user_mention%:
         
-        %text%
+        ```
+        %parsed_text%
+        ```
+  ephemeral: true

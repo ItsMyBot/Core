@@ -1,4 +1,4 @@
-import { APIEmbedField, ColorResolvable, EmbedBuilder } from 'discord.js';
+import { ColorResolvable, EmbedBuilder } from 'discord.js';
 import manager from '@itsmybot';
 import { Config } from '@itsmybot';
 import Utils from '@utils';
@@ -13,20 +13,21 @@ interface EmbedSettings {
 export async function setupEmbed(settings: EmbedSettings) {
   const variables = settings.variables || []
   const context = settings.context;
+  const config = settings.config;
 
-  let author = settings.config.getStringOrNull("author");
-  let authorIcon = settings.config.getStringOrNull("author-icon");
-  let authorUrl = settings.config.getStringOrNull("author-url");
-  let url = settings.config.getStringOrNull("url");
-  let title = settings.config.getStringOrNull("title");
-  let description = settings.config.getStringOrNull("description");
-  const fields = settings.config.getStringOrNull("fields");
-  let footer = settings.config.getStringOrNull("footer");
-  let footerIcon = settings.config.getStringOrNull("footer-icon");
-  let thumbnail = settings.config.getStringOrNull("thumbnail");
-  let image = settings.config.getStringOrNull("image");
-  let timestamp = settings.config.getStringOrNull("timestamp");
-  let color = settings.config.getStringOrNull("color") || manager.configs.config.getString("default-color");
+  let author = config.getStringOrNull("author") || config.getStringsOrNull("author");
+  let authorIcon = config.getStringOrNull("author-icon") || config.getStringsOrNull("author-icon");
+  let authorUrl = config.getStringOrNull("author-url") || config.getStringsOrNull("author-url");
+  let url = config.getStringOrNull("url") || config.getStringsOrNull("url");
+  let title = config.getStringOrNull("title") || config.getStringsOrNull("title");
+  let description = config.getStringOrNull("description") || config.getStringsOrNull("description");
+  const fields = config.getSubsectionsOrNull("fields");
+  let footer = config.getStringOrNull("footer") || config.getStringsOrNull("footer");
+  let footerIcon = config.getStringOrNull("footer-icon") || config.getStringsOrNull("footer-icon");
+  let thumbnail = config.getStringOrNull("thumbnail") || config.getStringsOrNull("thumbnail");
+  let image = config.getStringOrNull("image") || config.getStringsOrNull("image");
+  let timestamp = config.getStringOrNull("timestamp");
+  let color = config.getStringOrNull("color") || config.getStringsOrNull("color") || manager.configs.config.getString("default-color");
 
   if (Array.isArray(author)) author = Utils.getRandom(author);
   if (Array.isArray(authorIcon)) authorIcon = Utils.getRandom(authorIcon);
@@ -60,11 +61,12 @@ export async function setupEmbed(settings: EmbedSettings) {
 
   if (Array.isArray(fields) && fields.length) {
     for (const field of fields) {
+
       embed.addFields({
         name: await Utils.applyVariables(field.getString("name"), variables, context),
         value: await Utils.applyVariables(field.getString("value"), variables, context),
         inline: field.getBoolOrNull("inline") || false,
-      } as APIEmbedField);
+      });
     }
   }
 

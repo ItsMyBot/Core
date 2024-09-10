@@ -103,7 +103,7 @@ export class Config {
   }
 
   public getStrings(path: string): string[] {
-    return this.getValueOfType<string[]>(path, value => this.isArrayOfType(value, this.isString));
+    return this.getValueOfType<string[]>(path, value => this.isArrayOfType(value, this.isString) );
   }
 
   public getStringsOrNull(path: string): string[] | undefined {
