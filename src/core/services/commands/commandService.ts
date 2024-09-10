@@ -61,10 +61,11 @@ export default class CommandService {
   }
 
   async deployCommands() {
-    const enabledCommands = [...this.commands.values()]
-      .filter(cmd => !cmd.data.enabled === false)
-      .map(cmd => cmd.data);
 
+    const enabledCommands = [...this.commands.values()]
+      .filter(cmd => !(cmd.data.enabled === false))
+      .map(cmd => cmd.data);
+    
     try {
       const primaryGuildCommands = enabledCommands.filter(cmd => cmd.public === false);
       const guild = await this.manager.client.guilds.fetch(this.manager.primaryGuildId);
