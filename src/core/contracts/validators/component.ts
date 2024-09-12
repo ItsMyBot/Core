@@ -45,7 +45,7 @@ class TextInputValidator {
 
   @IsOptional()
   @IsNumber()
-  maxLenght: number
+  'max-lenght': number
 
   @IsOptional()
   @IsString()
@@ -79,7 +79,7 @@ export class ButtonValidator {
   @IsOptional()
   @IsString()
   @IsString({ each: true })
-  customId: string | string[]
+  'custom-id': string | string[]
 
   @IsOptional()
   @IsBoolean()
@@ -101,6 +101,10 @@ export class ButtonValidator {
   @IsString()
   @IsString({ each: true })
   url: string | string[]
+
+  @IsOptional()
+  @IsString()
+  show: string
 }
 
 export class ComponentValidator extends ButtonValidator {
@@ -115,11 +119,11 @@ export class ComponentValidator extends ButtonValidator {
 
   @IsOptional()
   @IsInt()
-  minValues: number
+  'min-values': number
 
   @IsOptional()
   @IsInt()
-  maxValues: number
+  'max-values': number
 
   @IsOptional()
   @IsArray()

@@ -212,4 +212,16 @@ export class Config {
 
     return value;
   }
+
+  public toJSON() {
+    const obj: any = {};
+    for (const [key, value] of this.values) {
+      if (value instanceof Config) {
+        obj[key] = value.toJSON();
+      } else {
+        obj[key] = value;
+      }
+    }
+    return obj;
+  }
 }

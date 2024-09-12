@@ -51,7 +51,7 @@ export class BaseConfig extends Config {
 
   async validate() {
     if (!this.configClass) return;
-    const config = plainToInstance(this.configClass, convertKeysToCamelCase(this.configContent));
+    const config = plainToInstance(this.configClass, this.configContent);
 
     const errors = await validate(config, { validationError: { target: false }, whitelist: true, forbidNonWhitelisted: true, skipMissingProperties: true });
 
@@ -90,21 +90,5 @@ function formatValidationErrors(errors: ValidationError[], parentPath?: string):
     }
   });
   return messages;
-}
-
-function convertKeysToCamelCase(obj: any): any {
-  if (typeof obj !== 'object' || obj === null) {
-    return obj;
-  }
-
-  if (Array.isArray(obj)) {
-    return obj.map(convertKeysToCamelCase);
-  }
-
-  return Object.keys(obj).reduce<any>((acc, key) => {
-    const camelKey = Utils.toCamelCase(key);
-    acc[camelKey] = convertKeysToCamelCase(obj[key]);
-    return acc;
-  }, {});
 }
 

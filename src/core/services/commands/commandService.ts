@@ -3,14 +3,14 @@ import { sync } from 'glob';
 
 import { Collection } from 'discord.js';
 import { Manager, Command, Plugin } from '@itsmybot';
+import { Service } from '@contracts';
 
-export default class CommandService {
-  manager: Manager
+export default class CommandService extends Service {
   commandsDir: string
-  commands: Collection<string, Command>
+  commands: Collection<string, Command<Plugin | undefined>>
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager)
     this.commandsDir = manager.managerOptions.dir.coreCommands;
     this.commands = manager.commands;
   }
@@ -39,7 +39,7 @@ export default class CommandService {
     };
   }
 
-  async registerCommand(command: Command) {
+  async registerCommand(command: Command<Plugin | undefined>) {
     try {
       if (!command.data) throw new Error("Command needs a data object.");
       if (this.commands.has(command.data.name)) throw new Error("Command already exists.");

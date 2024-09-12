@@ -1,27 +1,23 @@
 import Utils from '@utils';
 import { CommandBuilder } from '@builders';
-import { Command, Config, Manager, User } from '@itsmybot';
+import { Command, User } from '@itsmybot';
 import { Context, CommandInteraction } from '@contracts';
 
 export default class PluginCommand extends Command {
-  lang: Config;
-  command: Config;
 
-  public constructor(manager: Manager) {
-    super(manager);
-    this.lang = manager.configs.lang;
-    this.command = manager.configs.commands.getSubsection("parse");
+  build() {
+    const command = this.manager.configs.commands.getSubsection("parse");
 
-    this.data = new CommandBuilder()
+    return new CommandBuilder()
       .setName('parse')
-      .setConfig(this.command)
+      .using(command)
       .addStringOption(option =>
         option.setName("text")
-          .setDescription(this.command.getString("options.text"))
+          .setDescription(command.getString("options.text"))
           .setRequired(true))
       .addUserOption(option =>
         option.setName("user")
-          .setDescription(this.command.getString("options.user"))
+          .setDescription(command.getString("options.user"))
           .setRequired(false))
   }
 
@@ -38,7 +34,7 @@ export default class PluginCommand extends Command {
     const text = await Utils.applyVariables(interaction.options.getString("text", true), [], context);
 
     interaction.reply(await Utils.setupMessage({
-      config: this.lang.getSubsection("parsed"),
+      config: this.manager.configs.lang.getSubsection("parsed"),
       variables: [
         { searchFor: "%parsed_text%", replaceWith: text },
       ],

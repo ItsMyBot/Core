@@ -2,14 +2,14 @@ import { join } from 'path';
 import { sync } from 'glob';
 import { Manager, Event, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
+import { Service } from '@contracts';
 
-export default class EventService {
-  manager: Manager;
+export default class EventService extends Service {
   eventsDir: string;
   events: Collection<string, EventExecutor>;
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.eventsDir = manager.managerOptions.dir.coreEvents;
     this.events = manager.events;
   }
@@ -30,16 +30,14 @@ export default class EventService {
     };
   }
 
-  async registerEvent(event: Event) {
-    const logger = event.plugin ? event.plugin.logger : this.manager.logger;
-
+  async registerEvent(event: Event<Plugin | undefined>) {
     try {
       if (!this.events.has(event.name)) {
         this.events.set(event.name, new EventExecutor(event.once || false));
       }
       this.events.get(event.name)?.addEvent(event);
     } catch (e: any) {
-      logger.error(`Error initializing event '${Event.name}'`, e.stack);
+      event.logger.error(`Error initializing event '${Event.name}'`, e.stack);
     }
   }
 
@@ -59,14 +57,14 @@ export default class EventService {
 }
 
 export class EventExecutor {
-  events: Event[] = [];
+  events: Event<Plugin | undefined>[] = [];
   once;
 
   constructor(once: boolean = false) {
     this.once = once;
   }
 
-  addEvent(event: Event) {
+  addEvent(event: Event<Plugin | undefined>) {
     this.events.push(event);
     this.events.sort((a, b) => a.priority - b.priority);
   }

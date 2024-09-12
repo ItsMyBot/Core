@@ -19,7 +19,7 @@ options:
 actions: 
   - id: reply
     args:
-      content: "Hello %user_mention%, you used the role %option_role_name% and user %option_user_displayname%"
+      content: "Hello %user_mention%, you used the role %option_role_name% and user %option_user_display_name%"
   - actions:
     - id: addRole
       args:

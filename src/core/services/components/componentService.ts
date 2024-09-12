@@ -2,15 +2,15 @@ import { join } from 'path';
 import { sync } from 'glob';
 import { Component, Manager, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
+import { Service } from '@contracts';
 
-export default class ComponentService {
-  manager: Manager;
-  buttons: Collection<string, Component>;
-  selectMenus: Collection<string, Component>;
-  modals: Collection<string, Component>;
+export default class ComponentService extends Service {
+  buttons: Collection<string, Component<Plugin | undefined>>;
+  selectMenus: Collection<string, Component<Plugin | undefined>>;
+  modals: Collection<string, Component<Plugin | undefined>>;
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.buttons = manager.components.buttons;
     this.selectMenus = manager.components.selectMenus;
     this.modals = manager.components.modals;
@@ -65,39 +65,33 @@ export default class ComponentService {
     };
   }
 
-  async registerButton(Button: Component) {
-    const logger = Button.plugin ? Button.plugin.logger : this.manager.logger;
-
+  async registerButton(button: Component<Plugin | undefined>) {
     try {
-      if (this.buttons.has(Button.name)) throw new Error("Button already exists.");
+      if (this.buttons.has(button.customId)) throw new Error("Button already exists.");
 
-      this.buttons.set(Button.name, Button);
+      this.buttons.set(button.customId, button);
     } catch (e: any) {
-      logger.error(`Error initializing button '${Button.name}'`, e.stack);
+      button.logger.error(`Error initializing button '${button.customId}'`, e.stack);
     }
   }
 
-  async registerSelectMenu(SelectMenu: Component) {
-    const logger = SelectMenu.plugin ? SelectMenu.plugin.logger : this.manager.logger;
-
+  async registerSelectMenu(selectMenu: Component<Plugin | undefined>) {
     try {
-      if (this.selectMenus.has(SelectMenu.name)) throw new Error("SelectMenu already exists.");
+      if (this.selectMenus.has(selectMenu.customId)) throw new Error("SelectMenu already exists.");
 
-      this.selectMenus.set(SelectMenu.name, SelectMenu);
+      this.selectMenus.set(selectMenu.customId, selectMenu);
     } catch (e: any) {
-      logger.error(`Error initializing selectMenu '${SelectMenu.name}'`, e.stack);
+      selectMenu.logger.error(`Error initializing selectMenu '${selectMenu.customId}'`, e.stack);
     }
   }
 
-  async registerModal(Modal: Component) {
-    const logger = Modal.plugin ? Modal.plugin.logger : this.manager.logger;
-
+  async registerModal(modal: Component<Plugin | undefined>) {
     try {
-      if (this.modals.has(Modal.name)) throw new Error("Modal already exists.");
+      if (this.modals.has(modal.customId)) throw new Error("Modal already exists.");
 
-      this.modals.set(Modal.name, Modal);
+      this.modals.set(modal.customId, modal);
     } catch (e: any) {
-      logger.error(`Error initializing modal '${Modal.name}'`, e.stack);
+      modal.logger.error(`Error initializing modal '${modal.customId}'`, e.stack);
     }
   }
 }

@@ -73,12 +73,12 @@ export default class DefaultConfig {
   @NotEquals('GUILD_ID', {
     message: 'Please set your guild id in the configs/config.yml file.',
   })
-  primaryGuild: string
+  'primary-guild': string
 
   @IsDefined()
   @IsString()
   @IsHexColor()
-  defaultColor: string
+  'default-color': string
 
   @IsDefined()
   @IsBoolean()

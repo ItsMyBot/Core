@@ -18,6 +18,9 @@ export async function setupComponent(settings: ComponentSettings) {
   const customId = component.getStringOrNull("custom-id");
   const disabled = component.getBoolOrNull("disabled") || false;
 
+  const show = await Utils.applyVariables(component.getStringOrNull("show"), variables, context);
+  if (show === "false") return;
+
   switch (type) {
     case "button": {
       return Utils.setupButton({ config: component, variables, context });

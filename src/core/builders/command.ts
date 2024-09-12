@@ -2,29 +2,17 @@ import { ContextMenuCommandBuilder, SlashCommandBuilder } from 'discord.js';
 import { ComponentBuilder } from '@builders';
 import Utils from '@utils';
 import { Config } from '@itsmybot';
+import { Mixin } from 'ts-mixer';
 
-export class CommandBuilder extends SlashCommandBuilder {
-  component: ComponentBuilder;
-  aliases: string[];
-  enabled: boolean;
+export class CommandBuilder extends Mixin(SlashCommandBuilder, ComponentBuilder) {
+  aliases: string[] = [];
+  enabled: boolean = true;
 
-  constructor() {
-    super();
-
-    this.component = new ComponentBuilder();
-
-    this.aliases = [];
-    this.enabled = true;
-  }
-
-  public setConfig(config: Config) {
-    this.component.setConfig(config);
-    Object.assign(this, this.component);
-
-    this.setDescription(config.getString("description"));
-    if (config.has("permission")) {
-      this.setDefaultMemberPermissions(Utils.permissionFlags(config.getString("permission")));
-    }
+  public using(config: Config) {
+    super.using(config);
+    
+    if (config.has("description")) this.setDescription(config.getString("description"));
+    if (config.has("permission")) this.setDefaultMemberPermissions(Utils.permissionFlags(config.getString("permission")));
     if (config.has("aliases")) this.setAliases(config.getStrings("aliases"));
     if (config.getBoolOrNull("enabled") === false) this.setEnabled(false);
 
@@ -40,27 +28,13 @@ export class CommandBuilder extends SlashCommandBuilder {
     this.aliases = aliases;
     return this;
   }
-
-  public setPublic() {
-    this.component.setPublic();
-    return this;
-  }
 }
 
-export class ContextMenuBuilder extends ContextMenuCommandBuilder {
-  component: ComponentBuilder;
+export class ContextMenuBuilder extends Mixin(ContextMenuCommandBuilder, ComponentBuilder) {
   enabled: boolean;
 
-  constructor() {
-    super();
-
-    this.component = new ComponentBuilder();
-    this.enabled = true;
-  }
-
-  public setConfig(config: Config) {
-    this.component.setConfig(config);
-    Object.assign(this, this.component);
+  public using(config: Config) {
+    super.using(config);
 
     if (config.has("permission")) {
       this.setDefaultMemberPermissions(Utils.permissionFlags(config.getString("permission")));
@@ -72,11 +46,6 @@ export class ContextMenuBuilder extends ContextMenuCommandBuilder {
 
   public setEnabled(enabled: boolean) {
     this.enabled = enabled;
-    return this;
-  }
-
-  public setPublic() {
-    this.component.setPublic();
     return this;
   }
 }

@@ -1,19 +1,8 @@
-import { Manager, Plugin, Config } from '@itsmybot';
-import { Logger } from '@utils';
-import { Context } from '@contracts';
+import { Plugin, Config } from '@itsmybot';
+import { Base, Context } from '@contracts';
 import { BaseScript } from '../baseScript';
 
-export abstract class Condition {
-  public manager: Manager;
-  public plugin?: Plugin;
-  public logger: Logger
-
-  constructor(manager: Manager, plugin: Plugin | undefined = undefined) {
-    this.manager = manager;
-    this.plugin = plugin;
-    this.logger = plugin ? plugin.logger : manager.logger;
-  }
-
+export abstract class Condition<T extends Plugin | undefined = undefined> extends Base<T> {
   public parameters(): string[] {
     return [];
   }

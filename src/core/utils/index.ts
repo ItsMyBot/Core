@@ -7,7 +7,6 @@ import { setupComponent } from './setup/setupComponent.js';
 import { setupButton } from './setup/setupButton.js';
 import { setupModal } from './setup/setupModal.js';
 import { userVariables, botVariables, channelVariables, guildVariables, roleVariables, timeVariables } from './variables.js';
-import ServiceFactory from './serviceFactory.js';
 
 export { Logger } from './logger/index.js';
 export { Cooldown } from './cooldown.js';
@@ -21,8 +20,6 @@ import { Context, Variable } from '@contracts';
 const discordEpoch = 1420070400000;
 
 export default {
-  serviceFactory: ServiceFactory,
-
   permissionFlags,
   buttonStyle,
   activityType,
@@ -80,10 +77,6 @@ export default {
 
   async wait(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  },
-
-  toCamelCase(str: string) {
-    return str.replace(/-./g, (x) => x[1].toUpperCase());
   },
 
   isValidURL(url: string) {

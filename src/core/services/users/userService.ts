@@ -1,12 +1,10 @@
+import { Service } from '@contracts';
 import { Manager, User } from '@itsmybot';
 import { GuildMember } from 'discord.js';
 
-export default class UserService {
-  manager: Manager;
-
+export default class UserService extends Service {
   constructor(manager: Manager) {
-    this.manager = manager;
-
+    super(manager);
     this.manager.database.addModels([User]);
     User.sync({ alter: true });
   }
