@@ -19,8 +19,8 @@ import LangConfig from 'core/resources/lang.js';
 
 export class Manager {
   public client: Client<true>;
-  public services: Services;
-  public configs: ManagerConfigs;
+  public services: Services = {} as Services;
+  public configs: ManagerConfigs = {} as ManagerConfigs;
   public database: Sequelize;
 
   public managerOptions: ManagerOptions;
@@ -47,9 +47,9 @@ export class Manager {
   }
 
   public async initialize(): Promise<void> {
-    this.configs.config = await this.initializeConfig(DefaultConfig, 'config.yml', 'build/core/resources/config.yml');
-    this.configs.commands = await this.initializeConfig(CommandConfig, 'commands.yml', 'build/core/resources/commands.yml');
-    this.configs.lang = await this.initializeConfig(LangConfig, 'lang.yml', 'build/core/resources/lang.yml');
+    this.configs.config = await this.initializeConfig(DefaultConfig, 'config.yml');
+    this.configs.commands = await this.initializeConfig(CommandConfig, 'commands.yml');
+    this.configs.lang = await this.initializeConfig(LangConfig, 'lang.yml');
 
     this.primaryGuildId = this.configs.config.getString("primary-guild");
 
@@ -71,11 +71,11 @@ export class Manager {
     this.client.login(this.configs.config.getString("token"));
   }
 
-  private async initializeConfig(ConfigClass: any, filePath: string, defaultFilePath: string) {
+  private async initializeConfig(ConfigClass: any, filePath: string) {
     return await new BaseConfig({
       logger: this.logger,
       configFilePath: `configs/${filePath}`,
-      defaultFilePath: `build/core/resources/${defaultFilePath}`,
+      defaultFilePath: `build/core/resources/${filePath}`,
       ConfigClass
     }).initialize();
   }

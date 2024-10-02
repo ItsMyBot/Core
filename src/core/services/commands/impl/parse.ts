@@ -3,7 +3,7 @@ import { CommandBuilder } from '@builders';
 import { Command, User } from '@itsmybot';
 import { Context, CommandInteraction } from '@contracts';
 
-export default class PluginCommand extends Command {
+export default class ParseCommand extends Command {
 
   build() {
     const command = this.manager.configs.commands.getSubsection("parse");
