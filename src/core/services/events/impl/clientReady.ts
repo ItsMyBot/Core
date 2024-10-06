@@ -24,7 +24,7 @@ export default class ClientReadyEvent extends Event {
     this.manager.logger.empty(`                    • ${chalk.hex("#57ff6b").bold(`ItsMyBot v${this.manager.managerOptions.package.version}`)} is now Online! •`);
     this.manager.logger.empty(" ");
     this.manager.logger.empty("         • Join our Discord Server for any Issues/Custom Plugin •");
-    this.manager.logger.empty(`                       ${chalk.blue(chalk.underline(`https://itsmybot.xyz/discord`))}`);
+    this.manager.logger.empty(`                       ${chalk.blue(chalk.underline(`https://discord.gg/itsme-to`))}`);
     this.manager.logger.empty(" ");
     this.manager.logger.empty("#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#");
     this.manager.logger.info("Bot ready");
