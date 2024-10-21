@@ -43,6 +43,7 @@ export default class EventService extends Service {
 
   initializeEvents() {
     for (const [name, executor] of this.events) {
+
       if (executor.once) {
         this.manager.client.once(name, (...args) => {
           executor.run(...args);

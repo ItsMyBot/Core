@@ -7,6 +7,7 @@ import { BellowMembersCondition } from './impl/bellowMembers.js';
 import { ContentCondition } from './impl/content.js';
 import { ContentContainsCondition } from './impl/contentContains.js';
 import { IsBotCondition } from './impl/isBot.js';
+import { HasRoleCondition } from './impl/hasRole.js';
 import { ScriptCondition } from '../baseScript.js';
 
 export class ConditionHandler {
@@ -62,5 +63,6 @@ export class ConditionHandler {
     this.registerCondition("content", new ContentCondition(this.manager));
     this.registerCondition("contentContains", new ContentContainsCondition(this.manager));
     this.registerCondition("isBot", new IsBotCondition(this.manager));
+    this.registerCondition("hasRole", new HasRoleCondition(this.manager));
   }
 }

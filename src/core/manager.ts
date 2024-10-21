@@ -69,6 +69,18 @@ export class Manager {
     this.services.event.initializeEvents();
 
     this.client.login(this.configs.config.getString("token"));
+
+    this.client.on('reconnecting', () => {
+      this.logger.debug('The client is trying to reconnect.');
+    });
+
+    this.client.on('disconnect', () => {
+      this.logger.debug('The client has disconnected.');
+    });
+
+    this.client.on('resumed', () => {
+      this.logger.debug('The client has successfully reconnected.');
+    });
   }
 
   private async initializeConfig(ConfigClass: any, filePath: string) {
