@@ -11,7 +11,7 @@ export default class DefaultConfig {
   @IsDefined()
   @ValidateNested()
   @Type(() => CommandValidator)
-  serverInfo: CommandValidator
+  'server-info': CommandValidator
 
   @IsDefined()
   @ValidateNested()

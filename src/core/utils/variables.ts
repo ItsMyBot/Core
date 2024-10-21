@@ -31,7 +31,7 @@ export const userVariables = (user: User, prefix = "user") => {
     searchFor: `%${prefix}_id%`,
     replaceWith: user.id || "Unknown",
   }, {
-    searchFor: `%${prefix}_displayname%`,
+    searchFor: `%${prefix}_display_name%`,
     replaceWith: user.displayName,
   }, {
     searchFor: `%${prefix}_username%`,
@@ -43,10 +43,10 @@ export const userVariables = (user: User, prefix = "user") => {
     searchFor: `%${prefix}_pfp%`,
     replaceWith: user.avatar,
   }, {
-    searchFor: `%${prefix}_createdate%`,
+    searchFor: `%${prefix}_create_date%`,
     replaceWith: time(user.createdAt, "D"),
   }, {
-    searchFor: `%${prefix}_joindate%`,
+    searchFor: `%${prefix}_join_date%`,
     replaceWith: time(user.joinedAt, "D"),
   }, {
     searchFor: `%${prefix}_roles%`,
@@ -71,7 +71,7 @@ export const channelVariables = (channel: Channel, prefix = "channel") => {
     searchFor: `%${prefix}_type%`,
     replaceWith: channel.type,
   }, {
-    searchFor: `%${prefix}_createdate%`,
+    searchFor: `%${prefix}_create_date%`,
     replaceWith: channel.createdTimestamp ? time(Math.round(channel.createdTimestamp / 1000), "D") : "Unknown",
   }, {
     searchFor: `%${prefix}_topic%`,
@@ -112,7 +112,7 @@ export const guildVariables = (guild: Guild) => {
     searchFor: "%guild_level%",
     replaceWith: guild.premiumTier.toString(),
   }, {
-    searchFor: "%guild_createdate%",
+    searchFor: "%guild_create_date%",
     replaceWith: time(Math.round(guild.createdTimestamp / 1000), "D"),
   }, {
     searchFor: "%guild_members%",

@@ -1,20 +1,20 @@
 import { Manager, Plugin, User } from '@itsmybot';
-import { Logger } from '@utils';
 import { ButtonInteraction, ModalSubmitInteraction, AnySelectMenuInteraction } from 'discord.js';
 import { ComponentBuilder } from '@builders';
+import { Base } from '@contracts';
 
-export abstract class Component {
-  public manager: Manager;
-  public plugin?: Plugin;
-  public logger: Logger
+export abstract class Component<T extends Plugin | undefined = undefined> extends Base<T> {
+  public abstract customId: string;
+  public data: ComponentBuilder;
 
-  public abstract name: string;
-  public abstract data: ComponentBuilder;
+  constructor(manager: Manager, plugin?: T) {
+    super(manager, plugin);
 
-  constructor(manager: Manager, plugin: Plugin | undefined = undefined) {
-    this.manager = manager;
-    this.plugin = plugin;
-    this.logger = plugin ? plugin.logger : manager.logger;
+    this.data = this.build();
+  }
+
+  public build(): ComponentBuilder {
+    return new ComponentBuilder();
   }
 
   public abstract execute(interaction: AnySelectMenuInteraction<'cached'> | ButtonInteraction<'cached'> | ModalSubmitInteraction<'cached'>, user: User): Promise<void | any>

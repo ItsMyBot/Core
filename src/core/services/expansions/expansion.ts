@@ -1,18 +1,6 @@
-import { Context } from '@contracts';
-import { Plugin, Manager } from '@itsmybot';
-import { Logger } from '@utils';
+import { Context, Base } from '@contracts';
+import { Plugin } from '@itsmybot';
 
-export abstract class Expansion {
-  manager: Manager;
-  plugin?: Plugin;
-  logger: Logger;
-
-
-  constructor(manager: Manager, plugin: Plugin | undefined = undefined) {
-    this.manager = manager;
-    this.plugin = plugin;
-    this.logger = plugin ? plugin.logger : manager.logger;
-  }
-
+export abstract class Expansion<T extends Plugin | undefined = undefined> extends Base<T>{
   abstract onRequest(context: Context, placeholderName: string): Promise<string | undefined>
 }

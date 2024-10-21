@@ -70,5 +70,5 @@ export async function setupEmbed(settings: EmbedSettings) {
     }
   }
 
-  return embed;
+  return embed.data;
 };

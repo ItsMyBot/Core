@@ -1,7 +1,8 @@
-import { ActionRowBuilder } from 'discord.js';
+import { ActionRowBuilder, APIActionRowComponent, APIEmbed, APIMessageActionRowComponent, Attachment, AttachmentBuilder, BufferResolvable, MessageMentionOptions, PollData } from 'discord.js';
 import { Config } from '@itsmybot';
 import Utils from '@utils';
 import { Context, Variable } from '@contracts';
+import { Stream } from 'stream';
 
 interface MessageSettings {
   config: Config,
@@ -15,16 +16,19 @@ interface MessageSettings {
   disableMentions?: boolean
 }
 
+interface MessageOutput {
+  allowedMentions: MessageMentionOptions,
+  components: APIActionRowComponent<APIMessageActionRowComponent>[],
+  content: string | undefined,
+  embeds: APIEmbed[],
+  ephemeral?: boolean,
+  fetchReply?: boolean,
+  files: (Attachment | AttachmentBuilder | Stream | BufferResolvable)[],
+  poll?: PollData
+}
+
 export async function setupMessage(settings: MessageSettings) {
-  const message: {
-    content: string | undefined,
-    embeds: any[],
-    ephemeral: boolean,
-    components: any[],
-    files: any[],
-    fetchReply: boolean,
-    allowedMentions: any
-  } = {
+  const message: MessageOutput = {
     content: undefined,
     embeds: [],
     ephemeral: false,
@@ -32,6 +36,7 @@ export async function setupMessage(settings: MessageSettings) {
     files: [],
     fetchReply: settings.fetchReply || false,
     allowedMentions: settings.allowedMentions || undefined,
+    poll: undefined
   };
 
   const variables = settings.variables || [];

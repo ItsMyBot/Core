@@ -78,7 +78,7 @@ class MessageEmbedValidator {
 
   @IsOptional()
   @IsString({ each: true })
-  footerIcon: string | string[]
+  'footer-icon': string | string[]
 
   @IsOptional()
   @IsString({ each: true })
@@ -94,11 +94,11 @@ class MessageEmbedValidator {
 
   @IsOptional()
   @IsString({ each: true })
-  authorIcon: string | string[]
+  'author-icon': string | string[]
 
   @IsOptional()
   @IsString({ each: true })
-  authorUrl: string | string[]
+  'author-url': string | string[]
 
   @IsOptional()
   @IsArray()
@@ -129,6 +129,6 @@ export class MessageValidator {
 
   @IsOptional()
   @IsBoolean()
-  disableMentions: boolean
+  'disable-mentions': boolean
 }
 

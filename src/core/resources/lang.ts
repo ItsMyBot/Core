@@ -6,17 +6,17 @@ class Interaction {
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  inCooldown: MessageValidator
+  'in-cooldown': MessageValidator
 
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  noPermission: MessageValidator
+  'no-permission': MessageValidator
 
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  channelRestricted: MessageValidator
+  'channel-restricted': MessageValidator
 }
 
 class Plugin {
@@ -38,27 +38,27 @@ class Plugin {
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  alreadyEnabled: MessageValidator
+  'already-enabled': MessageValidator
 
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  alreadyDisabled: MessageValidator
+  'already-disabled': MessageValidator
 
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  notFound: MessageValidator
+  'not-found': MessageValidator
 }
 
 class Pagination {
   @IsDefined()
   @IsString()
-  selectPlaceholder: string
+  'select-placeholder': string
 
   @IsDefined()
   @IsString()
-  filtersPlaceholder: string
+  'filters-placeholder': string
 
   @IsDefined()
   @IsString()
@@ -67,40 +67,40 @@ class Pagination {
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  noData: MessageValidator
+  'no-data': MessageValidator
 
   @IsDefined()
   @ValidateNested()
   @Type(() => ButtonValidator)
-  buttonNext: ButtonValidator
+  'button-next': ButtonValidator
 
   @IsDefined()
   @ValidateNested()
   @Type(() => ButtonValidator)
-  buttonPrevious: ButtonValidator
+  'button-previous': ButtonValidator
 }
 
 class Leaderboard extends MessageValidator {
   @IsDefined()
   @IsString()
-  messagesFormat: string
+  'messages-format': string
 }
 
 export default class DefaultConfig {
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  noPermission: MessageValidator
+  'no-permission': MessageValidator
 
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  inCooldown: MessageValidator
+  'in-cooldown': MessageValidator
 
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  onlyInPrimaryGuild: MessageValidator
+  'only-in-primary-guild': MessageValidator
 
   @IsDefined()
   @ValidateNested()
@@ -125,7 +125,7 @@ export default class DefaultConfig {
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  serverInfo: MessageValidator
+  'server-info': MessageValidator
 
   @IsDefined()
   @ValidateNested()

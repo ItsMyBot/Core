@@ -1,5 +1,5 @@
 import Utils from '@utils';
-import { Command, Component, Event, User } from '@itsmybot';
+import { Command, Component, Event, User, Plugin } from '@itsmybot';
 import { Events, Context } from '@contracts';
 import { CommandInteraction, Interaction, ButtonInteraction, RepliableInteraction, AnySelectMenuInteraction, ModalSubmitInteraction } from 'discord.js';
 
@@ -47,13 +47,13 @@ export default class InteractionCreateEvent extends Event {
 
   private async handleInteraction(
     interaction: CommandInteraction<'cached'>,
-    component: Command,
+    component: Command<Plugin | undefined>,
     user: User
   ): Promise<void>;
 
   private async handleInteraction(
     interaction: ButtonInteraction<'cached'> | AnySelectMenuInteraction<'cached'> | ModalSubmitInteraction<'cached'>,
-    component: Component,
+    component: Component<Plugin | undefined>,
     user: User
   ): Promise<void>;
 
@@ -62,7 +62,6 @@ export default class InteractionCreateEvent extends Event {
     component: T,
     user: User
   ) {
-
     if (!component.data.public && interaction.guildId && interaction.guildId !== this.manager.primaryGuildId) {
       return interaction.reply(await Utils.setupMessage({
         config: this.manager.configs.lang.getSubsection("only-in-primary-guild"),

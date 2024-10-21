@@ -3,47 +3,41 @@ import { CommandInteraction } from "@contracts";
 import Utils from '@utils';
 import { CommandBuilder } from '@builders';
 import { Pagination } from '@utils';
-import { Manager, Config, Command, User, Plugin } from '@itsmybot';
+import { Command, User, Plugin } from '@itsmybot';
 import PluginModel from '../../plugins/plugin.model.js';
 
 export default class PluginCommand extends Command {
-  lang: Config;
-  command: Config;
+  build() {
+    const command = this.manager.configs.commands.getSubsection("plugin");
 
-  constructor(manager: Manager) {
-    super(manager);
-    this.lang = manager.configs.lang;
-    this.command = manager.configs.commands.getSubsection("plugin");
-
-    this.data = new CommandBuilder()
+    return new CommandBuilder()
       .setName('plugin')
-      .setConfig(this.command)
+      .using(command)
       .addSubcommand(subcommand =>
         subcommand
           .setName('list')
-          .setDescription(this.command.getString("subcommands.list.description")))
+          .setDescription(command.getString("subcommands.list.description")))
       .addSubcommand(subcommand =>
         subcommand
           .setName('enable')
-          .setDescription(this.command.getString("subcommands.enable.description"))
+          .setDescription(command.getString("subcommands.enable.description"))
           .addStringOption(option =>
             option.setName("plugin")
-              .setDescription(this.command.getString("subcommands.enable.options.plugin"))
+              .setDescription(command.getString("subcommands.enable.options.plugin"))
               .setRequired(true)
               .setAutocomplete(true)))
       .addSubcommand(subcommand =>
         subcommand
           .setName('disable')
-          .setDescription(this.command.getString("subcommands.disable.description"))
+          .setDescription(command.getString("subcommands.disable.description"))
           .addStringOption(option =>
             option.setName("plugin")
-              .setDescription(this.command.getString("subcommands.disable.options.plugin"))
+              .setDescription(command.getString("subcommands.disable.options.plugin"))
               .setRequired(true)
               .setAutocomplete(true)))
   }
 
   async autocomplete(interaction: AutocompleteInteraction) {
-
     const subcommand = interaction.options.getSubcommand();
     const focusedValue = interaction.options.getFocused();
     const enabled = subcommand === "enable" ? 0 : 1;
@@ -65,6 +59,7 @@ export default class PluginCommand extends Command {
 
   async execute(interaction: CommandInteraction, user: User) {
     const subcommand = interaction.options.getSubcommand();
+    const lang = this.manager.configs.lang;
 
     switch (subcommand) {
       case 'enable':
@@ -74,7 +69,7 @@ export default class PluginCommand extends Command {
 
         if (!plugin) {
           return interaction.reply(await Utils.setupMessage({
-            config: this.lang.getSubsection("plugin.not-found"),
+            config: lang.getSubsection("plugin.not-found"),
             variables: [
               { searchFor: "%plugin_name%", replaceWith: pluginName }
             ],
@@ -88,7 +83,7 @@ export default class PluginCommand extends Command {
 
         if (plugin.enabled && subcommand === "enable" || !plugin.enabled && subcommand === "disable") {
           return interaction.reply(await Utils.setupMessage({
-            config: this.lang.getSubsection(`plugin.already-${subcommand}d`),
+            config: lang.getSubsection(`plugin.already-${subcommand}d`),
             variables: [
               { searchFor: "%plugin_name%", replaceWith: pluginName }
             ],
@@ -103,7 +98,7 @@ export default class PluginCommand extends Command {
         await plugin.update({ enabled: subcommand === "enable" ? true : false });
 
         interaction.reply(await Utils.setupMessage({
-          config: this.lang.getSubsection(`plugin.${subcommand}d`),
+          config: lang.getSubsection(`plugin.${subcommand}d`),
           variables: [
             { searchFor: "%plugin_name%", replaceWith: pluginName }
           ],
@@ -136,7 +131,7 @@ export default class PluginCommand extends Command {
 
         const plugins = this.manager.services.plugin.plugins.map(getPluginDetails);
 
-        new Pagination(interaction, plugins, this.lang.getSubsection("plugin.list"))
+        new Pagination(interaction, plugins, lang.getSubsection("plugin.list"))
           .setContext({
             user: user,
             guild: interaction.guild,

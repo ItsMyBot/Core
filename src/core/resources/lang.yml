@@ -72,20 +72,20 @@ server-info:
       description: |
         • **Name**: %guild_name%
         • **Guild ID**: %guild_id%
-        • **Created At**: %guild_createdate%
+        • **Created At**: %guild_create_date%
       fields:
         - name: "👑︎ Server Owner"
           value: |
             • **Account**: %owner_mention% | %owner_username%
             • **ID**: %owner_id%
-            • **Created At**: %owner_createdate%
+            • **Created At**: %owner_create_date%
         - name: ⬆️ Server Boost status
           value: |
             • **Boosts**: %guild_boosts% Boosts
             • **Guild-Level**: Level %guild_level%
       thumbnail: '%guild_icon%'
       timestamp: true
-      footer: '%user_displayname%'
+      footer: '%user_display_name%'
       footer-icon: '%user_pfp%'
     - title: "📉 Server Stats - %guild_name%"
       fields:
@@ -106,7 +106,7 @@ server-info:
             • **DND Humans**: %guild_dnd_members%
             • **Offline Humans**: %guild_offline_members%
       timestamp: true
-      footer: '%user_displayname%'
+      footer: '%user_display_name%'
       footer-icon: '%user_pfp%'
 
 parsed:

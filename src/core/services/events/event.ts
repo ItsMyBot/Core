@@ -1,21 +1,11 @@
 
-import { Manager, Plugin } from '@itsmybot';
-import { Logger } from '@utils';
+import { Base } from '@contracts';
+import { Plugin } from '@itsmybot';
 
-export abstract class Event {
-  manager: Manager;
-  plugin?: Plugin;
-  logger: Logger;
-
+export abstract class Event<T extends Plugin | undefined = undefined> extends Base<T>{
   abstract name: string
   once: boolean = false;
   priority: number = 3;
-
-  constructor(manager: Manager, plugin: Plugin | undefined = undefined) {
-    this.manager = manager;
-    this.plugin = plugin;
-    this.logger = plugin ? plugin.logger : manager.logger;
-  }
 
   public abstract execute(...args: any): any | void;
 

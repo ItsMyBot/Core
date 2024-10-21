@@ -1,17 +1,16 @@
-import { Manager, Leaderboard, Command } from '@itsmybot';
+import { Manager, Leaderboard, Command, Plugin } from '@itsmybot';
 import {Collection } from 'discord.js';
 import { CommandBuilder } from '@builders';
 
 import { MessagesLeaderboard } from './impl/messages.js';
 import { Pagination } from '@utils';
-import { PaginationType, CommandInteraction } from '@contracts';
+import { PaginationType, CommandInteraction, Service } from '@contracts';
 
-export default class LeaderboardService {
-  manager: Manager;
-  leaderboards: Collection<string, Leaderboard>;
+export default class LeaderboardService extends Service{
+  leaderboards: Collection<string, Leaderboard<Plugin | undefined>>;
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.leaderboards = manager.leaderboards;
   }
 
@@ -20,7 +19,7 @@ export default class LeaderboardService {
     this.registerLeaderboard('messages', new MessagesLeaderboard(this.manager));
   }
 
-  registerLeaderboard(identifier: string, leaderboard: Leaderboard) {
+  registerLeaderboard(identifier: string, leaderboard: Leaderboard<Plugin | undefined>) {
     if (this.leaderboards.has(identifier)) {
       return this.manager.logger.error(`An leaderboard with the identifier ${identifier} is already registered.`);
     }
@@ -33,21 +32,20 @@ export default class LeaderboardService {
 
   async registerLeaderboards() {
     class LeaderboardCommands extends Command {
-      data: CommandBuilder;
 
-      constructor(manager: Manager) {
-        super(manager);
-
-        this.data = new CommandBuilder()
+      build() {
+        const data = new CommandBuilder()
           .setName('leaderboard')
-          .setConfig(this.manager.configs.commands.getSubsection('leaderboard'))
+          .using(this.manager.configs.commands.getSubsection('leaderboard'))
 
         for (const [key, leaderboard] of this.manager.services.leaderboard.leaderboards) {
-          this.data.addSubcommand(subcommand =>
+          data.addSubcommand(subcommand =>
             subcommand
               .setName(key)
               .setDescription(leaderboard.description))
         }
+
+        return data;
       }
 
       async execute(interaction: CommandInteraction) {
