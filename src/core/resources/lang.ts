@@ -49,6 +49,11 @@ class Plugin {
   @ValidateNested()
   @Type(() => MessageValidator)
   'not-found': MessageValidator
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MessageValidator)
+  reloaded: MessageValidator
 }
 
 class Pagination {

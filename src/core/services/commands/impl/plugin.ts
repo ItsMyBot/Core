@@ -3,7 +3,7 @@ import { CommandInteraction } from "@contracts";
 import Utils from '@utils';
 import { CommandBuilder } from '@builders';
 import { Pagination } from '@utils';
-import { Command, User, Plugin } from '@itsmybot';
+import { Command, Plugin, User } from '@itsmybot';
 import PluginModel from '../../plugins/plugin.model.js';
 
 export default class PluginCommand extends Command {
@@ -35,12 +35,22 @@ export default class PluginCommand extends Command {
               .setDescription(command.getString("subcommands.disable.options.plugin"))
               .setRequired(true)
               .setAutocomplete(true)))
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('reload')
+          .setDescription(command.getString("subcommands.reload.description"))
+          .addStringOption(option =>
+            option.setName("plugin")
+              .setDescription(command.getString("subcommands.reload.options.plugin"))
+              .setRequired(true)
+              .setAutocomplete(true)))
+        
   }
 
   async autocomplete(interaction: AutocompleteInteraction) {
     const subcommand = interaction.options.getSubcommand();
     const focusedValue = interaction.options.getFocused();
-    const enabled = subcommand === "enable" ? 0 : 1;
+    const enabled = ["reload", "disable"].includes(subcommand)
 
     let allPlugins = await PluginModel.findAll({
       where: { enabled: enabled }
@@ -61,11 +71,14 @@ export default class PluginCommand extends Command {
     const subcommand = interaction.options.getSubcommand();
     const lang = this.manager.configs.lang;
 
+    let pluginName: undefined | string
+    let plugin: undefined | PluginModel | Plugin | null
+
     switch (subcommand) {
       case 'enable':
       case 'disable':
-        const pluginName = interaction.options.getString("plugin", true);
-        const plugin = await PluginModel.findOne({ where: { name: pluginName } });
+        pluginName = interaction.options.getString("plugin", true);
+        plugin = await PluginModel.findOne({ where: { name: pluginName } });
 
         if (!plugin) {
           return interaction.reply(await Utils.setupMessage({
@@ -140,6 +153,37 @@ export default class PluginCommand extends Command {
           .send();
 
         break;
+      case 'reload':
+        pluginName = interaction.options.getString("plugin", true);
+        plugin = this.manager.plugins.get(pluginName)
+
+        if (!plugin) {
+          return interaction.reply(await Utils.setupMessage({
+            config: lang.getSubsection("plugin.not-found"),
+            variables: [
+              { searchFor: "%plugin_name%", replaceWith: pluginName }
+            ],
+            context: {
+              user: user,
+              guild: interaction.guild || undefined,
+              channel: interaction.channel || undefined
+            }
+          }));
+        }
+
+        await plugin.reload()
+
+        interaction.reply(await Utils.setupMessage({
+          config: lang.getSubsection("plugin.reloaded"),
+          variables: [
+            { searchFor: "%plugin_name%", replaceWith: pluginName }
+          ],
+          context: {
+            user: user,
+            guild: interaction.guild || undefined,
+            channel: interaction.channel || undefined
+          }
+        }));
     }
   }
 }

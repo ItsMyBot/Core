@@ -65,6 +65,9 @@ plugin:
   not-found:
     content: "The plugin `%plugin_name%` doesn't exist."
     ephemeral: true
+  reloaded:
+    content: "The plugin `%plugin_name%` configuration has been reloaded"
+    ephemeral: true
 
 server-info:
   embeds:

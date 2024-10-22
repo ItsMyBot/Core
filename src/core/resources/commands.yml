@@ -12,6 +12,10 @@ plugin:
       description: "Disable a plugin."
       options:
         plugin: "The plugin to disable."
+    reload:
+      description: "Reload the configuration of a plugin."
+      options:
+        plugin: "The plugin name"
 
 server-info:
   description: "Show information about the server."

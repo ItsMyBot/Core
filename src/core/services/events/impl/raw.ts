@@ -46,7 +46,11 @@ export default class RawEvent extends Event {
     if (!message) return;
 
     const emojiKey = (data.emoji.id) ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name;
-    const member = await channel.guild.members.fetch({ user: data.user_id, force: true });
+    let member = undefined
+
+    try {
+      member = await channel.guild.members.fetch({ user: data.user_id, force: true });
+    } catch (e) { }
 
     const user = member ? await this.manager.services.user.findOrCreate(member) : await this.manager.services.user.findOrNull(data.user_id);
 

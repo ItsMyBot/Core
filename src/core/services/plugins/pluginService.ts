@@ -56,7 +56,7 @@ export default class PluginService extends Service {
     if (!pluginData.enabled) {
       plugin.setEnabled(false);
     } else {
-      await plugin.load();
+      await plugin.init();
     }
 
     this.plugins.set(plugin.name, plugin);

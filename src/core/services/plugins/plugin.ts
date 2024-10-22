@@ -33,9 +33,19 @@ export abstract class Plugin {
 
   async initialize() { }
 
-  async load() {
+  async load() { }
+
+  async unload() { }
+
+  async reload() {
+    await this.unload()
+    await this.load()
+  }
+
+  async init() {
     try {
       await this.loadDatabaseModels();
+      await this.load()
       await this.initialize();
       await this.loadComponents();
       this.logger.info(`Plugin loaded in v${this.version}`);
