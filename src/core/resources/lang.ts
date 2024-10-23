@@ -49,11 +49,6 @@ class Plugin {
   @ValidateNested()
   @Type(() => MessageValidator)
   'not-found': MessageValidator
-
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => MessageValidator)
-  reloaded: MessageValidator
 }
 
 class Pagination {
@@ -136,4 +131,14 @@ export default class DefaultConfig {
   @ValidateNested()
   @Type(() => MessageValidator)
   parsed: MessageValidator
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MessageValidator)
+  reloaded: MessageValidator
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MessageValidator)
+  'error-reloading': MessageValidator
 }

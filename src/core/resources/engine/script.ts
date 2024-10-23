@@ -21,6 +21,14 @@ export class ConditionArgValidator {
   @IsOptional()
   @IsNumber()
   amount: number
+
+  @IsOptional()
+  @IsBoolean()
+  inherit: boolean
+
+  @IsOptional()
+  @IsString()
+  role: string
 }
 
 export class ConditionValidator {

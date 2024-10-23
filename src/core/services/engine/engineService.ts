@@ -44,6 +44,10 @@ export default class EngineService extends Service {
     this.condition.initialize();
     this.mutator.initialize();
 
+    await this.loadScripts();
+  }
+
+  async loadScripts() {
     const scripts = await new BaseConfigSection(ScriptConfig, this.manager.logger, 'scripts', 'build/core/resources/engine/scripts').initialize();
     for (const filePath of scripts) {
       this.registerScript(filePath[0], filePath[1], this.manager.logger);
@@ -119,7 +123,6 @@ export default class EngineService extends Service {
     const customCommandClass = new CustomCommand(customCommand, this.manager.logger, this);
 
     class CustomCommandBase extends Command {
-      
       build() {
         const options = customCommand.getSubsectionsOrNull("options") || []
         const data = new CommandBuilder()

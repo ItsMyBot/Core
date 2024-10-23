@@ -16,8 +16,8 @@ export default class CommandService extends Service {
   }
 
   async initialize() {
-    this.manager.logger.info("Command service initialized.");
     await this.registerFromDir(this.commandsDir);
+    this.manager.logger.info("Command service initialized.");
   }
 
   getCommand(name: string) {
@@ -61,7 +61,6 @@ export default class CommandService extends Service {
   }
 
   async deployCommands() {
-
     const enabledCommands = [...this.commands.values()]
       .filter(cmd => !(cmd.data.enabled === false))
       .map(cmd => cmd.data);

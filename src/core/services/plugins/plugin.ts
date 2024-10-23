@@ -54,8 +54,7 @@ export abstract class Plugin {
     }
   }
 
-  private async loadComponents() {
-    const componentTypes = ['commands', 'buttons', 'selectMenus', 'modals', 'events'];
+  public async loadComponents(componentTypes = ['commands', 'buttons', 'selectMenus', 'modals', 'events']) {
     for (const type of componentTypes) {
       const dir = join(this.path, type);
       if (sync(`${dir}/*`).length) {

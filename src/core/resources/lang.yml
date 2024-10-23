@@ -65,9 +65,23 @@ plugin:
   not-found:
     content: "The plugin `%plugin_name%` doesn't exist."
     ephemeral: true
-  reloaded:
-    content: "The plugin `%plugin_name%` configuration has been reloaded"
-    ephemeral: true
+
+reloaded:
+  content: "The bot has been reloaded. It may take a few seconds to deploy command."
+  ephemeral: true
+
+error-reloading:
+  embeds:
+    - title: "Error while reloading the bot"
+      description: |
+        An error occurred while reloading the bot.
+        ```yaml
+        %error_message%
+        ```
+      color: "#ff0000"
+      footer: "Error"
+      footer-icon: "%bot_pfp%"
+  ephemeral: true
 
 server-info:
   embeds:
