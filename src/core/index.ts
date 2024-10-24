@@ -72,7 +72,7 @@ process.on("uncaughtException", (error, origin) => {
 });
 
 process.on("unhandledRejection", async (reason: any, promise) => {
-    logger.error(reason, reason.stack);
+    logger.error(reason, reason?.stack ? reason.stack : "No stack trace");
 });
 
 export default manager;
