@@ -60,9 +60,8 @@ export class Config {
 
   public getString(path: string, randomize: boolean = false): string {
     const value = this.get(path);
-    if (TypeCheckers.isString(value)) {
-      return value;
-    }
+    
+    if (TypeCheckers.isString(value)) return value;
 
     if (TypeCheckers.isStringArray(value) && randomize) {
       return Utils.getRandom(value)
@@ -73,11 +72,9 @@ export class Config {
 
   public getStringOrNull(path: string, randomize: boolean = false): string | undefined {
     const value = this.getOrNull(path);
-    if (value === null || value === undefined) return undefined;
 
-    if (TypeCheckers.isString(value)) {
-      return value;
-    }
+    if (value === null || value === undefined) return undefined;
+    if (TypeCheckers.isString(value)) return value
 
     if (TypeCheckers.isStringArray(value) && randomize) {
       return Utils.getRandom(value)
@@ -89,9 +86,7 @@ export class Config {
   public getStrings(path: string): string[] {
     const value = this.get(path);
 
-    if (TypeCheckers.isStringArray(value)) {
-      return value;
-    }
+    if (TypeCheckers.isStringArray(value)) return value
 
     throw this.logger.error(`Expected string array at path "${path}"`);
   }
@@ -100,10 +95,7 @@ export class Config {
     const value = this.getOrNull(path);
 
     if (value === null || value === undefined) return undefined;
-
-    if (TypeCheckers.isStringArray(value)) {
-      return value;
-    }
+    if (TypeCheckers.isStringArray(value)) return value
 
     return undefined;
   }
@@ -111,20 +103,16 @@ export class Config {
   public getBool(path: string): boolean {
     const value = this.get(path);
 
-    if (TypeCheckers.isBoolean(value)) {
-      return value;
-    }
+    if (TypeCheckers.isBoolean(value)) return value
 
     throw this.logger.error(`Expected boolean at path "${path}"`);
   }
 
   public getBoolOrNull(path: string): boolean | undefined {
     const value = this.getOrNull(path);
-    if (value === null || value === undefined) return undefined;
 
-    if (TypeCheckers.isBoolean(value)) {
-      return value;
-    }
+    if (value === null || value === undefined) return undefined;
+    if (TypeCheckers.isBoolean(value)) return value
 
     return undefined;
   }
@@ -132,9 +120,7 @@ export class Config {
   public getNumber(path: string, randomize: boolean = false): number {
     const value = this.get(path);
 
-    if (TypeCheckers.isNumber(value)) {
-      return value;
-    }
+    if (TypeCheckers.isNumber(value)) return value
 
     if (TypeCheckers.isNumberArray(value) && randomize) {
       return Utils.getRandom(value);
@@ -145,11 +131,9 @@ export class Config {
 
   public getNumberOrNull(path: string, randomize: boolean = false): number | undefined {
     const value = this.getOrNull(path);
-    if (value === null || value === undefined) return undefined;
 
-    if (TypeCheckers.isNumber(value)) {
-      return value;
-    }
+    if (value === null || value === undefined) return undefined;
+    if (TypeCheckers.isNumber(value)) return value
 
     if (TypeCheckers.isNumberArray(value) && randomize) {
       return Utils.getRandom(value);
@@ -163,9 +147,7 @@ export class Config {
   public getNumbers(path: string): number[] {
     const value = this.get(path);
 
-    if (TypeCheckers.isNumberArray(value)) {
-      return value;
-    }
+    if (TypeCheckers.isNumberArray(value)) return value
 
     throw this.logger.error(`Expected number array at path "${path}"`);
   }
@@ -174,10 +156,7 @@ export class Config {
     const value = this.getOrNull(path);
 
     if (value === null || value === undefined) return undefined;
-
-    if (TypeCheckers.isNumberArray(value)) {
-      return value;
-    }
+    if (TypeCheckers.isNumberArray(value)) return value
 
     return undefined;
   }
@@ -185,9 +164,7 @@ export class Config {
   public getSubsection(path: string, randomize: boolean = false): Config {
     const value = this.get(path);
 
-    if (TypeCheckers.isConfig(value)) {
-      return value;
-    }
+    if (TypeCheckers.isConfig(value)) return value
 
     if (TypeCheckers.isConfigArray(value) && randomize) {
       return Utils.getRandom(value);
@@ -198,11 +175,9 @@ export class Config {
 
   public getSubsectionOrNull(path: string, randomize: boolean = false): Config | undefined {
     const value = this.getOrNull(path);
-    if (value === null || value === undefined) return undefined;
 
-    if (TypeCheckers.isConfig(value)) {
-      return value;
-    }
+    if (value === null || value === undefined) return undefined;
+    if (TypeCheckers.isConfig(value)) return value
 
     if (TypeCheckers.isConfigArray(value) && randomize) {
       return Utils.getRandom(value);
@@ -214,9 +189,7 @@ export class Config {
   public getSubsections(path: string): Config[] {
     const value = this.get(path);
 
-    if (TypeCheckers.isConfigArray(value)) {
-      return value;
-    }
+    if (TypeCheckers.isConfigArray(value)) return value
 
     throw this.logger.error(`Expected subsection array at path "${path}"`);
   }
@@ -225,10 +198,7 @@ export class Config {
     const value = this.getOrNull(path);
 
     if (value === null || value === undefined) return undefined;
-
-    if (TypeCheckers.isConfigArray(value)) {
-      return value;
-    }
+    if (TypeCheckers.isConfigArray(value)) return value
 
     return undefined;
   }
