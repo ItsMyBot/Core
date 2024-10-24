@@ -23,18 +23,12 @@ export async function setupButton(settings: ButtonSettings) {
   const context = settings.context;
   const config = settings.config;
 
-  let style = settings.style || config.getStringOrNull("style") || config.getStringsOrNull("style");
-  let customId = settings.customId || config.getStringOrNull("custom-id") || config.getStringsOrNull("custom-id");
+  let style = settings.style || config.getStringOrNull("style", true);
+  let customId = settings.customId || config.getStringOrNull("custom-id", true);
   let disabled = settings.disabled || config.getBoolOrNull("disabled") || false;
-  let label = settings.config.getStringOrNull("label") || config.getStringsOrNull("label");
-  let emoji = settings.config.getStringOrNull("emoji") || config.getStringsOrNull("emoji");
-  let url = settings.url || settings.config.getStringOrNull("url") || config.getStringsOrNull("url");
-
-  if (Array.isArray(style)) style = Utils.getRandom(style);
-  if (Array.isArray(customId)) customId = Utils.getRandom(customId);
-  if (Array.isArray(label)) label = Utils.getRandom(label);
-  if (Array.isArray(emoji)) emoji = Utils.getRandom(emoji);
-  if (Array.isArray(url)) url = Utils.getRandom(url);
+  let label = settings.config.getStringOrNull("label", true);
+  let emoji = settings.config.getStringOrNull("emoji", true);
+  let url = settings.url || settings.config.getStringOrNull("url", true);
 
   style = await Utils.applyVariables(style, variables, context);
   customId = await Utils.applyVariables(customId, variables, context);

@@ -1,4 +1,5 @@
 import { Logger } from '@utils';
+import Utils from '@utils';
 
 export class Config {
   public values: Map<string, any>;
@@ -57,97 +58,179 @@ export class Config {
     return value;
   }
 
-  private getValueOfType<T>(path: string, typeCheck: (value: any) => boolean): T {
+  public getString(path: string, randomize: boolean = false): string {
     const value = this.get(path);
-    if (!typeCheck(value)) {
-      const totalPath = this.currentPath ? `${this.currentPath}.${path}` : path;
-      throw this.logger.error(`Config value for "${totalPath}" is not of expected type`);
+    if (TypeCheckers.isString(value)) {
+      return value;
     }
-    return value as T;
+
+    if (TypeCheckers.isStringArray(value) && randomize) {
+      return Utils.getRandom(value)
+    }
+
+    throw this.logger.error(`Expected string at path "${path}"`);
   }
 
-  private getOrNullOfType<T>(path: string, typeCheck: (value: any) => boolean): T | undefined {
+  public getStringOrNull(path: string, randomize: boolean = false): string | undefined {
     const value = this.getOrNull(path);
-    if (typeCheck(value)) {
-      return value as T;
+    if (value === null || value === undefined) return undefined;
+
+    if (TypeCheckers.isString(value)) {
+      return value;
     }
+
+    if (TypeCheckers.isStringArray(value) && randomize) {
+      return Utils.getRandom(value)
+    }
+
     return undefined;
   }
 
-  private isArrayOfType<T>(value: any, itemCheck: (item: any) => item is T): value is T[] {
-    return Array.isArray(value) && value.every(itemCheck);
-  }
-
-  private isString(value: any): value is string {
-    return typeof value === 'string';
-  }
-
-  private isBoolean(value: any): value is boolean {
-    return typeof value === 'boolean';
-  }
-
-  private isNumber(value: any): value is number {
-    return typeof value === 'number';
-  }
-
-  private isConfig(value: any): value is Config {
-    return value instanceof Config;
-  }
-
-  public getString(path: string): string {
-    return this.getValueOfType<string>(path, this.isString);
-  }
-
-  public getStringOrNull(path: string): string | undefined {
-    return this.getOrNullOfType<string>(path, this.isString);
-  }
-
   public getStrings(path: string): string[] {
-    return this.getValueOfType<string[]>(path, value => this.isArrayOfType(value, this.isString) );
+    const value = this.get(path);
+
+    if (TypeCheckers.isStringArray(value)) {
+      return value;
+    }
+
+    throw this.logger.error(`Expected string array at path "${path}"`);
   }
 
   public getStringsOrNull(path: string): string[] | undefined {
-    return this.getOrNullOfType<string[]>(path, value => this.isArrayOfType(value, this.isString));
+    const value = this.getOrNull(path);
+
+    if (value === null || value === undefined) return undefined;
+
+    if (TypeCheckers.isStringArray(value)) {
+      return value;
+    }
+
+    return undefined;
   }
 
   public getBool(path: string): boolean {
-    return this.getValueOfType<boolean>(path, this.isBoolean);
+    const value = this.get(path);
+
+    if (TypeCheckers.isBoolean(value)) {
+      return value;
+    }
+
+    throw this.logger.error(`Expected boolean at path "${path}"`);
   }
 
   public getBoolOrNull(path: string): boolean | undefined {
-    return this.getOrNullOfType<boolean>(path, this.isBoolean);
+    const value = this.getOrNull(path);
+    if (value === null || value === undefined) return undefined;
+
+    if (TypeCheckers.isBoolean(value)) {
+      return value;
+    }
+
+    return undefined;
   }
 
-  public getNumber(path: string): number {
-    return this.getValueOfType<number>(path, this.isNumber);
+  public getNumber(path: string, randomize: boolean = false): number {
+    const value = this.get(path);
+
+    if (TypeCheckers.isNumber(value)) {
+      return value;
+    }
+
+    if (TypeCheckers.isNumberArray(value) && randomize) {
+      return Utils.getRandom(value);
+    }
+
+    throw this.logger.error(`Expected number at path "${path}"`);
   }
 
-  public getNumberOrNull(path: string): number | undefined {
-    return this.getOrNullOfType<number>(path, this.isNumber);
+  public getNumberOrNull(path: string, randomize: boolean = false): number | undefined {
+    const value = this.getOrNull(path);
+    if (value === null || value === undefined) return undefined;
+
+    if (TypeCheckers.isNumber(value)) {
+      return value;
+    }
+
+    if (TypeCheckers.isNumberArray(value) && randomize) {
+      return Utils.getRandom(value);
+    }
+
+    return undefined;
   }
+
+
 
   public getNumbers(path: string): number[] {
-    return this.getValueOfType<number[]>(path, value => this.isArrayOfType(value, this.isNumber));
+    const value = this.get(path);
+
+    if (TypeCheckers.isNumberArray(value)) {
+      return value;
+    }
+
+    throw this.logger.error(`Expected number array at path "${path}"`);
   }
 
   public getNumbersOrNull(path: string): number[] | undefined {
-    return this.getOrNullOfType<number[]>(path, value => this.isArrayOfType(value, this.isNumber));
+    const value = this.getOrNull(path);
+
+    if (value === null || value === undefined) return undefined;
+
+    if (TypeCheckers.isNumberArray(value)) {
+      return value;
+    }
+
+    return undefined;
   }
 
-  public getSubsection(path: string): Config {
-    return this.getValueOfType<Config>(path, this.isConfig);
+  public getSubsection(path: string, randomize: boolean = false): Config {
+    const value = this.get(path);
+
+    if (TypeCheckers.isConfig(value)) {
+      return value;
+    }
+
+    if (TypeCheckers.isConfigArray(value) && randomize) {
+      return Utils.getRandom(value);
+    }
+
+    throw this.logger.error(`Expected subsection at path "${path}"`);
   }
 
-  public getSubsectionOrNull(path: string): Config | undefined {
-    return this.getOrNullOfType<Config>(path, this.isConfig);
+  public getSubsectionOrNull(path: string, randomize: boolean = false): Config | undefined {
+    const value = this.getOrNull(path);
+    if (value === null || value === undefined) return undefined;
+
+    if (TypeCheckers.isConfig(value)) {
+      return value;
+    }
+
+    if (TypeCheckers.isConfigArray(value) && randomize) {
+      return Utils.getRandom(value);
+    }
+
+    return undefined;
   }
 
   public getSubsections(path: string): Config[] {
-    return this.getValueOfType<Config[]>(path, value => this.isArrayOfType(value, this.isConfig));
+    const value = this.get(path);
+
+    if (TypeCheckers.isConfigArray(value)) {
+      return value;
+    }
+
+    throw this.logger.error(`Expected subsection array at path "${path}"`);
   }
 
   public getSubsectionsOrNull(path: string): Config[] | undefined {
-    return this.getOrNullOfType<Config[]>(path, value => this.isArrayOfType(value, this.isConfig));
+    const value = this.getOrNull(path);
+
+    if (value === null || value === undefined) return undefined;
+
+    if (TypeCheckers.isConfigArray(value)) {
+      return value;
+    }
+
+    return undefined;
   }
 
   public set(path: string, obj: any) {
@@ -225,3 +308,34 @@ export class Config {
     return obj;
   }
 }
+
+class TypeCheckers {
+  static isString(value: any): value is string {
+    return typeof value === 'string';
+  }
+
+  static isStringArray(value: any): value is string[] {
+    return Array.isArray(value) && value.every(item => this.isString(item));
+  }
+
+  static isNumber(value: any): value is number {
+    return typeof value === 'number';
+  }
+
+  static isNumberArray(value: any): value is number[] {
+    return Array.isArray(value) && value.every(item => this.isNumber(item));
+  }
+
+  static isBoolean(value: any): value is boolean {
+    return typeof value === 'boolean';
+  }
+
+  static isConfig(value: any): value is Config {
+    return value instanceof Config;
+  }
+
+  static isConfigArray(value: any): value is Config[] {
+    return Array.isArray(value) && value.every(item => this.isConfig(item));
+  }
+}
+

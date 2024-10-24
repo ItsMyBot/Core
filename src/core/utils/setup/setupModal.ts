@@ -16,9 +16,7 @@ export async function setupModal(settings: ModalSettings) {
   const context = settings.context;
 
   let customId = settings.customId || settings.config.getString("custom-id");
-  let title = settings.title || settings.config.getString("title")
-
-  if (Array.isArray(title)) title = Utils.getRandom(title);
+  let title = settings.title || settings.config.getString("title", true)
 
   customId = await Utils.applyVariables(customId, variables, context);
   if (!customId) throw new Error(`Custom ID is required for a modal.`);
@@ -33,16 +31,12 @@ export async function setupModal(settings: ModalSettings) {
   for (const component of components) {
 
     let cCustomId = component.getString("id");
-    let cLabel = component.getString("label");
-    let cPlaceholder = component.getStringOrNull("placeholder") || '';
+    let cLabel = component.getString("label", true);
+    let cPlaceholder = component.getStringOrNull("placeholder", true) || '';
     const cRequired = component.getBoolOrNull("required") || false;
     let cMaxLength = component.getStringOrNull("max-length") || "1000";
-    let cValue = component.getStringOrNull("value") || '';
+    let cValue = component.getStringOrNull("value", true) || '';
     const cStyle = component.getStringOrNull("style");
-
-    if (Array.isArray(cLabel)) cLabel = Utils.getRandom(cLabel);
-    if (Array.isArray(cPlaceholder)) cPlaceholder = Utils.getRandom(cPlaceholder);
-    if (Array.isArray(cValue)) cMaxLength = Utils.getRandom(cValue);
 
     cCustomId = await Utils.applyVariables(cCustomId, variables, context);
     cLabel = await Utils.applyVariables(cLabel, variables, context);
