@@ -17,9 +17,6 @@ reload:
   permission: "ADMINISTRATOR"
   description: "Reload the bot"
 
-server-info:
-  description: "Show information about the server."
-
 parse: 
   permission: "ADMINISTRATOR"
   description: "Parse a text."

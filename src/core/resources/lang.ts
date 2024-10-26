@@ -137,11 +137,6 @@ export default class DefaultConfig {
   @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
-  'server-info': MessageValidator
-
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => MessageValidator)
   parsed: MessageValidator
 
   @IsDefined()
