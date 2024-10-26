@@ -26,12 +26,6 @@ export class MutatorHandler {
       return context;
     }
 
-    const mutatorArguments = mutator.arguments().filter(argument => !mutatorData.has(`args.${argument}`));
-    for (const argument of mutatorArguments) {
-      this.manager.logger.error(`${mutatorData.getString("id")} need the argument '${argument}'`);
-      return context;
-    }
-
     return mutator.apply(mutatorData.getSubsection("args"), context, variables);
   }
 

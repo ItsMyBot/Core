@@ -9,7 +9,7 @@ export default class SendMessageAction extends Action {
     const channelConfig = await Utils.applyVariables(script.args.getStringOrNull("channel"), variables, context)
 
     const channel = channelConfig ? await Utils.findTextChannel(channelConfig) : context.channel;
-    if (!channel || !channel.isTextBased() || channel.isDMBased()) return this.logger.warn(`No channel provided for sendMessage action`);
+    if (!channel || !channel.isTextBased() || channel.isDMBased()) return this.missingArgument("channel", script, context);
 
     const message = await channel.send(await Utils.setupMessage({ config: script.args, context, variables }));
 

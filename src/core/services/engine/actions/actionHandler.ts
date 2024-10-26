@@ -36,16 +36,6 @@ export class ActionHandler {
     const actionInstance = this.actions.get(script.id);
     if (!actionInstance) return this.manager.logger.warn(`No action found for ID: ${script.id}`);
 
-    const actionParameters = actionInstance.parameters().filter((param: string) => !(param in context));
-    for (const param of actionParameters) {
-      return this.manager.logger.error(`${script.id} need the parameter '${param}'`);
-    }
-
-    const actionArguments = actionInstance.arguments().filter((arg: string) => !script.args.has(arg));
-    for (const arg of actionArguments) {
-      return this.manager.logger.error(`${script.id} need the argument '${arg}'`);
-    }
-
     actionInstance.trigger(script, context, variables);
   }
 

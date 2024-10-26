@@ -3,12 +3,9 @@ import { Action } from '../action.js';
 import { ActionScript } from 'core/services/engine/actionScript.js';
 
 export default class DeleteMessageAction extends Action {
-
-  public parameters() {
-    return ["message"];
-  }
-
   onTrigger(script: ActionScript, context: Context, variables: Variable[]) {
-    context.message!.delete();
+    if (!context.message) return this.missingContext("message", script, context);
+
+    context.message.delete();
   }
 }

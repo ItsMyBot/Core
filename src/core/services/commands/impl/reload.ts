@@ -18,6 +18,7 @@ export default class ReloadCommand extends Command {
     this.manager.commands.clear()
     await this.manager.services.command.initialize()
     this.manager.services.engine.event.removeAllListeners()
+    this.manager.services.engine.scripts.clear()
 
     let error: any
 

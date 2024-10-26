@@ -7,4 +7,8 @@ export abstract class Mutator<T extends Plugin | undefined = undefined> extends 
   }
 
   abstract apply(args: Config, context: Context, variables: Variable[]): Promise<Context> | Context
+
+  public missingArgument(missing: string) {
+    this.logger.error(`Missing argument: ${missing}`);
+  }
 }

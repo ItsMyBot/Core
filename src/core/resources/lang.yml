@@ -135,3 +135,11 @@ parsed:
         %parsed_text%
         ```
   ephemeral: true
+
+engine:
+  missing-argument:
+    content: "You're missing the `%argument%` argument."
+    ephemeral: true
+  missing-context:
+    content: "You're missing the `%context%` context."
+    ephemeral: true

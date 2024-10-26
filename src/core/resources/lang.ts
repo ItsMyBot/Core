@@ -86,6 +86,18 @@ class Leaderboard extends MessageValidator {
   'messages-format': string
 }
 
+class Engine {
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MessageValidator)
+  'missing-argument': MessageValidator
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => MessageValidator)
+  'missing-context': MessageValidator
+}
+
 export default class DefaultConfig {
   @IsDefined()
   @ValidateNested()
@@ -141,4 +153,9 @@ export default class DefaultConfig {
   @ValidateNested()
   @Type(() => MessageValidator)
   'error-reloading': MessageValidator
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Engine)
+  engine: Engine
 }

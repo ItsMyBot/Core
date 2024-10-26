@@ -3,16 +3,11 @@ import { ActionScript, Config } from '@itsmybot';
 import { Context } from '@contracts';
 
 export class BellowMembersCondition extends Condition {
-
-  public parameters() {
-    return ["guild"];
-  }
-
-  public arguments() {
-    return ["amount"];
-  }
-
   isMet(script: ActionScript, context: Context, args: Config) {
-    return context.guild!.memberCount < args.getNumber("amount");
+    if (!context.guild) return this.missingContext("guild");
+    const amount = args.getNumberOrNull("amount");
+    if (!amount) return this.missingArgument("amount");
+
+    return context.guild!.memberCount < amount;
   }
 }

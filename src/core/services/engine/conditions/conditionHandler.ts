@@ -32,18 +32,6 @@ export class ConditionHandler {
       return false;
     }
 
-    const conditionParameters = condition.parameters().filter(param => !(param in context));
-    for (const param of conditionParameters) {
-      this.manager.logger.error(`${conditionData.id} need the parameter '${param}'`);
-      return false;
-    }
-
-    const conditionArguments = condition.arguments().filter(argument => !conditionData.args.has(`${argument}`));
-    for (const argument of conditionArguments) {
-      this.manager.logger.error(`${conditionData.id} need the argument '${argument}'`);
-      return false;
-    }
-
     let isMet = condition.isMet(script, context, conditionData.args);
 
     if (conditionData.args.getBoolOrNull("inverse")) {

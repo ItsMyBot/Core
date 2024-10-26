@@ -4,16 +4,11 @@ import { Context } from '@contracts';
 import Utils from '@utils';
 
 export class HasRoleCondition extends Condition {
-
-  public parameters() {
-    return ["member"];
-  }
-
-  public arguments() {
-    return ["role", "inherit" ];
-  }
-
   isMet(script: ActionScript, context: Context, args: Config) {
-    return Utils.hasRole(context.member!, args.getString("role"), args.getBoolOrNull("inherit"));
+    if (!context.member) return this.missingContext("member");
+    const role = args.getStringOrNull("role");
+    if (!role) return this.missingArgument("role");
+
+    return Utils.hasRole(context.member, role, args.getBoolOrNull("inherit"));
   }
 }

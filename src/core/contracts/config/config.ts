@@ -60,7 +60,6 @@ export class Config {
 
   public getString(path: string, randomize: boolean = false): string {
     const value = this.get(path);
-    
     if (TypeCheckers.isString(value)) return value;
 
     if (TypeCheckers.isStringArray(value) && randomize) {
@@ -72,7 +71,7 @@ export class Config {
 
   public getStringOrNull(path: string, randomize: boolean = false): string | undefined {
     const value = this.getOrNull(path);
-
+    
     if (value === null || value === undefined) return undefined;
     if (TypeCheckers.isString(value)) return value
 
@@ -87,6 +86,7 @@ export class Config {
     const value = this.get(path);
 
     if (TypeCheckers.isStringArray(value)) return value
+    if (TypeCheckers.isString(value)) return [value]
 
     throw this.logger.error(`Expected string array at path "${path}"`);
   }
@@ -96,6 +96,7 @@ export class Config {
 
     if (value === null || value === undefined) return undefined;
     if (TypeCheckers.isStringArray(value)) return value
+    if (TypeCheckers.isString(value)) return [value]
 
     return undefined;
   }
@@ -148,6 +149,7 @@ export class Config {
     const value = this.get(path);
 
     if (TypeCheckers.isNumberArray(value)) return value
+    if (TypeCheckers.isNumber(value)) return [value]
 
     throw this.logger.error(`Expected number array at path "${path}"`);
   }
@@ -157,6 +159,7 @@ export class Config {
 
     if (value === null || value === undefined) return undefined;
     if (TypeCheckers.isNumberArray(value)) return value
+    if (TypeCheckers.isNumber(value)) return [value]
 
     return undefined;
   }
@@ -190,6 +193,7 @@ export class Config {
     const value = this.get(path);
 
     if (TypeCheckers.isConfigArray(value)) return value
+    if (TypeCheckers.isConfig(value)) return [value]
 
     throw this.logger.error(`Expected subsection array at path "${path}"`);
   }
@@ -199,6 +203,7 @@ export class Config {
 
     if (value === null || value === undefined) return undefined;
     if (TypeCheckers.isConfigArray(value)) return value
+    if (TypeCheckers.isConfig(value)) return [value]
 
     return undefined;
   }
