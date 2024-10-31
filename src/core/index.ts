@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 import { GatewayIntentBits, Partials } from 'discord.js';
-import { join, resolve } from 'path';
+import { join } from 'path';
 import { readFileSync } from 'fs';
 import { Manager } from './manager.js';
 import { Logger } from '@utils';
@@ -24,8 +24,9 @@ export { Manager };
 
 const logger = new Logger();
 
-const __dirname = resolve();
-const packageJsonPath = join(__dirname, 'package.json');
+const processFolder = process.cwd();
+
+const packageJsonPath = join(processFolder, 'package.json');
 const packageJSON = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
 
 const manager = new Manager(
@@ -54,14 +55,14 @@ const manager = new Manager(
     }, {
     package: packageJSON,
     dir: {
-        base: __dirname,
-        configs: join(__dirname, 'configs'),
-        plugins: join(__dirname, 'build', 'plugins'),
-        coreCommands: join(__dirname, 'build', 'core', 'services', 'commands', 'impl'),
-        coreEvents: join(__dirname, 'build', 'core', 'services', 'events', 'impl'),
-        scripts: join(__dirname, 'scripts'),
-        customCommands: join(__dirname, 'custom-commands'),
-        logs: join(__dirname, 'logs'),
+        base: processFolder,
+        configs: join(processFolder, 'configs'),
+        plugins: join(processFolder, 'build', 'plugins'),
+        coreCommands: join(processFolder, 'build', 'core', 'services', 'commands', 'impl'),
+        coreEvents: join(processFolder, 'build', 'core', 'services', 'events', 'impl'),
+        scripts: join(processFolder, 'scripts'),
+        customCommands: join(processFolder, 'custom-commands'),
+        logs: join(processFolder, 'logs'),
     },
 });
 

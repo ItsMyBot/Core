@@ -14,7 +14,7 @@ export default class BotReadyEvent extends Event {
 
     if (status) this.manager.client.user.setStatus(status);
     else {
-      this.manager.logger.warn(`The status "${status}" is not valid. Must be one of "invisible", "dnd", "idle" or "online".`);
+      this.logger.warn(`The status "${status}" is not valid. Must be one of "invisible", "dnd", "idle" or "online".`);
       this.manager.client.user.setStatus("online");
     }
 

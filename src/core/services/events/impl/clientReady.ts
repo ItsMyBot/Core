@@ -11,23 +11,23 @@ export default class ClientReadyEvent extends Event {
   async execute(client: Client) {
     this.manager.services.command.deployCommands();
 
-    this.manager.logger.info(`Engine Actions registered: ${this.manager.services.engine.action.actions.size}`);
-    this.manager.logger.info(`Engine Conditions registered: ${this.manager.services.engine.condition.conditions.size}`);
-    this.manager.logger.info(`Engine Mutators registered: ${this.manager.services.engine.mutator.mutators.size}`);
-    this.manager.logger.info(`Commands registered: ${this.manager.commands.size}`);
-    this.manager.logger.info(`Events registered: ${this.manager.events.size}`);
-    this.manager.logger.info(`Plugins registered: ${this.manager.plugins.size}`);
-    this.manager.logger.info(`Placeholder Expansions registered: ${this.manager.expansions.size}`);
+    this.logger.info(`Engine Actions registered: ${this.manager.services.engine.action.actions.size}`);
+    this.logger.info(`Engine Conditions registered: ${this.manager.services.engine.condition.conditions.size}`);
+    this.logger.info(`Engine Mutators registered: ${this.manager.services.engine.mutator.mutators.size}`);
+    this.logger.info(`Commands registered: ${this.manager.commands.size}`);
+    this.logger.info(`Events registered: ${this.manager.events.size}`);
+    this.logger.info(`Plugins registered: ${this.manager.plugins.size}`);
+    this.logger.info(`Placeholder Expansions registered: ${this.manager.expansions.size}`);
 
-    this.manager.logger.empty("#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#");
-    this.manager.logger.empty(" ");
-    this.manager.logger.empty(`                    • ${chalk.hex("#57ff6b").bold(`ItsMyBot v${this.manager.managerOptions.package.version}`)} is now Online! •`);
-    this.manager.logger.empty(" ");
-    this.manager.logger.empty("         • Join our Discord Server for any Issues/Custom Plugin •");
-    this.manager.logger.empty(`                       ${chalk.blue(chalk.underline(`https://discord.gg/itsme-to`))}`);
-    this.manager.logger.empty(" ");
-    this.manager.logger.empty("#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#");
-    this.manager.logger.info("Bot ready");
+    this.logger.empty("#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#");
+    this.logger.empty(" ");
+    this.logger.empty(`                    • ${chalk.hex("#57ff6b").bold(`ItsMyBot v${this.manager.managerOptions.package.version}`)} is now Online! •`);
+    this.logger.empty(" ");
+    this.logger.empty("         • Join our Discord Server for any Issues/Custom Plugin •");
+    this.logger.empty(`                       ${chalk.blue(chalk.underline(`https://discord.gg/itsme-to`))}`);
+    this.logger.empty(" ");
+    this.logger.empty("#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#");
+    this.logger.info("Bot ready");
 
     schedule('0 * * * *', () => {
       this.manager.client.emit('everyHour');
@@ -46,12 +46,12 @@ export default class ClientReadyEvent extends Event {
     }
 
     if (isPrimaryGuild) {
-      this.manager.logger.info(`${client.guilds.cache.size} guilds found`);
-      this.manager.logger.info(`Connected to ${chalk.hex("#ffbe0b")(client.guilds.cache.get(this.manager.primaryGuildId)!.name)}`);
+      this.logger.info(`${client.guilds.cache.size} guilds found`);
+      this.logger.info(`Connected to ${chalk.hex("#ffbe0b")(client.guilds.cache.get(this.manager.primaryGuildId)!.name)}`);
     } else {
-      this.manager.logger.error("Primary Guild not found");
-      this.manager.logger.error("Please invite the bot to the primary guild");
-      this.manager.logger.error(chalk.blue(chalk.underline(`https://discord.com/api/oauth2/authorize?client_id=${this.manager.client.user!.id}&permissions=8&scope=applications.commands%20bot`)));
+      this.logger.error("Primary Guild not found");
+      this.logger.error("Please invite the bot to the primary guild");
+      this.logger.error(chalk.blue(chalk.underline(`https://discord.com/api/oauth2/authorize?client_id=${this.manager.client.user!.id}&permissions=8&scope=applications.commands%20bot`)));
       process.exit(1);
     }
 

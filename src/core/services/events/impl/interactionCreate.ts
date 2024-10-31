@@ -25,7 +25,7 @@ export default class InteractionCreateEvent extends Event {
       try {
         await command.autocomplete(interaction)
       } catch (error: any) {
-        this.manager.logger.error(`Error executing autocomplete command '${command.data.name}`, error, error.stack);
+        this.logger.error(`Error executing autocomplete command '${command.data.name}`, error, error.stack);
       }
     } else if (interaction.isButton()) {
       const button = this.manager.services.component.getButton(interaction.customId);
@@ -75,7 +75,7 @@ export default class InteractionCreateEvent extends Event {
     try {
       await component.execute(interaction, user);
     } catch (error: any) {
-      this.manager.logger.error(`Error executing ${component.data.name}`, error, error.stack);
+      this.logger.error(`Error executing ${component.data.name}`, error, error.stack);
     }
 
     component.data.cooldown.setCooldown(interaction.user.id);

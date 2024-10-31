@@ -40,8 +40,8 @@ export abstract class Action<T extends Plugin | undefined = undefined> extends B
       config: this.manager.configs.lang.getSubsection("engine.missing-argument"),
       context,
       variables: [
-        { searchFor: "missing", replaceWith: missing },
-        { searchFor: "script", replaceWith: script.id }
+        { searchFor: "%missing%", replaceWith: missing },
+        { searchFor: "%script%", replaceWith: script.id }
       ]
     });
 
