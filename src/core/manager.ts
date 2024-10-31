@@ -1,9 +1,8 @@
 import { Client, Collection } from 'discord.js';
 import { existsSync, mkdirSync } from 'fs';
-import Utils from '@utils';
 import { Logger } from '@utils';
 import { Command, Component, Expansion, Leaderboard, Plugin } from '@itsmybot'
-import { ClientOptions, ManagerOptions, Services, ManagerConfigs, BaseConfig } from '@contracts';
+import { ClientOptions, ManagerOptions, Services, ManagerConfigs, BaseConfig, Service } from '@contracts';
 import { Sequelize } from 'sequelize-typescript';
 
 import EventService, { EventExecutor } from './services/events/eventService.js';
@@ -40,7 +39,6 @@ export class Manager {
 
   constructor(clientOptions: ClientOptions, managerOptions: ManagerOptions) {
     this.client = new Client(clientOptions);
-
     this.managerOptions = managerOptions;
 
     if (!existsSync(managerOptions.dir.configs)) mkdirSync(managerOptions.dir.configs);
@@ -49,66 +47,66 @@ export class Manager {
   }
 
   public async initialize(): Promise<void> {
-
-    this.configs.config = await new BaseConfig({
-      logger: this.logger,
-      configFilePath: "configs/config.yml",
-      defaultFilePath: "build/core/resources/config.yml", 
-      ConfigClass: DefaultConfig
-    }).initialize()
-
-    this.configs.commands = await new BaseConfig({
-      logger: this.logger,
-      configFilePath: "configs/commands.yml",
-      defaultFilePath: "build/core/resources/commands.yml",
-      ConfigClass: CommandConfig
-    }).initialize()
-
-    this.configs.lang = await new BaseConfig({
-      logger: this.logger,
-      configFilePath: "configs/lang.yml",
-      defaultFilePath: "build/core/resources/lang.yml",
-      ConfigClass: LangConfig
-    }).initialize()
+    this.configs.config = await this.initializeConfig(DefaultConfig, 'config.yml');
+    this.configs.commands = await this.initializeConfig(CommandConfig, 'commands.yml');
+    this.configs.lang = await this.initializeConfig(LangConfig, 'lang.yml');
 
     this.primaryGuildId = this.configs.config.getString("primary-guild");
 
     await this.initializeDatabase();
 
-    this.services.engine = await Utils.serviceFactory.createService(EngineService, this);
-    this.services.expansion = await Utils.serviceFactory.createService(ExpansionService, this);
-    this.services.user = await Utils.serviceFactory.createService(UserService, this);
-    this.services.event = await Utils.serviceFactory.createService(EventService, this);
-    this.services.command = await Utils.serviceFactory.createService(CommandService, this);
-    this.services.component = await Utils.serviceFactory.createService(ComponentService, this);
-    this.services.leaderboard = await Utils.serviceFactory.createService(LeaderboardService, this);
-    this.services.plugin = await Utils.serviceFactory.createService(PluginService, this);
+    this.services.engine = await this.createService(EngineService);
+    this.services.expansion = await this.createService(ExpansionService);
+    this.services.user = await this.createService(UserService);
+    this.services.event = await this.createService(EventService);
+    this.services.command = await this.createService(CommandService);
+    this.services.component = await this.createService(ComponentService);
+    this.services.leaderboard = await this.createService(LeaderboardService);
+    this.services.plugin = await this.createService(PluginService);
 
     await this.services.engine.loadCustomCommands();
     this.services.leaderboard.registerLeaderboards();
     this.services.event.initializeEvents();
 
     this.client.login(this.configs.config.getString("token"));
+
+    this.client.on('reconnecting', () => {
+      this.logger.debug('The client is trying to reconnect.');
+    });
+
+    this.client.on('disconnect', () => {
+      this.logger.debug('The client has disconnected.');
+    });
+
+    this.client.on('resumed', () => {
+      this.logger.debug('The client has successfully reconnected.');
+    });
+  }
+
+  private async initializeConfig(ConfigClass: any, filePath: string) {
+    return await new BaseConfig({
+      logger: this.logger,
+      configFilePath: `configs/${filePath}`,
+      defaultFilePath: `build/core/resources/${filePath}`,
+      ConfigClass
+    }).initialize();
   }
 
   private async initializeDatabase() {
     this.logger.info('Initializing database...');
     const databaseConfig = this.configs.config.getSubsection('database');
 
-    switch (databaseConfig.getString('type')) {
-      case 'mysql':
-      case 'mariadb':
-        this.database = new Sequelize(
-          databaseConfig.getString('database'),
-          databaseConfig.getString('username'),
-          databaseConfig.getString('password'),
-          {
-            host: databaseConfig.getString('host'),
-            dialect: databaseConfig.getString('type') as 'mysql' | 'mariadb',
-            logging: databaseConfig.getBoolOrNull('debug') || false
-          });
-
-      default:
+    if (['mysql', 'mariadb'].includes(databaseConfig.getString('type'))) {
+      this.database = new Sequelize(
+        databaseConfig.getString('database'),
+        databaseConfig.getString('username'),
+        databaseConfig.getString('password'),
+        {
+          host: databaseConfig.getString('host'),
+          dialect: databaseConfig.getString('type') as 'mysql' | 'mariadb',
+          logging: databaseConfig.getBoolOrNull('debug') || false
+        });
+    } else {
         this.database = new Sequelize({
           dialect: 'sqlite',
           storage: 'database.sqlite',
@@ -118,11 +116,16 @@ export class Manager {
 
     try {
       await this.database.authenticate();
-
       this.logger.info('Connection has been established successfully with database.');
     } catch (error) {
       this.logger.error('Unable to connect to the database:', error);
       process.exit(1);
     }
+  }
+
+  private async createService<T extends Service>(ServiceType: new (manager: Manager) => T): Promise<T> {
+    const service = new ServiceType(this);
+    await service.initialize();
+    return service;
   }
 }

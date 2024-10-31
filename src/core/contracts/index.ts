@@ -1,4 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
+import { Manager, Plugin } from '@itsmybot';
+import { Logger } from '@utils';
 
 export { Context } from './context.js';
 export { Events, EventType } from './events.js';
@@ -25,3 +27,25 @@ export enum PaginationType {
 }
 
 export type CommandInteraction = ChatInputCommandInteraction<'cached'>;
+
+export class Base<T extends Plugin | undefined = undefined> {
+  public manager: Manager;
+  public plugin: T;
+  public logger: Logger;
+
+  constructor(manager: Manager, plugin?: T) {
+    this.manager = manager;
+    this.plugin = plugin as T;
+    this.logger = plugin ? plugin.logger : manager.logger;
+  }
+}
+
+export abstract class Service {
+  protected manager: Manager
+
+  constructor(manager: Manager) {
+    this.manager = manager
+  }
+
+  abstract initialize(): Promise<void>
+}

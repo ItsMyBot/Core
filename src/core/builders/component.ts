@@ -11,7 +11,7 @@ export class ComponentBuilder {
   permissions: bigint[] = [];
   public: boolean = false;
 
-  setConfig(config: Config) {
+  using(config: Config) {
     if (config.has("cooldown")) this.setCooldown(config.getNumber("cooldown"));
     if (config.has("permissions")) this.setPermissions(config.getStrings("permissions"));
     if (config.has("roles")) this.setRequiredRoles(config.getStrings("roles"));

@@ -6,19 +6,18 @@ import { Manager, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
 import { Logger } from '@utils';
 import PluginModel from './plugin.model.js';
+import { Service } from '@contracts';
 
-export default class PluginService {
-  manager: Manager;
+export default class PluginService extends Service {
   pluginsDir: string;
   plugins: Collection<string, Plugin>;
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.pluginsDir = manager.managerOptions.dir.plugins;
     this.plugins = manager.plugins;
 
     this.manager.database.addModels([PluginModel]);
-
   }
 
   async initialize() {
@@ -57,7 +56,7 @@ export default class PluginService {
     if (!pluginData.enabled) {
       plugin.setEnabled(false);
     } else {
-      await plugin.load();
+      await plugin.init();
     }
 
     this.plugins.set(plugin.name, plugin);

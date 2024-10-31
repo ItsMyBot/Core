@@ -34,24 +34,24 @@ class CommandOptionValidator {
 
   @IsOptional()
   @IsNumber()
-  maxLength: number
+  'max-length': number
 
   @IsOptional()
   @IsNumber()
-  minLength: number
+  'min-length': number
 
   @IsOptional()
   @IsNumber()
-  minValue: number
+  'min-value': number
 
   @IsOptional()
   @IsNumber()
-  maxValue: number
+  'max-value': number
 
   @IsOptional()
   @IsString()
   @Validate(IsChannelType)
-  channelType: string
+  'channel-type': string
 
   @IsOptional()
   @ValidateNested({ each: true })

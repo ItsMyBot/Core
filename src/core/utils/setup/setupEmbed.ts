@@ -15,31 +15,19 @@ export async function setupEmbed(settings: EmbedSettings) {
   const context = settings.context;
   const config = settings.config;
 
-  let author = config.getStringOrNull("author") || config.getStringsOrNull("author");
-  let authorIcon = config.getStringOrNull("author-icon") || config.getStringsOrNull("author-icon");
-  let authorUrl = config.getStringOrNull("author-url") || config.getStringsOrNull("author-url");
-  let url = config.getStringOrNull("url") || config.getStringsOrNull("url");
-  let title = config.getStringOrNull("title") || config.getStringsOrNull("title");
-  let description = config.getStringOrNull("description") || config.getStringsOrNull("description");
+  let author = config.getStringOrNull("author", true);
+  let authorIcon = config.getStringOrNull("author-icon", true);
+  let authorUrl = config.getStringOrNull("author-url", true);
+  let url = config.getStringOrNull("url", true);
+  let title = config.getStringOrNull("title", true);
+  let description = config.getStringOrNull("description", true);
   const fields = config.getSubsectionsOrNull("fields");
-  let footer = config.getStringOrNull("footer") || config.getStringsOrNull("footer");
-  let footerIcon = config.getStringOrNull("footer-icon") || config.getStringsOrNull("footer-icon");
-  let thumbnail = config.getStringOrNull("thumbnail") || config.getStringsOrNull("thumbnail");
-  let image = config.getStringOrNull("image") || config.getStringsOrNull("image");
+  let footer = config.getStringOrNull("footer", true);
+  let footerIcon = config.getStringOrNull("footer-icon", true);
+  let thumbnail = config.getStringOrNull("thumbnail", true);
+  let image = config.getStringOrNull("image", true);
   let timestamp = config.getStringOrNull("timestamp");
-  let color = config.getStringOrNull("color") || config.getStringsOrNull("color") || manager.configs.config.getString("default-color");
-
-  if (Array.isArray(author)) author = Utils.getRandom(author);
-  if (Array.isArray(authorIcon)) authorIcon = Utils.getRandom(authorIcon);
-  if (Array.isArray(authorUrl)) authorUrl = Utils.getRandom(authorUrl);
-  if (Array.isArray(url)) url = Utils.getRandom(url);
-  if (Array.isArray(title)) title = Utils.getRandom(title);
-  if (Array.isArray(description)) description = Utils.getRandom(description);
-  if (Array.isArray(footer)) footer = Utils.getRandom(footer);
-  if (Array.isArray(footerIcon)) footerIcon = Utils.getRandom(footerIcon);
-  if (Array.isArray(thumbnail)) thumbnail = Utils.getRandom(thumbnail);
-  if (Array.isArray(image)) image = Utils.getRandom(image);
-  if (Array.isArray(color)) color = Utils.getRandom(color);
+  let color = config.getStringOrNull("color", true) || manager.configs.config.getString("default-color");
 
   const embed = new EmbedBuilder()
     .setTitle(await Utils.applyVariables(title, variables, context) || null)
@@ -70,5 +58,5 @@ export async function setupEmbed(settings: EmbedSettings) {
     }
   }
 
-  return embed;
+  return embed.data;
 };

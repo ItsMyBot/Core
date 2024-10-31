@@ -43,7 +43,6 @@ leaderboard:
       description: "%current_item%"
       footer: '%current_page%/%total_pages%'
 
-
 plugin:
   list:
     content: |
@@ -66,48 +65,22 @@ plugin:
     content: "The plugin `%plugin_name%` doesn't exist."
     ephemeral: true
 
-server-info:
+reloaded:
+  content: "The bot has been reloaded. It may take a few seconds to deploy command."
+  ephemeral: true
+
+error-reloading:
   embeds:
-    - title: "💭︎ Server Info - %guild_name%"
+    - title: "Error while reloading the bot"
       description: |
-        • **Name**: %guild_name%
-        • **Guild ID**: %guild_id%
-        • **Created At**: %guild_createdate%
-      fields:
-        - name: "👑︎ Server Owner"
-          value: |
-            • **Account**: %owner_mention% | %owner_username%
-            • **ID**: %owner_id%
-            • **Created At**: %owner_createdate%
-        - name: ⬆️ Server Boost status
-          value: |
-            • **Boosts**: %guild_boosts% Boosts
-            • **Guild-Level**: Level %guild_level%
-      thumbnail: '%guild_icon%'
-      timestamp: true
-      footer: '%user_displayname%'
-      footer-icon: '%user_pfp%'
-    - title: "📉 Server Stats - %guild_name%"
-      fields:
-        - name: "📊︎ Global"
-          value: |
-            • **Total Channels**: %guild_channels%
-            • **Total Roles**: %guild_roles%
-            • **Total Emojis**: %guild_emojis%
-        - name: "👪︎ Member"
-          value: |
-            • **Total Humans**: %guild_members%
-            • **Total Bots**: %guild_bots%
-            • **Total Members**: %guild_users%
-        - name: "🤵 Member Status"
-          value: |
-            • **Online Humans**: %guild_online_members%
-            • **Idle Humans**: %guild_idle_members%
-            • **DND Humans**: %guild_dnd_members%
-            • **Offline Humans**: %guild_offline_members%
-      timestamp: true
-      footer: '%user_displayname%'
-      footer-icon: '%user_pfp%'
+        An error occurred while reloading the bot.
+        ```yaml
+        %error_message%
+        ```
+      color: "#ff0000"
+      footer: "Error"
+      footer-icon: "%bot_pfp%"
+  ephemeral: true
 
 parsed:
   embeds:
@@ -118,3 +91,11 @@ parsed:
         %parsed_text%
         ```
   ephemeral: true
+
+engine:
+  missing-argument:
+    content: "The script %script% is missing the `%missing%` argument."
+    ephemeral: true
+  missing-context:
+    content: "The script %script% is missing the `%missing%` context."
+    ephemeral: true

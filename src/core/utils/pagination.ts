@@ -166,11 +166,13 @@ export class Pagination {
   }
 
   private createCollector() {
-    this.collector = this.message.createMessageComponentCollector({ time: this.time });
+    const filter = (interaction: MessageComponentInteraction) => ['pagination_items', 'pagination_previous', 'pagination_next', 'pagination_filter'].includes(interaction.customId);
+
+    this.collector = this.message.createMessageComponentCollector({ filter,  time: this.time });
 
     this.collector.on('collect', async (interaction: MessageComponentInteraction) => {
-      if (interaction.customId === 'previous') this.prevPage();
-      if (interaction.customId === 'next') this.nextPage();
+      if (interaction.customId === 'pagination_previous') this.prevPage();
+      if (interaction.customId === 'pagination_next') this.nextPage();
 
       if (interaction instanceof StringSelectMenuInteraction) {
         if (interaction.values[0]?.startsWith("item_")) {
@@ -241,7 +243,7 @@ export class Pagination {
       rows.push(new ActionRowBuilder<StringSelectMenuBuilder>()
         .addComponents(
           new StringSelectMenuBuilder()
-            .setCustomId('items')
+            .setCustomId('pagination_items')
             .setPlaceholder(await Utils.applyVariables(this.lang.getStringOrNull("select-placeholder"), [
               ...this.variables,
               { searchFor: "%current_page%", replaceWith: this.currentPage + 1 },
@@ -265,7 +267,7 @@ export class Pagination {
       rows.push(new ActionRowBuilder<StringSelectMenuBuilder>()
         .addComponents(
           new StringSelectMenuBuilder()
-            .setCustomId('filter')
+            .setCustomId('pagination_filter')
             .setPlaceholder(this.lang.getString("filters-placeholder"))
             .setMinValues(0)
             .setMaxValues(this.categories.length)
@@ -276,8 +278,8 @@ export class Pagination {
     if (totalPages > 1) {
       rows.push(new ActionRowBuilder<ButtonBuilder>()
         .addComponents(await Promise.all([
-          Utils.setupButton({ customId: 'previous', config: this.lang.getSubsection("button-previous"), disabled: this.currentPage === 0, context: this.context }),
-          Utils.setupButton({ customId: 'next', config: this.lang.getSubsection("button-next"), disabled: this.currentPage === totalPages - 1, context: this.context }),
+          Utils.setupButton({ customId: 'pagination_previous', config: this.lang.getSubsection("button-previous"), disabled: this.currentPage === 0, context: this.context }),
+          Utils.setupButton({ customId: 'pagination_next', config: this.lang.getSubsection("button-next"), disabled: this.currentPage === totalPages - 1, context: this.context }),
         ])));
     }
 

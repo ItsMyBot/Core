@@ -1,26 +1,17 @@
-import { Manager, Plugin, Config } from '@itsmybot';
-import { Logger } from '@utils';
-import { Context } from '@contracts';
+import { Plugin, Config } from '@itsmybot';
+import { Base, Context } from '@contracts';
 import { BaseScript } from '../baseScript';
 
-export abstract class Condition {
-  public manager: Manager;
-  public plugin?: Plugin;
-  public logger: Logger
-
-  constructor(manager: Manager, plugin: Plugin | undefined = undefined) {
-    this.manager = manager;
-    this.plugin = plugin;
-    this.logger = plugin ? plugin.logger : manager.logger;
-  }
-
-  public parameters(): string[] {
-    return [];
-  }
-
-  public arguments(): string[] {
-    return [];
-  }
-
+export abstract class Condition<T extends Plugin | undefined = undefined> extends Base<T> {
   abstract isMet(script: BaseScript, context: Context, args: Config): Promise<boolean> | boolean
+
+  public missingContext(missing: string) {
+    this.logger.error(`Missing context: ${missing}`);
+    return false;
+  }
+
+  public missingArgument(missing: string) {
+    this.logger.error(`Missing argument: ${missing}`);
+    return false;
+  }
 }

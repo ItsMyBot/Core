@@ -6,7 +6,7 @@ import { ConditionHandler } from './conditions/conditionHandler.js';
 
 import { Manager, Script, CustomCommand, Command, User } from '@itsmybot';
 import { Logger } from '@utils';
-import { BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction } from '@contracts';
+import { BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction, Service } from '@contracts';
 
 import ScriptConfig from '../../resources/engine/script.js';
 import CustomCommandConfig from '../../resources/engine/customCommand.js';
@@ -14,9 +14,7 @@ import { CommandBuilder } from '@builders';
 import { MutatorHandler } from './mutators/mutatorHandler.js';
 import EngineEventEmitter from './eventEmitter.js';
 
-export default class EngineService {
-  manager: Manager
-
+export default class EngineService extends Service {
   scriptDir: string
   scripts: Collection<string, Script> = new Collection();
 
@@ -30,17 +28,26 @@ export default class EngineService {
   mutator: MutatorHandler
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.scriptDir = manager.managerOptions.dir.scripts;
     this.customCommandDir = manager.managerOptions.dir.customCommands;
+
+    this.action = new ActionHandler(manager);
+    this.condition = new ConditionHandler(manager);
+    this.mutator = new MutatorHandler(manager);
   }
 
   async initialize() {
     this.manager.logger.info('Script engine initialized.');
-    this.action = await Utils.serviceFactory.createService(ActionHandler, this.manager);
-    this.condition = await Utils.serviceFactory.createService(ConditionHandler, this.manager);
-    this.mutator = await Utils.serviceFactory.createService(MutatorHandler, this.manager)
+    
+    this.action.initialize();
+    this.condition.initialize();
+    this.mutator.initialize();
 
+    await this.loadScripts();
+  }
+
+  async loadScripts() {
     const scripts = await new BaseConfigSection(ScriptConfig, this.manager.logger, 'scripts', 'build/core/resources/engine/scripts').initialize();
     for (const filePath of scripts) {
       this.registerScript(filePath[0], filePath[1], this.manager.logger);
@@ -116,18 +123,13 @@ export default class EngineService {
     const customCommandClass = new CustomCommand(customCommand, this.manager.logger, this);
 
     class CustomCommandBase extends Command {
-      data: CommandBuilder;
-      options: Config[]
-
-      constructor(manager: Manager) {
-        super(manager);
-
-        this.options = customCommand.getSubsectionsOrNull("options") || []
-        this.data = new CommandBuilder()
+      build() {
+        const options = customCommand.getSubsectionsOrNull("options") || []
+        const data = new CommandBuilder()
           .setName(customCommandClass.data.getString("name"))
-          .setConfig(customCommandClass.data)
+          .using(customCommandClass.data)
 
-        for (const optionConfig of this.options) {
+        for (const optionConfig of options) {
           const option: CommandApplicationOption = {
             name: optionConfig.getString("name"),
             description: optionConfig.getString("description"),
@@ -169,8 +171,10 @@ export default class EngineService {
             }
           }
 
-          this.data.options.push(option)
+          data.options.push(option)
         }
+
+        return data
       }
 
       async execute(interaction: CommandInteraction, user: User) {

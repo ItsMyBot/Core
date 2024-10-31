@@ -1,6 +1,6 @@
 {
   "name": "itsmybot",
-  "version": "2.0.0",
+  "version": "2.0.4",
   "description": "",
   "main": "build/core/index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "url": "https://gg.itsme.to"
   },
   "devDependencies": {
+    "@inquirer/prompts": "^5.3.2",
     "@types/node": "^20.14.2",
     "@types/node-cron": "^3.0.11",
     "@types/validator": "^13.11.10",
@@ -30,7 +31,6 @@
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.10",
-    "@inquirer/prompts": "^5.3.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
@@ -38,7 +38,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "discord-html-transcripts": "^3.2.0",
-    "discord.js": "^14.16.1",
+    "discord.js": "^14.16.3",
     "glob": "^10.4.1",
     "mariadb": "^3.3.1",
     "mysql2": "^3.10.0",
@@ -47,6 +47,7 @@
     "sequelize": "^6.37.3",
     "sequelize-typescript": "^2.1.6",
     "sqlite3": "^5.1.7",
+    "ts-mixer": "^6.0.4",
     "yaml": "^2.4.5"
   }
 }

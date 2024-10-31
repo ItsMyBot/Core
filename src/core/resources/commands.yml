@@ -11,10 +11,11 @@ plugin:
     disable:
       description: "Disable a plugin."
       options:
-        plugin: "The plugin to disable."
+        plugin: "The plugin to disabled."
 
-server-info:
-  description: "Show information about the server."
+reload:
+  permission: "ADMINISTRATOR"
+  description: "Reload the bot"
 
 parse: 
   permission: "ADMINISTRATOR"

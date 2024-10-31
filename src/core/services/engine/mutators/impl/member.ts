@@ -4,13 +4,14 @@ import { Context, Variable } from '@contracts';
 import Utils from '@utils';
 
 export class MemberMutator extends Mutator {
-
-  public arguments() {
-    return ["member"];
-  }
-
   async apply(args: Config, context: Context, variables: Variable[]) {
-    const newMember = await context.member?.guild.members.fetch(await Utils.applyVariables(args.getString("member"), variables, context))
+    const member = await Utils.applyVariables(args.getStringOrNull("member"), variables, context)
+    if (!member) {
+      this.missingArgument("member");
+      return context
+    }
+
+    const newMember = await context.member?.guild.members.fetch(member)
     if (!newMember) return context
 
     const newUser = await this.manager.services.user.findOrCreate(newMember)

@@ -3,12 +3,9 @@ import { Action } from '../action.js';
 import { ActionScript } from 'core/services/engine/actionScript.js';
 
 export default class PinMessageAction extends Action {
-
-  public parameters() {
-    return ["message"];
-  }
-
   onTrigger(script: ActionScript, context: Context, variables: Variable[]) {
-    context.message!.pin();
+    if (!context.message) return this.missingContext("message", script, context);
+
+    context.message.pin();
   }
 }

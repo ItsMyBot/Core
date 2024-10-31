@@ -1,5 +1,5 @@
 import { Collection } from 'discord.js';
-import { Action, ActionScript, Manager } from '@itsmybot';
+import { Action, ActionScript, Manager, Plugin } from '@itsmybot';
 
 import AddReactionAction from './impl/addReaction.js';
 import AddRoleAction from './impl/addRole.js';
@@ -17,14 +17,14 @@ import { Context, Variable } from '@contracts';
 
 export class ActionHandler {
   manager: Manager;
-  actions: Collection<string, Action>;
+  actions: Collection<string, Action<Plugin | undefined>>;
 
   constructor(manager: Manager) {
     this.manager = manager;
     this.actions = new Collection();
   }
 
-  registerAction(id: string, action: Action) {
+  registerAction(id: string, action: Action<Plugin | undefined>) {
     if (this.actions.has(id)) return action.logger.warn(`Action ${id} is already registered`);
 
     this.actions.set(id, action);
@@ -35,16 +35,6 @@ export class ActionHandler {
 
     const actionInstance = this.actions.get(script.id);
     if (!actionInstance) return this.manager.logger.warn(`No action found for ID: ${script.id}`);
-
-    const actionParameters = actionInstance.parameters().filter((param: string) => !(param in context));
-    for (const param of actionParameters) {
-      return this.manager.logger.error(`${script.id} need the parameter '${param}'`);
-    }
-
-    const actionArguments = actionInstance.arguments().filter((arg: string) => !script.args.has(arg));
-    for (const arg of actionArguments) {
-      return this.manager.logger.error(`${script.id} need the argument '${arg}'`);
-    }
 
     actionInstance.trigger(script, context, variables);
   }

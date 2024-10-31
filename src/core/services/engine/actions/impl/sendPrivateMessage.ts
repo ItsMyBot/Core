@@ -10,7 +10,9 @@ export default class SendPrivateMessageAction extends Action {
   }
 
   async onTrigger(script: ActionScript, context: Context, variables: Variable[]) {
-    const message = await context.member!.send(await Utils.setupMessage({ config: script.args, context, variables }));
+    if (!context.member) return this.missingContext("member", script, context);
+
+    const message = await context.member.send(await Utils.setupMessage({ config: script.args, context, variables }));
 
     const newContext: Context = {
       ...context,

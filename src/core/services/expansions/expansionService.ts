@@ -1,14 +1,13 @@
 import { Collection } from 'discord.js';
 import { MathExpansion } from './impl/math.js';
-import { Manager, Expansion } from '@itsmybot';
-import { Context } from '@contracts';
+import { Manager, Expansion, Plugin } from '@itsmybot';
+import { Context, Service } from '@contracts';
 
-export default class ExpansionService {
-  manager: Manager;
-  expansions: Collection<string, Expansion>;
+export default class ExpansionService extends Service{
+  expansions: Collection<string, Expansion<Plugin | undefined>>;
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.expansions = manager.expansions;
   }
 
@@ -17,7 +16,7 @@ export default class ExpansionService {
     this.registerExpansion("math", new MathExpansion(this.manager));
   }
 
-  registerExpansion(identifier: string, expansion: Expansion) {
+  registerExpansion(identifier: string, expansion: Expansion<Plugin | undefined>) {
     if (this.expansions.has(identifier)) {
       return this.manager.logger.error(`An expansion with the identifier ${identifier} is already registered.`);
     }

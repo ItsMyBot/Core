@@ -11,7 +11,7 @@ export class ConditionArgValidator {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ActionValidator)
-  notMetActions: ActionValidator[]
+  'not-met-actions': ActionValidator[]
 
   @IsOptional()
   @IsArray()
@@ -21,6 +21,14 @@ export class ConditionArgValidator {
   @IsOptional()
   @IsNumber()
   amount: number
+
+  @IsOptional()
+  @IsBoolean()
+  inherit: boolean
+
+  @IsOptional()
+  @IsString()
+  role: string
 }
 
 export class ConditionValidator {
