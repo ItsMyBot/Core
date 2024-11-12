@@ -15,8 +15,8 @@ export class ExpressionCondition extends Condition {
     const inputNumber = parseFloat(await Utils.applyVariables(input, variables, context));
     const outputNumber = parseFloat(await Utils.applyVariables(output, variables, context));
  
-    if (isNaN(inputNumber)) return condition.invalidArg("input", "Invalid number");
-    if (isNaN(outputNumber)) return condition.invalidArg("output", "Invalid number");
+    if (isNaN(inputNumber)) return condition.logError("Invalid number in input");
+    if (isNaN(outputNumber)) return condition.logError("Invalid number in output");
 
     switch (operator) {
       case "==":
@@ -32,7 +32,7 @@ export class ExpressionCondition extends Condition {
       case "<=":
         return inputNumber <= outputNumber;
       default:
-        return condition.invalidArg("operator", "Invalid operator");
+        return condition.logError("Invalid argument: operator expected one of ==, !=, >, <, >=, <=");
     }
   }
 }

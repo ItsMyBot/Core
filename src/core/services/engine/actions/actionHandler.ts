@@ -1,5 +1,5 @@
 import { Collection } from 'discord.js';
-import { Action, ActionScript, Manager, Plugin } from '@itsmybot';
+import { Action, ActionData, Manager, Plugin } from '@itsmybot';
 
 import AddReactionAction from './impl/addReaction.js';
 import AddRoleAction from './impl/addRole.js';
@@ -30,7 +30,7 @@ export class ActionHandler {
     this.actions.set(id, action);
   }
 
-  async triggerAction(script: ActionScript, context: Context, variables: Variable[] = []) {
+  async triggerAction(script: ActionData, context: Context, variables: Variable[] = []) {
     if (!script.id) return this.manager.logger.error("No action ID found in script");
 
     const actionInstance = this.actions.get(script.id);

@@ -200,3 +200,4 @@ interface CommandApplicationOption {
   choices: undefined | { name: string, value: string | number }[]
   toJSON(): any
 }
+

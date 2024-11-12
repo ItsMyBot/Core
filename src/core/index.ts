@@ -11,7 +11,7 @@ export { Condition } from './services/engine/conditions/condition.js';
 export { Mutator } from './services/engine/mutators/mutator.js'
 export { BaseScript } from './services/engine/baseScript.js';
 export { Script } from './services/engine/script.js';
-export { ActionScript } from './services/engine/actionScript.js';
+export { ActionData } from './services/engine/actions/actionData.js';
 export { Plugin } from './services/plugins/plugin.js';
 export { Expansion } from './services/expansions/expansion.js';
 export { User } from './services/users/user.model.js';

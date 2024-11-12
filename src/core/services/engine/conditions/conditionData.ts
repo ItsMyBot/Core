@@ -1,5 +1,5 @@
 import { Logger } from '@utils';
-import { Config, ActionScript } from '@itsmybot';
+import { Config, ActionData } from '@itsmybot';
 import EngineService from '../engineService';
 
 export class ConditionData {
@@ -8,8 +8,7 @@ export class ConditionData {
   private path: string;
   public logger: Logger;
   public args: Config;
-  public notMetActions: ActionScript[];
-
+  public notMetActions: ActionData[];
   public engine: EngineService;
 
   constructor(engine: EngineService, condition: Config, notMetAction: boolean = true) {
@@ -19,7 +18,7 @@ export class ConditionData {
     this.engine = engine;
     this.logger = new Logger(`Condition/${this.id}`);
     this.args = condition.getSubsection("args");
-    this.notMetActions = notMetAction && condition.has("args.not-met-actions") ? condition.getSubsections("args.not-met-actions").map((actionData: Config) => new ActionScript(this.engine, actionData, condition.logger)) : [];
+    this.notMetActions = notMetAction && condition.has("args.not-met-actions") ? condition.getSubsections("args.not-met-actions").map((actionData: Config) => new ActionData(this.engine, actionData, condition.logger)) : [];
   }
 
   public logError(message: string) {
@@ -27,18 +26,13 @@ export class ConditionData {
     return false;
   }
 
-  public missingArg(arg: string) {
-    this.logError(`Missing required argument: ${arg}`);
+  public missingArg(missing: string) {
+    this.logError(`Missing required argument: "${missing}"`);
     return false;
   }
 
-  public invalidArg(arg: string, expected: string) {
-    this.logError(`Invalid argument: ${arg} expected ${expected}`);
-    return false;
-  }
-
-  public missingContext(context: string) {
-    this.logError(`Missing context: ${context}`);
+  public missingContext(missing: string) {
+    this.logError(`Missing context: "${missing}"`);
     return false;
   }
 }

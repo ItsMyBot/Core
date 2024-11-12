@@ -1,9 +1,9 @@
 import { Context, Variable } from '@contracts';
-import { ActionScript, BaseScript } from '@itsmybot';
+import { ActionData, BaseScript } from '@itsmybot';
 import { Collection } from 'discord.js';
 
 export class Script extends BaseScript {
-  triggers = new Collection<string, ActionScript[]>();
+  triggers = new Collection<string, ActionData[]>();
 
   loadTriggers() {
     for (const action of this.actions) {

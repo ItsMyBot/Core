@@ -1,11 +1,11 @@
 import { Context, Variable } from '@contracts';
 import { Action } from '../action.js';
-import { ActionScript } from 'core/services/engine/actionScript.js';
+import { ActionData } from 'core/services/engine/actions/actionData.js';
 import Utils from '@utils';
 
 export default class ReplyAction extends Action {
 
-  async onTrigger(script: ActionScript, context: Context, variables: Variable[]) {
+  async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
     let message
 
     if (context.interaction && context.interaction.isRepliable()) {

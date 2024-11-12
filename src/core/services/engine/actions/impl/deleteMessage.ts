@@ -1,10 +1,10 @@
 import { Context, Variable } from '@contracts';
 import { Action } from '../action.js';
-import { ActionScript } from 'core/services/engine/actionScript.js';
+import { ActionData } from 'core/services/engine/actions/actionData.js';
 
 export default class DeleteMessageAction extends Action {
-  onTrigger(script: ActionScript, context: Context, variables: Variable[]) {
-    if (!context.message) return this.missingContext("message", script, context);
+  onTrigger(script: ActionData, context: Context, variables: Variable[]) {
+    if (!context.message) return script.missingContext("message", context);
 
     context.message.delete();
   }

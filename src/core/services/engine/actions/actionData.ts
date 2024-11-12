@@ -1,16 +1,20 @@
 import { Logger } from '@utils';
 import { Config, BaseScript } from '@itsmybot';
-import EngineService from './engineService';
+import EngineService from '../engineService';
 import { Context, Variable } from '@contracts';
+import Utils from '@utils';
+import manager from '@itsmybot';
 
-export class ActionScript extends BaseScript {
-  id?: string;
-  args: Config;
-  triggers?: string[];
-  mutators?: Config[];
-  triggerActions: ActionScript[];
-  executionCounter: number = 0;
-  lastExecutionTime: number = 0;
+export class ActionData extends BaseScript {
+  public id?: string;
+  public args: Config;
+  private fileName: string;
+  private path: string;
+  public triggers?: string[];
+  public mutators?: Config[];
+  public triggerActions: ActionData[];
+  public executionCounter: number = 0;
+  public lastExecutionTime: number = 0;
 
   constructor(engine: EngineService, data: Config, logger: Logger, ) {
     super(engine, data, logger);
@@ -18,7 +22,7 @@ export class ActionScript extends BaseScript {
     this.args = data.getSubsectionOrNull("args") || data.empty();
     this.triggers = data.getStringsOrNull("triggers");
     this.mutators = data.getSubsectionsOrNull("mutators");
-    this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionScript(engine, actionData, logger)) : [];
+    this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionData(engine, actionData, logger)) : [];
   }
 
   async run(context: Context, variables: Variable[] = []) {
@@ -65,5 +69,47 @@ export class ActionScript extends BaseScript {
     if (this.args.has("chance") && Math.floor(Math.random() * 100) + 1 > this.args.getNumber("chance")) return false;
 
     return true;
+  }
+
+  public logError(message: string) {
+    this.logger.error(`${message} in ${this.fileName} at ${this.path}`);
+  }
+
+  public async missingArg(missing: string, context: Context) {
+    this.logError(`Missing required argument: "${missing}"`);
+
+    const message = await Utils.setupMessage({
+      config: manager.configs.lang.getSubsection("engine.missing-context"),
+      context,
+      variables: [
+        { searchFor: "%missing%", replaceWith: missing },
+        { searchFor: "%script%", replaceWith: this.id }
+      ]
+    });
+
+    if (context.interaction) {
+      context.interaction.reply(message);
+    } else if (context.message) {
+      context.message.reply(message);
+    }
+  }
+
+  public async missingContext(missing: string, context: Context) {
+    this.logError(`Missing context: "${missing}"`);
+
+    const message = await Utils.setupMessage({
+      config: manager.configs.lang.getSubsection("engine.missing-argument"),
+      context,
+      variables: [
+        { searchFor: "%missing%", replaceWith: missing },
+        { searchFor: "%script%", replaceWith: this.id }
+      ]
+    });
+
+    if (context.interaction) {
+      context.interaction.reply(message);
+    } else if (context.message) {
+      context.message.reply(message);
+    }
   }
 }
