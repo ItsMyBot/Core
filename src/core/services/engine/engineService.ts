@@ -113,14 +113,14 @@ export default class EngineService extends Service {
   registerScript(id: string, script: BaseConfig, logger: Logger) {
     if (this.scripts.has(id)) return logger.warn(`Script ${id} is already registered`);
 
-    const scriptClass = new Script(script, logger, this);
+    const scriptClass = new Script(this, script, logger);
     scriptClass.loadTriggers();
 
     this.scripts.set(id, scriptClass);
   }
 
   registerCustomCommand(id: string, customCommand: BaseConfig) {
-    const customCommandClass = new CustomCommand(customCommand, this.manager.logger, this);
+    const customCommandClass = new CustomCommand(this, customCommand, this.manager.logger);
 
     class CustomCommandBase extends Command {
       build() {

@@ -60,6 +60,43 @@ class Database {
   debug: boolean;
 }
 
+class LogConfig {
+  @IsDefined()
+  @IsBoolean()
+  enabled: boolean;
+
+  @IsDefined()
+  @IsString()
+  channel: string;
+}
+
+class Log {
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => LogConfig)
+  minor: LogConfig;
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => LogConfig)
+  moderate: LogConfig;
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => LogConfig)
+  high: LogConfig;
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => LogConfig)
+  major: LogConfig;
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => LogConfig)
+  critical: LogConfig;
+}
+
 export default class DefaultConfig {
   @IsDefined()
   @IsString()
@@ -93,4 +130,9 @@ export default class DefaultConfig {
   @ValidateNested()
   @Type(() => Database)
   database: Database
+
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Log)
+  log: Log
 }

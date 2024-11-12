@@ -60,3 +60,23 @@ database:
   password: "password" # Database password
   database: "database" # Database name
   debug: false # Debug mode for database
+
+# Configure channels for different log levels 
+# Each log level can be used in different plugin to define with channel to log to
+log:
+  minor: 
+    enabled: true
+    channel: "LOG_CHANNEL_ID"
+  moderate:
+    enabled: true
+    channel: "LOG_CHANNEL_ID"
+  high:
+    enabled: true
+    channel: "LOG_CHANNEL_ID"
+  major:
+    enabled: true
+    channel: "LOG_CHANNEL_ID"
+  critical:
+    enabled: true
+    channel: "LOG_CHANNEL_ID"
+  

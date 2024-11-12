@@ -8,6 +8,17 @@ export default class GuildMemberAddEvent extends Event {
 
   async execute(member: GuildMember) {
     if (member.guild.id !== this.manager.primaryGuildId) return;
-    await this.manager.services.user.findOrCreate(member);
+    const user = await this.manager.services.user.findOrCreate(member);
+
+    if (!member.pending) {
+      const context = {
+        member: member,
+        user: user,
+        guild: member.guild,
+        content: member.displayName
+      };
+
+      this.manager.services.engine.event.emit('guildMemberAdd', context);
+    }
   }
 };

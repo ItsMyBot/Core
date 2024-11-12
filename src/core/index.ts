@@ -6,6 +6,7 @@ import { readFileSync } from 'fs';
 import { Manager } from './manager.js';
 import { Logger } from '@utils';
 export { Action } from './services/engine/actions/action.js';
+export { ConditionData } from './services/engine/conditions/conditionData.js';
 export { Condition } from './services/engine/conditions/condition.js';
 export { Mutator } from './services/engine/mutators/mutator.js'
 export { BaseScript } from './services/engine/baseScript.js';

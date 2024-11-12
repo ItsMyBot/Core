@@ -12,13 +12,13 @@ export class ActionScript extends BaseScript {
   executionCounter: number = 0;
   lastExecutionTime: number = 0;
 
-  constructor(data: Config, logger: Logger, engine: EngineService) {
-    super(data, logger, engine);
+  constructor(engine: EngineService, data: Config, logger: Logger, ) {
+    super(engine, data, logger);
     this.id = data.getStringOrNull("id");
     this.args = data.getSubsectionOrNull("args") || data.empty();
     this.triggers = data.getStringsOrNull("triggers");
     this.mutators = data.getSubsectionsOrNull("mutators");
-    this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionScript(actionData, logger, engine)) : [];
+    this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionScript(engine, actionData, logger)) : [];
   }
 
   async run(context: Context, variables: Variable[] = []) {

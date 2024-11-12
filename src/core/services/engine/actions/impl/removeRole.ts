@@ -15,7 +15,7 @@ export default class RemoveRoleAction extends Action {
     roles.filter(Boolean);
 
     if (roles.length) {
-      context.member.roles.add(roles as Role[]);
+      context.member.roles.remove(roles as Role[]);
     }
   }
 }

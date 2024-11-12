@@ -1,8 +1,7 @@
-import { ActionRowBuilder, APIActionRowComponent, APIEmbed, APIMessageActionRowComponent, Attachment, AttachmentBuilder, BufferResolvable, MessageMentionOptions, PollData } from 'discord.js';
+import { ActionRowBuilder } from 'discord.js';
 import { Config } from '@itsmybot';
 import Utils from '@utils';
-import { Context, Variable } from '@contracts';
-import { Stream } from 'stream';
+import { Context, Variable, MessageOutput } from '@contracts';
 
 interface MessageSettings {
   config: Config,
@@ -16,18 +15,7 @@ interface MessageSettings {
   disableMentions?: boolean
 }
 
-interface MessageOutput {
-  allowedMentions: MessageMentionOptions,
-  components: APIActionRowComponent<APIMessageActionRowComponent>[],
-  content: string | undefined,
-  embeds: APIEmbed[],
-  ephemeral?: boolean,
-  fetchReply?: boolean,
-  files: (Attachment | AttachmentBuilder | Stream | BufferResolvable)[],
-  poll?: PollData
-}
-
-export async function setupMessage(settings: MessageSettings) {
+export async function setupMessage(settings: MessageSettings): Promise<MessageOutput> {
   const message: MessageOutput = {
     content: undefined,
     embeds: [],

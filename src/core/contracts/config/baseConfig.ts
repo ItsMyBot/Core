@@ -18,7 +18,7 @@ export class BaseConfig extends Config {
   private defaultFilePath?: string;
 
   constructor(settings: { logger: Logger, configFilePath: string, defaultFilePath?: string, ConfigClass?: any, update?: boolean }) {
-    super(settings.logger)
+    super(settings.logger, settings.configFilePath);
     this.configClass = settings.ConfigClass
 
     this.update = settings.update || false

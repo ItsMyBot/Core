@@ -1,14 +1,13 @@
-import { Condition } from '../condition.js';
-import { ActionScript, Config } from '@itsmybot';
-import { Context } from '@contracts';
+import { Condition, ConditionData } from '@itsmybot';
+import { Context, Variable } from '@contracts';
 import Utils from '@utils';
 
 export class HasRoleCondition extends Condition {
-  isMet(script: ActionScript, context: Context, args: Config) {
-    if (!context.member) return this.missingContext("member");
-    const role = args.getStringOrNull("role");
-    if (!role) return this.missingArgument("role");
+  isMet(condition: ConditionData, context: Context, variables: Variable[]) {
+    if (!context.member) return condition.missingContext("member");
+    const role = condition.args.getStringOrNull("role");
+    if (!role) return condition.missingArg("role");
 
-    return Utils.hasRole(context.member, role, args.getBoolOrNull("inherit"));
+    return Utils.hasRole(context.member, role, condition.args.getBoolOrNull("inherit"));
   }
 }

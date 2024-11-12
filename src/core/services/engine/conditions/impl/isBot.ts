@@ -1,11 +1,9 @@
-import { Condition } from '../condition.js';
-import { ActionScript, Config } from '@itsmybot';
-import { Context } from '@contracts';
+import { Condition, ConditionData } from '@itsmybot';
+import { Context, Variable } from '@contracts';
 
 export class IsBotCondition extends Condition {
-
-  isMet(script: ActionScript, context: Context, args: Config) {
-    if (!context.member) return this.missingContext("member");
+  isMet(condition: ConditionData, context: Context, variables: Variable[]) {
+    if (!context.member) return condition.missingContext("member");
 
     return context.member.user.bot;
   }

@@ -34,8 +34,7 @@ export default class PluginCommand extends Command {
             option.setName("plugin")
               .setDescription(command.getString("subcommands.disable.options.plugin"))
               .setRequired(true)
-              .setAutocomplete(true)))
-        
+              .setAutocomplete(true))) 
   }
 
   async autocomplete(interaction: AutocompleteInteraction) {
