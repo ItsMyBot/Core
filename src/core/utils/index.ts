@@ -178,9 +178,9 @@ export default {
 
     return result * 1000;
   },
-  async logToChannel(level: string, message: MessageOutput) {
-    const log = manager.configs.config.getSubsection('log');
-    if (!log.getBool('enabled')) return;
+  async logToDiscord(id: string, message: MessageOutput) {
+    const log = manager.configs.config.getSubsections('log-channels').find(log => log.getString("id") === id);
+    if (!log) return;
 
     const channel = await findTextChannel(log.getString('channel'));
     if (!channel) return;

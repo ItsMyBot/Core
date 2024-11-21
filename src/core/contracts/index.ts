@@ -17,6 +17,8 @@ export { CommandValidator } from './validators/command.js';
 export { MessageValidator } from './validators/message.js';
 export { ButtonValidator, ComponentValidator, ModalValidator } from './validators/component.js';
 
+export { ConditionValidator, MutatorValidator, ActionValidator, TriggerActionValidator } from './validators/scripting.js';
+
 export { Config };
 
 export interface Variable {

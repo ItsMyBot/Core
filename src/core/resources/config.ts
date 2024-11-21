@@ -1,6 +1,6 @@
 import { IsActivityType } from '@contracts';
 import { Type } from 'class-transformer';
-import { IsString, IsInt, ValidateNested, IsBoolean, Validate, IsDefined, NotEquals, IsHexColor, IsIn, IsPositive } from 'class-validator';
+import { IsString, IsInt, ValidateNested, IsBoolean, Validate, IsDefined, NotEquals, IsHexColor, IsIn, IsPositive, IsArray } from 'class-validator';
 
 class Activity {
   @IsDefined()
@@ -62,39 +62,12 @@ class Database {
 
 class LogConfig {
   @IsDefined()
-  @IsBoolean()
-  enabled: boolean;
+  @IsString()
+  id: string;
 
   @IsDefined()
   @IsString()
   channel: string;
-}
-
-class Log {
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => LogConfig)
-  minor: LogConfig;
-
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => LogConfig)
-  moderate: LogConfig;
-
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => LogConfig)
-  high: LogConfig;
-
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => LogConfig)
-  major: LogConfig;
-
-  @IsDefined()
-  @ValidateNested()
-  @Type(() => LogConfig)
-  critical: LogConfig;
 }
 
 export default class DefaultConfig {
@@ -132,7 +105,8 @@ export default class DefaultConfig {
   database: Database
 
   @IsDefined()
-  @ValidateNested()
-  @Type(() => Log)
-  log: Log
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LogConfig)
+  'log-channels': LogConfig[]
 }

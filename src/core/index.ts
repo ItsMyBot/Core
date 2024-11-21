@@ -5,6 +5,7 @@ import { join } from 'path';
 import { readFileSync } from 'fs';
 import { Manager } from './manager.js';
 import { Logger } from '@utils';
+
 export { Action } from './services/engine/actions/action.js';
 export { ConditionData } from './services/engine/conditions/conditionData.js';
 export { Condition } from './services/engine/conditions/condition.js';
@@ -30,8 +31,7 @@ const processFolder = process.cwd();
 const packageJsonPath = join(processFolder, 'package.json');
 const packageJSON = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
 
-const manager = new Manager(
-    {
+const manager = new Manager({
         intents: [
             GatewayIntentBits.Guilds,
             GatewayIntentBits.GuildEmojisAndStickers,
@@ -64,7 +64,7 @@ const manager = new Manager(
         scripts: join(processFolder, 'scripts'),
         customCommands: join(processFolder, 'custom-commands'),
         logs: join(processFolder, 'logs'),
-    },
+    }
 });
 
 manager.initialize();
