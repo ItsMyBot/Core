@@ -4,8 +4,8 @@ import Utils from '@utils';
 export class Config {
   public values: Map<string, any>;
   public logger: Logger;
-  private currentPath: string;
-  private fileName: string;
+  public currentPath: string;
+  public fileName: string;
 
   constructor(logger: Logger, fileName: string = '', currentPath = '') {
     this.values = new Map();

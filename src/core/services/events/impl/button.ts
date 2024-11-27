@@ -13,7 +13,7 @@ export default class ButtonEvent extends Event {
       member: interaction.member || undefined,
       user: user,
       channel: interaction.channel || undefined,
-      content: interaction.customId.replace("script_", ""),
+      content: interaction.customId,
       interaction: interaction
     };
 

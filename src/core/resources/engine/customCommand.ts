@@ -1,8 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsString, ValidateNested, IsOptional, IsDefined, IsArray, IsBoolean, IsNumber, Validate } from 'class-validator';
-import { ConditionValidator, ActionValidator } from './script.js';
-import { IsChannelType, IsCommandOptionType } from 'core/contracts/decorators/validator.js';
-import { CommandValidator } from '@contracts';
+import { CommandValidator, ConditionValidator, ActionValidator, IsChannelType, IsCommandOptionType } from '@contracts';
 
 class ChoiceOptionValidator {
   @IsDefined()

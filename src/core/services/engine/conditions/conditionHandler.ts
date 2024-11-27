@@ -1,14 +1,15 @@
 import { Collection } from 'discord.js';
-import { Manager, Condition, BaseScript, Plugin } from '@itsmybot';
-import { Context, Variable } from '@contracts';
+import { Manager, Condition, Plugin, ConditionData } from '@itsmybot';
+import { Context, Variable, Config } from '@contracts';
 
 import { AboveMembersCondition } from './impl/aboveMembers.js';
 import { BellowMembersCondition } from './impl/bellowMembers.js';
 import { ContentCondition } from './impl/content.js';
 import { ContentContainsCondition } from './impl/contentContains.js';
+import { ExpressionCondition } from './impl/expression.js';
 import { IsBotCondition } from './impl/isBot.js';
 import { HasRoleCondition } from './impl/hasRole.js';
-import { ScriptCondition } from '../baseScript.js';
+import { Logger } from '@utils';
 
 export class ConditionHandler {
   manager: Manager;
@@ -25,14 +26,32 @@ export class ConditionHandler {
     this.conditions.set(id, condition);
   }
 
-  async isConditionMet(conditionData: ScriptCondition, script: BaseScript, context: Context, variables: Variable[]) {
+  buildConditions(conditions: Config[] | undefined, logger: Logger, notMetAction: boolean = true): ConditionData[] {
+    if (!conditions) return [];
+
+    return conditions.map(condition => new ConditionData(this.manager.services.engine, condition, notMetAction));
+  }
+
+  async meetsConditions(conditions: ConditionData[], context: Context, variables: Variable[]): Promise<boolean> {
+    if (!conditions) return true;
+
+    for (const condition of conditions) {
+      const isMet = await this.isConditionMet(condition, context, variables);
+
+      if (!isMet) return false;
+    }
+
+    return true;
+  }
+
+  async isConditionMet(conditionData: ConditionData, context: Context, variables: Variable[]) {
     const condition = this.conditions.get(conditionData.id);
     if (!condition) {
       this.manager.logger.warn(`No condition found for ID: ${conditionData.id}`);
       return false;
     }
 
-    let isMet = condition.isMet(script, context, conditionData.args);
+    let isMet = await condition.isMet(conditionData, context, variables);
 
     if (conditionData.args.getBoolOrNull("inverse")) {
       isMet = !isMet;
@@ -50,6 +69,7 @@ export class ConditionHandler {
     this.registerCondition("bellowMembers", new BellowMembersCondition(this.manager));
     this.registerCondition("content", new ContentCondition(this.manager));
     this.registerCondition("contentContains", new ContentContainsCondition(this.manager));
+    this.registerCondition("expression", new ExpressionCondition(this.manager));
     this.registerCondition("isBot", new IsBotCondition(this.manager));
     this.registerCondition("hasRole", new HasRoleCondition(this.manager));
   }

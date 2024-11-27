@@ -1,22 +1,22 @@
 import { Context, Variable } from '@contracts';
 import { Action } from '../action.js';
-import { ActionScript } from 'core/services/engine/actionScript.js';
+import { ActionData } from 'core/services/engine/actions/actionData.js';
 import Utils from '@utils';
 import { Role } from 'discord.js';
 
 export default class AddRoleAction extends Action {
-  async onTrigger(script: ActionScript, context: Context, variables: Variable[]) {
+  async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
     const rolesToAdd = script.args.getStringsOrNull("role")
 
-    if (!context.member) return this.missingContext("member", script, context);
-    if (!context.guild) return this.missingContext("guild", script, context);
-    if (!rolesToAdd) return this.missingArgument("role", script, context);
+    if (!context.member) return script.missingContext("member", context);
+    if (!context.guild) return script.missingContext("guild", context);
+    if (!rolesToAdd) return script.missingArg("role", context);
 
     let roles = await Promise.all(rolesToAdd.map(async roleName => Utils.findRole(await Utils.applyVariables(roleName, variables, context), context.guild)));
-    roles.filter(Boolean);
-
+    roles = roles.filter(Boolean);
+    
     if (roles.length) {
-      context.member.roles.add(roles as Role[]);
+      await context.member.roles.add(roles as Role[]);
     }
   }
 }

@@ -1,13 +1,11 @@
-import { Condition } from '../condition.js';
-import { ActionScript, Config } from '@itsmybot';
-import { Context } from '@contracts';
+import { Condition, ConditionData } from '@itsmybot';
+import { Context, Variable } from '@contracts';
 
 export class ContentContainsCondition extends Condition {
-
-  isMet(script: ActionScript, context: Context, args: Config) {
-    const arg = args.getStringsOrNull("text")
-    if (!arg) return this.missingArgument("text");
-    if (!context.content) return this.missingContext("content");
+  isMet(condition: ConditionData, context: Context, variables: Variable[]) {
+    const arg = condition.args.getStringsOrNull("text")
+    if (!arg) return condition.missingArg("text");
+    if (!context.content) return condition.missingContext("content");
 
     return arg && arg.some(text => context.content!.includes(text));
   }

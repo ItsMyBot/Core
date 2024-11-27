@@ -1,11 +1,11 @@
 import { Context, Variable } from '@contracts';
 import { Action } from '../action.js';
-import { ActionScript } from 'core/services/engine/actionScript.js';
+import { ActionData } from 'core/services/engine/actions/actionData.js';
 import Utils from '@utils';
 
 export default class RemoveReactionAction extends Action {
-  async onTrigger(script: ActionScript, context: Context, variables: Variable[]) {
-    if (!context.message) return this.missingContext("message", script, context);
+  async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
+    if (!context.message) return script.missingContext("message", context);
 
     const emoji = await Utils.applyVariables(script.args.getStringOrNull('emoji'), variables, context)
 

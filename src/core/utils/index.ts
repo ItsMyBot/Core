@@ -15,7 +15,7 @@ export { Pagination } from './pagination.js';
 import manager from '@itsmybot';
 
 import { GuildMember } from 'discord.js';
-import { Context, Variable } from '@contracts';
+import { Context, Variable, MessageOutput } from '@contracts';
 
 const discordEpoch = 1420070400000;
 
@@ -92,7 +92,7 @@ export default {
     return array[Math.floor(Math.random() * array.length)]
   },
 
-  async hasRole(member: GuildMember, identifiers: string, inherited = true) {
+  async hasRole(member: GuildMember, identifiers: string, inherited = false) {
     const searchIdentifiers = Array.isArray(identifiers) ? identifiers : [identifiers];
 
     for (const identifier of searchIdentifiers) {
@@ -107,9 +107,7 @@ export default {
         const targetRole = member.guild.roles.cache.find(r => r.name.toLowerCase() === search || r.id === search);
         if (targetRole) {
           const hasHigherRole = member.roles.cache.some(r => r.position > targetRole.position);
-          if (hasHigherRole) {
-            return true;
-          }
+          if (hasHigherRole) return true;
         }
       }
     }
@@ -179,5 +177,14 @@ export default {
     }
 
     return result * 1000;
+  },
+  async logToDiscord(id: string, message: MessageOutput) {
+    const log = manager.configs.config.getSubsections('log-channels').find(log => log.getString("id") === id);
+    if (!log) return;
+
+    const channel = await findTextChannel(log.getString('channel'));
+    if (!channel) return;
+
+    channel.send(message)
   }
 };

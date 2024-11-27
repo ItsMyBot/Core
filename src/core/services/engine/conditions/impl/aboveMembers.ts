@@ -1,12 +1,12 @@
+import { ConditionData } from '@itsmybot';
 import { Condition } from '../condition.js';
-import { ActionScript, Config } from '@itsmybot';
-import { Context } from '@contracts';
+import { Context, Variable } from '@contracts';
 
 export class AboveMembersCondition extends Condition {
-  isMet(script: ActionScript, context: Context, args: Config) {
-    if (!context.guild) return this.missingContext("guild");
-    const amount = args.getNumberOrNull("amount");
-    if (!amount) return this.missingArgument("amount");
+  isMet(condition: ConditionData, context: Context, variables: Variable[]) {
+    if (!context.guild) return condition.missingContext("guild");
+    const amount = condition.args.getNumberOrNull("amount");
+    if (!amount) return condition.missingArg("amount");
 
     return context.guild.memberCount > amount;
   }
