@@ -14,7 +14,7 @@ export class BaseScript {
     this.logger = logger;
     this.engine = engine
     this.data = data;
-    this.conditions = this.engine.condition.buildConditions(data.getSubsectionsOrNull("conditions"), this.logger);
+    this.conditions = data.has("conditions") ? this.engine.condition.buildConditions(data.getSubsections("conditions")) : [];
     this.actions = data.has("actions") ? data.getSubsections("actions").map((actionData: Config) => new ActionData(engine, actionData, logger, )) : [];
   }
 

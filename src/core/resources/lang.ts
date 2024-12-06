@@ -21,6 +21,10 @@ class Interaction {
 
 class Plugin {
   @IsDefined()
+  @IsString()
+  information: string
+
+  @IsDefined()
   @ValidateNested()
   @Type(() => MessageValidator)
   list: MessageValidator

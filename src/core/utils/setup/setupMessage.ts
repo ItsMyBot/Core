@@ -36,7 +36,7 @@ export async function setupMessage(settings: MessageSettings): Promise<MessageOu
 
     if (content.length > 2000) content = content.substring(0, 1997) + "...";
 
-    message.content = content;
+    message.content = Utils.removeHiddenLines(content);
   }
 
   let embeds = settings.config.getSubsectionsOrNull("embeds") || [];

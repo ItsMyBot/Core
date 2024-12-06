@@ -9,7 +9,6 @@ import { ContentContainsCondition } from './impl/contentContains.js';
 import { ExpressionCondition } from './impl/expression.js';
 import { IsBotCondition } from './impl/isBot.js';
 import { HasRoleCondition } from './impl/hasRole.js';
-import { Logger } from '@utils';
 
 export class ConditionHandler {
   manager: Manager;
@@ -26,8 +25,7 @@ export class ConditionHandler {
     this.conditions.set(id, condition);
   }
 
-  buildConditions(conditions: Config[] | undefined, logger: Logger, notMetAction: boolean = true): ConditionData[] {
-    if (!conditions) return [];
+  buildConditions(conditions: Config[], notMetAction: boolean = true): ConditionData[] {
 
     return conditions.map(condition => new ConditionData(this.manager.services.engine, condition, notMetAction));
   }

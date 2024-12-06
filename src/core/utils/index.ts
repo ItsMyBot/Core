@@ -92,6 +92,15 @@ export default {
     return array[Math.floor(Math.random() * array.length)]
   },
 
+  removeHiddenLines(text: string) {
+    let texts = text.split('\n');
+
+    texts = texts.filter((line) => !line.startsWith('show=false '));
+    texts = texts.map((line) => line.replace('show=true ', ''));
+
+    return texts.join('\n');
+  },
+
   async hasRole(member: GuildMember, identifiers: string, inherited = false) {
     const searchIdentifiers = Array.isArray(identifiers) ? identifiers : [identifiers];
 

@@ -114,25 +114,30 @@ export default class PluginCommand extends Command {
         break;
 
       case 'list':
-        const getPluginDetails = (plugin: Plugin) => {
+        const pluginInfo = lang.getString("plugin.information");
+        
+        const getPluginDetails = async (plugin: Plugin) => {
           const status = plugin.enabled ? '✅' : '❌';
-          const description = plugin.description ? `- ${plugin.description}` : '';
-          const authors = plugin.authors ? `- Authors: ${plugin.authors.join(', ')}` : '';
-          const website = plugin.website ? `- ${hyperlink("Website", hideLinkEmbed(plugin.website))}` : '';
+
+          const info = await Utils.applyVariables(pluginInfo, [
+            { searchFor: "%status%", replaceWith: status },
+            { searchFor: "%name%", replaceWith: plugin.name },
+            { searchFor: "%version%", replaceWith: plugin.version },
+            { searchFor: "%description%", replaceWith: plugin.description },
+            { searchFor: "%authors%", replaceWith: plugin.authors.join(', ') },
+            { searchFor: "%website%", replaceWith: hyperlink("Website", hideLinkEmbed(plugin.website || '')) },
+            { searchFor: "%has_description%", replaceWith: plugin.description ? true : false },
+            { searchFor: "%has_website%", replaceWith: plugin.website ? true : false }
+          ]);
 
           return {
             label: plugin.name,
             emoji: status,
-            message: [
-              `### ${status} ${plugin.name} v${plugin.version}`,
-              description,
-              authors,
-              website,
-            ].filter(Boolean).join("\n")
+            message: Utils.removeHiddenLines(info)
           };
         };
 
-        const plugins = this.manager.services.plugin.plugins.map(getPluginDetails);
+        const plugins = await Promise.all(this.manager.services.plugin.plugins.map(getPluginDetails));
 
         new Pagination(interaction, plugins, lang.getSubsection("plugin.list"))
           .setContext({

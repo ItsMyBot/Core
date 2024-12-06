@@ -29,9 +29,12 @@ export async function setupEmbed(settings: EmbedSettings) {
   let timestamp = config.getStringOrNull("timestamp");
   let color = config.getStringOrNull("color", true) || manager.configs.config.getString("default-color");
 
+  description = await Utils.applyVariables(description, variables, context);
+  if (description) description = Utils.removeHiddenLines(description);
+
   const embed = new EmbedBuilder()
     .setTitle(await Utils.applyVariables(title, variables, context) || null)
-    .setDescription(await Utils.applyVariables(description, variables, context) || null)
+    .setDescription(description || null)
     .setAuthor({
       name: await Utils.applyVariables(author, variables, context) || null!,
       iconURL: await Utils.applyVariables(authorIcon, variables, context) || undefined,
@@ -47,12 +50,15 @@ export async function setupEmbed(settings: EmbedSettings) {
     .setColor(await Utils.applyVariables(color, variables, context) as ColorResolvable || null)
     .setURL(await Utils.applyVariables(url, variables, context) || null);
 
-  if (Array.isArray(fields) && fields.length) {
+  if (Array.isArray(fields)) {
     for (const field of fields) {
+      const show = await Utils.applyVariables(field.getStringOrNull('show'), variables, context);
+      
+      if (show === "false") continue;
 
       embed.addFields({
         name: await Utils.applyVariables(field.getString("name"), variables, context),
-        value: await Utils.applyVariables(field.getString("value"), variables, context),
+        value: Utils.removeHiddenLines(await Utils.applyVariables(field.getString("value"), variables, context)),
         inline: field.getBoolOrNull("inline") || false,
       });
     }
