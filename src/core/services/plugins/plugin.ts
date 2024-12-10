@@ -102,7 +102,7 @@ export abstract class Plugin {
     }).initialize();
   }
 
-  async createConfigSection(config: any, configFolderPath: string): Promise<Collection<string, BaseConfig>> {
+  async createConfigSection(configFolderPath: string, config: any): Promise<Collection<string, BaseConfig>> {
     const pluginFolder = join(this.manager.managerOptions.dir.configs, this.name);
     if (!existsSync(pluginFolder)) mkdirSync(pluginFolder);
 

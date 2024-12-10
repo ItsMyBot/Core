@@ -27,6 +27,8 @@ export default class PluginService extends Service {
 
     const pluginFolders = sync("*/", { cwd: this.pluginsDir, dot: false });
     for (const pluginFolder of pluginFolders) {
+      if (pluginFolder.startsWith("_")) continue;
+
       const logger = new Logger(pluginFolder);
       try {
         await this.loadPlugin(pluginFolder);

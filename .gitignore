@@ -3,7 +3,11 @@
 /scripts/
 /custom-commands/
 /build/
-/src/plugins/
+
+/src/plugins/**
+
+!src/plugins/_Example/
+!src/plugins/_Example/**
 
 .vagrant/
 .vscode
