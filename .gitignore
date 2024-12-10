@@ -5,6 +5,7 @@
 /build/
 
 /src/plugins/**
+src/plugins/.git
 
 !src/plugins/_Example/
 !src/plugins/_Example/**
