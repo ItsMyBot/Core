@@ -4,12 +4,25 @@ import PluginConfig from './resources/config.js'; // Import configuration valida
 import LangConfig from './resources/lang.js';
 import CommandsConfig from './resources/commands.js';
 import CategoryConfig from './resources/category.js';
+import { Collection } from 'discord.js';
+import { BaseConfig } from '@contracts';
+
+// This is an example of how to define a configurations object, used for typing and tab completion
+interface Configs {
+  config: BaseConfig;
+  lang: BaseConfig;
+  commands: BaseConfig;
+  categories: Collection<string, BaseConfig>
+}
 
 // This is an example plugin, you can use this as a template for your own plugins, since it's start with an underscore, it won't be loaded.
 export default class ExamplePlugin extends Plugin {
   version = '0.0.1'; // Version of the plugin, required
   authors = ['@itsme.to'] // Authors of the plugin, required
   website = 'https://yourwebsite.com'; // Website of the plugin, optional, can be used for more information or purchase
+  description = 'This is an example plugin'; // Description of the plugin, optional
+
+  configs = {} as Configs;
 
   async load() {
     // This method is called when the plugin is loaded, before initialize and can be reloadable, useful for loading configs
@@ -28,5 +41,6 @@ export default class ExamplePlugin extends Plugin {
 
   async initialize() {
     // This method is called when the plugin is initialized, only called once, useful for registering Expansions, etc.
+
   }
 }

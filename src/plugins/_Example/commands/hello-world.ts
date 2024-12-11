@@ -1,4 +1,3 @@
-import Utils from '@utils';
 import { CommandBuilder } from '@builders';
 import { CommandInteraction } from "@contracts";
 import { Command, User } from '@itsmybot';
@@ -76,15 +75,6 @@ export default class HelloWorldCommand extends Command<ExamplePlugin> {
   }
 
   async autocomplete(interaction: AutocompleteInteraction): Promise<any> {
-    switch (interaction.options.getSubcommand()) {
-      case 'create':
-        const focusedValue = interaction.options.getFocused();
-        const suggestions = getSuggestions(focusedValue);
-        interaction.respond(
-          suggestions.map(suggestion => ({ name: suggestion, value: suggestion }))
-        );
-        break;
-    }
   }
 
   async execute(interaction: CommandInteraction, user: User) {
