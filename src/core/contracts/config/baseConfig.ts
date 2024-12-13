@@ -62,33 +62,41 @@ export class BaseConfig extends Config {
     const formattedErrors = formatValidationErrors(errors);
 
     if (this.defaultContent) {
-      let edited = false;
-      for (const error of formattedErrors) {
-        const [path, errorMessage] = error.split(': ', 2);
-        if (errorMessage && errorMessage.includes('should not be null or undefined')) {
-          const pathArray = path.split('.');
-          const defaultValue: any = this.defaultContent.getIn(pathArray, true);
-          if (defaultValue !== null && defaultValue !== undefined) {
-            this.logger.warn(`Using default value for ${path}: ${defaultValue}`);
-            this.configContent.setIn(pathArray, defaultValue);
-            edited = true;
-          }
-        }
-      }
-
-      if (edited) {
+      const corrected = await this.correctWithDefaults(formattedErrors);
+      if (corrected) {
         await fs.writeFile(this.configFilePath, this.configContent.toString(), 'utf8');
         return this.loadConfigs();
       }
     }
 
-    if (formattedErrors.length > 0) {
-      this.logger.error(`Validation errors in the configuration file '${this.configFilePath}':`);
-      formattedErrors.forEach(error => {
-        this.logger.error(`- ${error}`);
-      });
-      process.exit(1);
+    this.handleValidationErrors(formattedErrors);
+  }
+  
+  async correctWithDefaults(errors: string[]): Promise<boolean> {
+    let corrected = false;
+
+    for (const error of errors) {
+      const [path, errorMessage] = error.split(': ', 2);
+      if (errorMessage.includes('should not be null or undefined')) {
+        const pathArray = path.split('.');
+        const defaultValue: any = this.defaultContent.getIn(pathArray, true);
+        if (defaultValue !== null && defaultValue !== undefined) {
+          this.logger.warn(`Using default value for '${path}': ${defaultValue}`);
+          this.configContent.setIn(pathArray, defaultValue);
+          corrected = true;
+        }
+      }
     }
+
+    return corrected;
+  }
+
+  handleValidationErrors(errors: string[]) {
+    if (errors.length === 0) return;
+
+    this.logger.error(`Validation errors in the configuration file '${this.configFilePath}':`);
+    errors.forEach(error => this.logger.error(`- ${error}`));
+    process.exit(1);
   }
 
   private async replaceTabs() {

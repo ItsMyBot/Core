@@ -1,5 +1,5 @@
 import { Collection } from 'discord.js';
-import { Manager, Condition, Plugin, ConditionData } from '@itsmybot';
+import { Condition, Plugin, ConditionData } from '@itsmybot';
 import { Context, Variable, Config } from '@contracts';
 
 import { AboveMembersCondition } from './impl/aboveMembers.js';
@@ -9,13 +9,14 @@ import { ContentContainsCondition } from './impl/contentContains.js';
 import { ExpressionCondition } from './impl/expression.js';
 import { IsBotCondition } from './impl/isBot.js';
 import { HasRoleCondition } from './impl/hasRole.js';
+import EngineService from '../engineService.js';
 
 export class ConditionHandler {
-  manager: Manager;
+  engine: EngineService;
   conditions: Collection<string, Condition<Plugin | undefined>>;
 
-  constructor(manager: Manager) {
-    this.manager = manager;
+  constructor(engine: EngineService) {
+    this.engine = engine;
     this.conditions = new Collection();
   }
 
@@ -27,7 +28,7 @@ export class ConditionHandler {
 
   buildConditions(conditions: Config[], notMetAction: boolean = true): ConditionData[] {
 
-    return conditions.map(condition => new ConditionData(this.manager.services.engine, condition, notMetAction));
+    return conditions.map(condition => new ConditionData(this.engine, condition, notMetAction));
   }
 
   async meetsConditions(conditions: ConditionData[], context: Context, variables: Variable[]): Promise<boolean> {
@@ -45,7 +46,7 @@ export class ConditionHandler {
   async isConditionMet(conditionData: ConditionData, context: Context, variables: Variable[]) {
     const condition = this.conditions.get(conditionData.id);
     if (!condition) {
-      this.manager.logger.warn(`No condition found for ID: ${conditionData.id}`);
+      conditionData.logger.warn(`No condition found for ID: ${conditionData.id}`);
       return false;
     }
 
@@ -63,12 +64,12 @@ export class ConditionHandler {
   }
 
   initialize() {
-    this.registerCondition("aboveMembers", new AboveMembersCondition(this.manager));
-    this.registerCondition("bellowMembers", new BellowMembersCondition(this.manager));
-    this.registerCondition("content", new ContentCondition(this.manager));
-    this.registerCondition("contentContains", new ContentContainsCondition(this.manager));
-    this.registerCondition("expression", new ExpressionCondition(this.manager));
-    this.registerCondition("isBot", new IsBotCondition(this.manager));
-    this.registerCondition("hasRole", new HasRoleCondition(this.manager));
+    this.registerCondition("aboveMembers", new AboveMembersCondition(this.engine.manager));
+    this.registerCondition("bellowMembers", new BellowMembersCondition(this.engine.manager));
+    this.registerCondition("content", new ContentCondition(this.engine.manager));
+    this.registerCondition("contentContains", new ContentContainsCondition(this.engine.manager));
+    this.registerCondition("expression", new ExpressionCondition(this.engine.manager));
+    this.registerCondition("isBot", new IsBotCondition(this.engine.manager));
+    this.registerCondition("hasRole", new HasRoleCondition(this.engine.manager));
   }
 }

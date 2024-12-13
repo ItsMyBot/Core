@@ -1,15 +1,16 @@
 import { Collection } from 'discord.js';
-import { Config, Manager, Mutator, Plugin } from '@itsmybot';
+import { Config, Mutator, Plugin } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 
 import { MemberMutator } from './impl/member.js';
+import EngineService from '../engineService.js';
 
 export class MutatorHandler {
-  manager: Manager;
+  engine: EngineService;
   mutators: Collection<string, Mutator<Plugin | undefined>>;
 
-  constructor(manager: Manager) {
-    this.manager = manager;
+  constructor(engine: EngineService) {
+    this.engine = engine;
     this.mutators = new Collection();
   }
 
@@ -22,7 +23,7 @@ export class MutatorHandler {
   async applyMutator(mutatorData: Config, context: Context, variables: Variable[]) {
     const mutator = this.mutators.get(mutatorData.getString("id"));
     if (!mutator) {
-      this.manager.logger.warn(`No mutator found for ID: ${mutatorData.getString("id")}`);
+      mutatorData.logger.warn(`No mutator found for ID: ${mutatorData.getString("id")}`);
       return context;
     }
 
@@ -30,6 +31,6 @@ export class MutatorHandler {
   }
 
   initialize() {
-    this.registerMutator("member", new MemberMutator(this.manager));
+    this.registerMutator("member", new MemberMutator(this.engine.manager));
   }
 }

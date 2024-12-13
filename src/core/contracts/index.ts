@@ -60,7 +60,7 @@ export class Base<T extends Plugin | undefined = undefined> {
 }
 
 export abstract class Service {
-  protected manager: Manager
+  public manager: Manager
 
   constructor(manager: Manager) {
     this.manager = manager
