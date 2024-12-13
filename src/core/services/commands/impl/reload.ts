@@ -20,7 +20,7 @@ export default class ReloadCommand extends Command {
     this.manager.services.engine.event.removeAllListeners()
     this.manager.services.engine.scripts.clear()
 
-    let error: any
+    let error: unknown
 
     try {
       await this.manager.services.engine.loadScripts();

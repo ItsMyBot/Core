@@ -60,7 +60,7 @@ export class MutatorValidator {
   id: string
 
   @IsDefined()
-  args: any
+  args: unknown
 }
 
 class ActionArgumentValidator extends MessageValidator {

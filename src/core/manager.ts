@@ -87,7 +87,7 @@ export class Manager {
     });
   }
 
-  private async initializeConfig(ConfigClass: any, filePath: string) {
+  private async initializeConfig(ConfigClass: unknown, filePath: string) {
     return await new BaseConfig({
       logger: this.logger,
       configFilePath: `configs/${filePath}`,

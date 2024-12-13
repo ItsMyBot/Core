@@ -16,7 +16,7 @@ export abstract class Plugin {
   description?: string
   website?: string
   enabled: boolean = true
-  configs?: any
+  configs?: unknown
   path: string
 
   constructor(manager: Manager, name: string) {
