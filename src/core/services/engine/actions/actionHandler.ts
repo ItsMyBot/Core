@@ -1,5 +1,5 @@
 import { Collection } from 'discord.js';
-import { Action, ActionData, Plugin } from '@itsmybot';
+import { Action, ActionData, Manager, Plugin } from '@itsmybot';
 
 import AddReactionAction from './impl/addReaction.js';
 import AddRoleAction from './impl/addRole.js';
@@ -14,14 +14,13 @@ import StartThreadAction from './impl/startThread.js';
 import UnpinMessageAction from './impl/unpinMessage.js';
 
 import { Context, Variable } from '@contracts';
-import EngineService from '../engineService.js';
 
 export class ActionHandler {
-  engine: EngineService;
+  manager: Manager;
   actions: Collection<string, Action<Plugin | undefined>>;
 
-  constructor(engine: EngineService) {
-    this.engine = engine;
+  constructor(manager: Manager) {
+    this.manager = manager;
     this.actions = new Collection();
   }
 
@@ -41,16 +40,16 @@ export class ActionHandler {
   }
 
   initialize() {
-    this.registerAction("addReaction", new AddReactionAction(this.engine.manager));
-    this.registerAction("addRole", new AddRoleAction(this.engine.manager));
-    this.registerAction("deleteMessage", new DeleteMessageAction(this.engine.manager));
-    this.registerAction("pinMessage", new PinMessageAction(this.engine.manager));
-    this.registerAction("removeReaction", new RemoveReactionAction(this.engine.manager));
-    this.registerAction("removeRole", new RemoveRoleAction(this.engine.manager));
-    this.registerAction("reply", new ReplyAction(this.engine.manager));
-    this.registerAction("sendMessage", new SendMessageAction(this.engine.manager));
-    this.registerAction("sendPrivateMessage", new SendPrivateMessageAction(this.engine.manager));
-    this.registerAction("startThread", new StartThreadAction(this.engine.manager));
-    this.registerAction("unpinMessage", new UnpinMessageAction(this.engine.manager));
+    this.registerAction("addReaction", new AddReactionAction(this.manager));
+    this.registerAction("addRole", new AddRoleAction(this.manager));
+    this.registerAction("deleteMessage", new DeleteMessageAction(this.manager));
+    this.registerAction("pinMessage", new PinMessageAction(this.manager));
+    this.registerAction("removeReaction", new RemoveReactionAction(this.manager));
+    this.registerAction("removeRole", new RemoveRoleAction(this.manager));
+    this.registerAction("reply", new ReplyAction(this.manager));
+    this.registerAction("sendMessage", new SendMessageAction(this.manager));
+    this.registerAction("sendPrivateMessage", new SendPrivateMessageAction(this.manager));
+    this.registerAction("startThread", new StartThreadAction(this.manager));
+    this.registerAction("unpinMessage", new UnpinMessageAction(this.manager));
   }
 }

@@ -1,16 +1,15 @@
 import { Collection } from 'discord.js';
-import { Config, Mutator, Plugin } from '@itsmybot';
+import { Config, Manager, Mutator, Plugin } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 
 import { MemberMutator } from './impl/member.js';
-import EngineService from '../engineService.js';
 
 export class MutatorHandler {
-  engine: EngineService;
+  manager: Manager;
   mutators: Collection<string, Mutator<Plugin | undefined>>;
 
-  constructor(engine: EngineService) {
-    this.engine = engine;
+  constructor(manager: Manager) {
+    this.manager = manager;
     this.mutators = new Collection();
   }
 
@@ -31,6 +30,6 @@ export class MutatorHandler {
   }
 
   initialize() {
-    this.registerMutator("member", new MemberMutator(this.engine.manager));
+    this.registerMutator("member", new MemberMutator(this.manager));
   }
 }

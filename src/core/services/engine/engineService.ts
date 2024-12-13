@@ -31,20 +31,19 @@ export default class EngineService extends Service {
     super(manager);
     this.scriptDir = manager.managerOptions.dir.scripts;
     this.customCommandDir = manager.managerOptions.dir.customCommands;
+
+    this.action = new ActionHandler(manager);
+    this.condition = new ConditionHandler(manager);
+    this.mutator = new MutatorHandler(manager);
   }
 
   async initialize() {
-    this.action = new ActionHandler(this);
-    this.condition = new ConditionHandler(this);
-    this.mutator = new MutatorHandler(this);
-
-    this.manager.logger.info('Script engine initialized.');
-    
     this.action.initialize();
     this.condition.initialize();
     this.mutator.initialize();
 
     await this.loadScripts();
+    this.manager.logger.info('Script engine initialized.');
   }
 
   async loadScripts() {
