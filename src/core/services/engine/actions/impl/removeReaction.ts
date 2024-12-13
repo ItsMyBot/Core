@@ -9,6 +9,8 @@ export default class RemoveReactionAction extends Action {
 
     const emoji = await Utils.applyVariables(script.args.getStringOrNull('emoji'), variables, context)
 
-    emoji ? context.message.reactions.cache.get(emoji)?.remove() : context.message.reactions.removeAll();
+    return emoji
+      ? context.message.reactions.cache.get(emoji)?.remove()
+      : context.message.reactions.removeAll();
   }
 }

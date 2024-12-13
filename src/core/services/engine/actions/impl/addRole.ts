@@ -12,7 +12,11 @@ export default class AddRoleAction extends Action {
     if (!context.guild) return script.missingContext("guild", context);
     if (!rolesToAdd) return script.missingArg("role", context);
 
-    let roles = await Promise.all(rolesToAdd.map(async roleName => Utils.findRole(await Utils.applyVariables(roleName, variables, context), context.guild)));
+    let roles = await Promise.all(
+      rolesToAdd.map(async roleName =>
+        Utils.findRole(await Utils.applyVariables(roleName, variables, context), context.guild)
+      ));
+
     roles = roles.filter(Boolean);
     
     if (roles.length) {
