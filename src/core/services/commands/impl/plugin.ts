@@ -66,7 +66,7 @@ export default class PluginCommand extends Command {
 
     switch (subcommand) {
       case 'enable':
-      case 'disable':
+      case 'disable': {
         pluginName = interaction.options.getString("plugin", true);
         plugin = await PluginModel.findOne({ where: { name: pluginName } });
 
@@ -112,10 +112,11 @@ export default class PluginCommand extends Command {
           }
         }));
         break;
+      }
 
-      case 'list':
+      case 'list': {
         const pluginInfo = lang.getString("plugin.information");
-        
+
         async function getPluginDetails(plugin: Plugin) {
           const status = plugin.enabled ? '✅' : '❌';
 
@@ -148,6 +149,7 @@ export default class PluginCommand extends Command {
           .send();
 
         break;
+      }
     }
   }
 }

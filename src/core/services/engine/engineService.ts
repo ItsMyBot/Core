@@ -77,17 +77,19 @@ export default class EngineService extends Service {
 
     for (const option of interaction.options.data) {
       switch (true) {
-        case option.member != null || option.member != undefined:
+        case option.member != null || option.member != undefined: {
           const targetUserM = await this.manager.services.user.findOrCreate(option.member)
           if (!targetUserM) break;
           variables.push(...Utils.userVariables(targetUserM, `option_${option.name}`))
           break;
-
-        case option.user != undefined:
+        }
+          
+        case option.user != undefined: {
           const targetUser = await this.manager.services.user.findOrNull(option.user.id)
           if (!targetUser) break;
           variables.push(...Utils.userVariables(targetUser, `option_${option.name}`))
           break;
+        }
 
         case option.role != null || option.role != undefined:
           variables.push(...Utils.roleVariables(option.role, `option_${option.name}`))

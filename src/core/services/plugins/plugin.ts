@@ -63,10 +63,11 @@ export abstract class Plugin {
             break;
           case 'buttons':
           case 'selectMenus':
-          case 'modals':
+          case 'modals': {
             const componentType = type.slice(0, -1); // remove plural 's' for singular type name
             await this.manager.services.component.registerFromDir(dir, componentType, this);
             break;
+          }
         }
       }
     }
