@@ -74,7 +74,7 @@ export default class HelloWorldCommand extends Command<ExamplePlugin> {
       );
   }
 
-  async autocomplete(interaction: AutocompleteInteraction): Promise<any> {
+  async autocomplete(interaction: AutocompleteInteraction) {
   }
 
   async execute(interaction: CommandInteraction, user: User) {

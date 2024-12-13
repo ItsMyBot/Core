@@ -116,7 +116,7 @@ export default class PluginCommand extends Command {
       case 'list':
         const pluginInfo = lang.getString("plugin.information");
         
-        const getPluginDetails = async (plugin: Plugin) => {
+        async function getPluginDetails(plugin: Plugin) {
           const status = plugin.enabled ? '✅' : '❌';
 
           const info = await Utils.applyVariables(pluginInfo, [

@@ -43,15 +43,11 @@ export abstract class Plugin {
   }
 
   async init() {
-    try {
-      await this.loadDatabaseModels();
-      await this.load()
-      await this.initialize();
-      await this.loadComponents();
-      this.logger.info(`Plugin loaded in v${this.version}`);
-    } catch (error) {
-      throw error;
-    }
+    await this.loadDatabaseModels();
+    await this.load()
+    await this.initialize();
+    await this.loadComponents();
+    this.logger.info(`Plugin loaded in v${this.version}`);
   }
 
   public async loadComponents(componentTypes = ['commands', 'buttons', 'selectMenus', 'modals', 'events']) {
@@ -89,7 +85,7 @@ export abstract class Plugin {
     this.enabled = enabled;
   }
 
-  async createConfig(configFilePath: string, config?: any, update: boolean = false): Promise<BaseConfig> {
+  async createConfig(configFilePath: string, config?: unknown, update: boolean = false): Promise<BaseConfig> {
     const pluginFolder = join(this.manager.managerOptions.dir.configs, this.name);
     if (!existsSync(pluginFolder)) mkdirSync(pluginFolder);
 
@@ -102,7 +98,7 @@ export abstract class Plugin {
     }).initialize();
   }
 
-  async createConfigSection(configFolderPath: string, config: any): Promise<Collection<string, BaseConfig>> {
+  async createConfigSection(configFolderPath: string, config: unknown): Promise<Collection<string, BaseConfig>> {
     const pluginFolder = join(this.manager.managerOptions.dir.configs, this.name);
     if (!existsSync(pluginFolder)) mkdirSync(pluginFolder);
 

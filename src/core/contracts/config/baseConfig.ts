@@ -17,7 +17,7 @@ export class BaseConfig extends Config {
   private configFilePath: string;
   private defaultFilePath?: string;
 
-  constructor(settings: { logger: Logger, configFilePath: string, defaultFilePath?: string, ConfigClass?: any, update?: boolean }) {
+  constructor(settings: { logger: Logger, configFilePath: string, defaultFilePath?: string, ConfigClass?: unknown, update?: boolean }) {
     super(settings.logger, settings.configFilePath);
     this.configClass = settings.ConfigClass
 
@@ -79,7 +79,7 @@ export class BaseConfig extends Config {
       const [path, errorMessage] = error.split(': ', 2);
       if (errorMessage.includes('should not be null or undefined')) {
         const pathArray = path.split('.');
-        const defaultValue: any = this.defaultContent.getIn(pathArray, true);
+        const defaultValue: unknown = this.defaultContent.getIn(pathArray, true);
         if (defaultValue !== null && defaultValue !== undefined) {
           this.logger.warn(`Using default value for '${path}': ${defaultValue}`);
           this.configContent.setIn(pathArray, defaultValue);
@@ -110,7 +110,7 @@ export class BaseConfig extends Config {
 }
 
 function formatValidationErrors(errors: ValidationError[], parentPath?: string): string[] {
-  let messages: string[] = [];
+  const messages: string[] = [];
   errors.forEach(error => {
     const propertyPath = parentPath ? `${parentPath}.${error.property}` : error.property;
     if (error.constraints) {
