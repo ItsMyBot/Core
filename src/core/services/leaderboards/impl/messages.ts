@@ -10,7 +10,7 @@ export class MessagesLeaderboard extends Leaderboard {
 
   async getData() {
 
-    let data = await User.findAll({
+    const data = await User.findAll({
       order: Sequelize.col('messages'),
       where: {
         messages: {

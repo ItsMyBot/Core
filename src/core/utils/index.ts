@@ -146,7 +146,7 @@ export default {
     };
 
     let remainingSeconds = seconds;
-    let result = [];
+    const result = [];
 
     for (const unit in timeUnits) {
       if (remainingSeconds >= timeUnits[unit]) {

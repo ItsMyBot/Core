@@ -15,19 +15,19 @@ export async function setupEmbed(settings: EmbedSettings) {
   const context = settings.context;
   const config = settings.config;
 
-  let author = config.getStringOrNull("author", true);
-  let authorIcon = config.getStringOrNull("author-icon", true);
-  let authorUrl = config.getStringOrNull("author-url", true);
-  let url = config.getStringOrNull("url", true);
-  let title = config.getStringOrNull("title", true);
+  const author = config.getStringOrNull("author", true);
+  const authorIcon = config.getStringOrNull("author-icon", true);
+  const authorUrl = config.getStringOrNull("author-url", true);
+  const url = config.getStringOrNull("url", true);
+  const title = config.getStringOrNull("title", true);
   let description = config.getStringOrNull("description", true);
   const fields = config.getSubsectionsOrNull("fields");
-  let footer = config.getStringOrNull("footer", true);
-  let footerIcon = config.getStringOrNull("footer-icon", true);
-  let thumbnail = config.getStringOrNull("thumbnail", true);
-  let image = config.getStringOrNull("image", true);
-  let timestamp = config.getStringOrNull("timestamp");
-  let color = config.getStringOrNull("color", true) || manager.configs.config.getString("default-color");
+  const footer = config.getStringOrNull("footer", true);
+  const footerIcon = config.getStringOrNull("footer-icon", true);
+  const thumbnail = config.getStringOrNull("thumbnail", true);
+  const image = config.getStringOrNull("image", true);
+  const timestamp = config.getStringOrNull("timestamp");
+  const color = config.getStringOrNull("color", true) || manager.configs.config.getString("default-color");
 
   description = await Utils.applyVariables(description, variables, context);
   if (description) description = Utils.removeHiddenLines(description);

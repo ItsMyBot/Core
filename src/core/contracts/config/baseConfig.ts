@@ -110,7 +110,7 @@ export class BaseConfig extends Config {
 }
 
 function formatValidationErrors(errors: ValidationError[], parentPath?: string): string[] {
-  let messages: string[] = [];
+  const messages: string[] = [];
   errors.forEach(error => {
     const propertyPath = parentPath ? `${parentPath}.${error.property}` : error.property;
     if (error.constraints) {

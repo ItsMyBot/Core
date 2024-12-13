@@ -11,7 +11,7 @@ export default class RemoveRoleAction extends Action {
     if (!context.member) return script.missingContext("member", context);
     if (!rolesToRemove) return script.missingArg("role", context);
 
-    let roles = await Promise.all(rolesToRemove.map(async roleName => Utils.findRole(await Utils.applyVariables(roleName, variables, context), context.guild)));
+    const roles = await Promise.all(rolesToRemove.map(async roleName => Utils.findRole(await Utils.applyVariables(roleName, variables, context), context.guild)));
     roles.filter(Boolean);
 
     if (roles.length) {
