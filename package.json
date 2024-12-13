@@ -7,7 +7,7 @@
     "make:plugin": "node ./build/core/tools/makePlugin.js",
     "build:clean": "rm -rf ./build",
     "build:itsmybot": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
-    "build:copy": "cpy 'src/**/*.yml' 'build/' --parents",
+    "build:copy": "cpy \"src/**/*.yml\" \"build/\" --parents",
     "build:success": "echo '[ItsMyBot] Build completed successfully!'",
     "build": "npm run build:clean && npm run build:itsmybot && npm run build:copy && npm run build:success",
     "start": "node ./build/core/index.js"
