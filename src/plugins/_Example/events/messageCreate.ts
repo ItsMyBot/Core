@@ -1,5 +1,6 @@
-import { Events, Message } from 'discord.js';
-import { Event } from '@itsmybot';
+import { Message } from 'discord.js';
+import { Events } from '@contracts';
+import { Event, } from '@itsmybot';
 import ExamplePlugin from '..';
 
 export default class MessageCreateEvent extends Event<ExamplePlugin> {
