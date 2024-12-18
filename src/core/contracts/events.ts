@@ -7,6 +7,8 @@ enum BotEvents {
   Button = 'button',
   SelectMenu = 'selectMenu',
   ModalSubmit = 'modalSubmit',
+  VoiceJoin = 'voiceJoin',
+  VoiceLeave = 'voiceLeave',
 }
 
 const Events = {
