@@ -1,5 +1,6 @@
 import { Collection } from 'discord.js';
 import { MathExpansion } from './impl/math.js';
+import { OwnerExpansion } from './impl/owner.js';
 import { Manager, Expansion, Plugin } from '@itsmybot';
 import { Context, Service } from '@contracts';
 
@@ -14,6 +15,7 @@ export default class ExpansionService extends Service{
   async initialize() {
     this.manager.logger.info("Placeholder expansions services initialized.");
     this.registerExpansion("math", new MathExpansion(this.manager));
+    this.registerExpansion("owner", new OwnerExpansion(this.manager));
   }
 
   registerExpansion(identifier: string, expansion: Expansion<Plugin | undefined>) {
