@@ -55,7 +55,9 @@ export class BaseConfig extends Config {
 
   async validate() {
     if (!this.configClass) return;
-    const config = plainToInstance(this.configClass, this.configContent.toJS());
+    const config = plainToInstance(this.configClass, this.configContent.toJS());  
+
+    if (!config) return this.handleValidationErrors(['Empty configuration file, please delete it or fill it with the values. If the error persists, contact the plugin developer.']);
 
     const errors = await validate(config, { validationError: { target: false }, whitelist: true, forbidNonWhitelisted: true, skipMissingProperties: true });
 
