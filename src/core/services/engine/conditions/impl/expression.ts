@@ -2,7 +2,9 @@ import { Condition, ConditionData } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 import Utils from '@utils';
 
-export class ExpressionCondition extends Condition {
+export default class ExpressionCondition extends Condition {
+  id = "expression";
+
   async isMet(condition: ConditionData, context: Context, variables: Variable[]) {
     const input = condition.args.getStringOrNull("input")
     const operator = condition.args.getStringOrNull("operator")

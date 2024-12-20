@@ -1,5 +1,6 @@
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { sync } from 'glob';
+import { fileURLToPath } from 'url';
 
 import { Collection } from 'discord.js';
 import { Manager, Command, Plugin } from '@itsmybot';
@@ -11,12 +12,11 @@ export default class CommandService extends Service {
 
   constructor(manager: Manager) {
     super(manager)
-    this.commandsDir = manager.managerOptions.dir.coreCommands;
     this.commands = manager.commands;
   }
 
   async initialize() {
-    await this.registerFromDir(this.commandsDir);
+    await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
     this.manager.logger.info("Command service initialized.");
   }
 

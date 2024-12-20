@@ -1,14 +1,9 @@
 import { Collection } from 'discord.js';
 import { Condition, Plugin, ConditionData, Manager } from '@itsmybot';
 import { Context, Variable, Config } from '@contracts';
-
-import { AboveMembersCondition } from './impl/aboveMembers.js';
-import { BellowMembersCondition } from './impl/bellowMembers.js';
-import { ContentCondition } from './impl/content.js';
-import { ContentContainsCondition } from './impl/contentContains.js';
-import { ExpressionCondition } from './impl/expression.js';
-import { IsBotCondition } from './impl/isBot.js';
-import { HasRoleCondition } from './impl/hasRole.js';
+import { sync } from 'glob';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 export class ConditionHandler {
   manager: Manager;
@@ -19,10 +14,25 @@ export class ConditionHandler {
     this.conditions = new Collection();
   }
 
-  registerCondition(id: string, condition: Condition<Plugin | undefined>) {
-    if (this.conditions.has(id)) return condition.logger.warn(`Condition ${id} is already registered`);
+  async initialize() {
+    await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
+  }
 
-    this.conditions.set(id, condition);
+  async registerFromDir(conditionsDir: string, plugin: Plugin | undefined = undefined) {
+    const conditionFiles = sync(join(conditionsDir, '**', '*.js'));
+
+    for (const filePath of conditionFiles) {
+      const conditionPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;
+      const { default: condition } = await import(conditionPath);
+
+      this.registerCondition(new condition(this.manager, plugin));
+    };
+  }
+
+  registerCondition(condition: Condition<Plugin | undefined>) {
+    if (this.conditions.has(condition.id)) return condition.logger.warn(`Condition ${condition.id} is already registered`);
+
+    this.conditions.set(condition.id, condition);
   }
 
   buildConditions(conditions: Config[], notMetAction: boolean = true): ConditionData[] {
@@ -59,15 +69,5 @@ export class ConditionHandler {
     }
 
     return isMet;
-  }
-
-  initialize() {
-    this.registerCondition("aboveMembers", new AboveMembersCondition(this.manager));
-    this.registerCondition("bellowMembers", new BellowMembersCondition(this.manager));
-    this.registerCondition("content", new ContentCondition(this.manager));
-    this.registerCondition("contentContains", new ContentContainsCondition(this.manager));
-    this.registerCondition("expression", new ExpressionCondition(this.manager));
-    this.registerCondition("isBot", new IsBotCondition(this.manager));
-    this.registerCondition("hasRole", new HasRoleCondition(this.manager));
   }
 }

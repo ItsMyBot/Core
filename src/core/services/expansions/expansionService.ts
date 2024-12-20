@@ -1,11 +1,9 @@
 import { Collection } from 'discord.js';
-import { MathExpansion } from './impl/math.js';
-import { OwnerExpansion } from './impl/owner.js';
-import { PerformanceExpansion } from './impl/performance.js';
-import { BotExpansion } from './impl/bot.js';
-import { GuildExpansion } from './impl/guild.js';
 import { Manager, Expansion, Plugin } from '@itsmybot';
 import { Context, Service } from '@contracts';
+import { sync } from 'glob';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 export default class ExpansionService extends Service{
   expansions: Collection<string, Expansion<Plugin | undefined>>;
@@ -17,18 +15,25 @@ export default class ExpansionService extends Service{
 
   async initialize() {
     this.manager.logger.info("Placeholder expansions services initialized.");
-    this.registerExpansion("math", new MathExpansion(this.manager));
-    this.registerExpansion("owner", new OwnerExpansion(this.manager));
-    this.registerExpansion("performance", new PerformanceExpansion(this.manager));
-    this.registerExpansion("bot", new BotExpansion(this.manager));
-    this.registerExpansion("guild", new GuildExpansion(this.manager));
+    await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
   }
 
-  registerExpansion(identifier: string, expansion: Expansion<Plugin | undefined>) {
-    if (this.expansions.has(identifier)) {
-      return this.manager.logger.error(`An expansion with the identifier ${identifier} is already registered.`);
+  async registerFromDir(expansionsDir: string, plugin: Plugin | undefined = undefined) {
+    const expansionFiles = sync(join(expansionsDir, '**', '*.js'));
+
+    for (const filePath of expansionFiles) {
+      const expansionPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;
+      const { default: expansion } = await import(expansionPath);
+
+      this.registerExpansion(new expansion(this.manager, plugin));
+    };
+  }
+
+  registerExpansion(expansion: Expansion<Plugin | undefined>) {
+    if (this.expansions.has(expansion.name)) {
+      return this.manager.logger.error(`An expansion with the identifier ${expansion.name} is already registered.`);
     }
-    this.expansions.set(identifier, expansion);
+    this.expansions.set(expansion.name, expansion);
   }
 
   unregisterExpansion(identifier: string) {

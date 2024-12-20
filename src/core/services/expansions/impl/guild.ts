@@ -2,7 +2,8 @@ import { Context } from '@contracts';
 import { Expansion } from '../expansion.js';
 import { channelMention, roleMention, time, ChannelType } from 'discord.js';
 
-export class GuildExpansion extends Expansion {
+export default class GuildExpansion extends Expansion {
+  name = 'guild';
 
   async onRequest(context: Context, placeholder: string) {
     if (!context.guild) return 

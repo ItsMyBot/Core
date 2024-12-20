@@ -5,6 +5,8 @@ import Utils from '@utils';
 import { Role } from 'discord.js';
 
 export default class RemoveRoleAction extends Action {
+  id = "removeRole";
+
   async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
     const rolesToRemove = script.args.getStringsOrNull("role")
 

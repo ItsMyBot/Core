@@ -38,10 +38,9 @@ export default class EngineService extends Service {
   }
 
   async initialize() {
-    this.action.initialize();
-    this.condition.initialize();
-    this.mutator.initialize();
-
+    await this.action.initialize();
+    await this.condition.initialize();
+    await this.mutator.initialize();
     await this.loadScripts();
     this.manager.logger.info('Script engine initialized.');
   }

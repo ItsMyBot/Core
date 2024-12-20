@@ -2,7 +2,8 @@ import { Context } from '@contracts';
 import { Expansion } from '../expansion.js';
 import { userMention } from 'discord.js';
 
-export class BotExpansion extends Expansion {
+export default class BotExpansion extends Expansion {
+  name = 'bot';
 
   async onRequest(context: Context, placeholder: string) {
     const bot = this.manager.client.user;

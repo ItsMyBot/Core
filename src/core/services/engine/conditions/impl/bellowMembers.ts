@@ -1,7 +1,9 @@
 import { Condition, ConditionData } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 
-export class BellowMembersCondition extends Condition {
+export default class BellowMembersCondition extends Condition {
+  id = "bellowMembers";
+
   isMet(condition: ConditionData, context: Context, variables: Variable[]) {
     if (!context.guild) return condition.missingContext("guild");
     const amount = condition.args.getNumberOrNull("amount");

@@ -4,6 +4,7 @@ import { ActionData } from 'core/services/engine/actions/actionData.js';
 import Utils from '@utils';
 
 export default class ReplyAction extends Action {
+  id = "reply";
 
   async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
     let message

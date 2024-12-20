@@ -2,6 +2,8 @@ import { Plugin, ActionData } from '@itsmybot';
 import { Base, Context, Variable } from '@contracts';
 
 export abstract class Action<T extends Plugin | undefined = undefined> extends Base<T>{
+  abstract id: string;
+
   public trigger(script: ActionData, context: Context, variables: Variable[]) {
     const variablesCopy = [...variables];
     this.onTrigger(script, context, variablesCopy);

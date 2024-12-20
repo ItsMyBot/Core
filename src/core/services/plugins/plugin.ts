@@ -4,7 +4,7 @@ import { join } from 'path';
 import { sync } from 'glob';
 import { BaseConfig, BaseConfigSection } from '@contracts';
 import { Collection } from 'discord.js';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, readdirSync, statSync } from 'fs';
 
 export abstract class Plugin {
   manager: Manager
@@ -50,25 +50,34 @@ export abstract class Plugin {
     this.logger.info(`Plugin loaded in v${this.version}`);
   }
 
-  public async loadComponents(componentTypes = ['commands', 'buttons', 'selectMenus', 'modals', 'events']) {
-    for (const type of componentTypes) {
-      const dir = join(this.path, type);
-      if (sync(`${dir}/*`).length) {
-        switch (type) {
-          case 'commands':
-            await this.manager.services.command.registerFromDir(dir, this);
-            break;
-          case 'events':
-            await this.manager.services.event.registerFromDir(dir, this);
-            break;
-          case 'buttons':
-          case 'selectMenus':
-          case 'modals': {
-            const componentType = type.slice(0, -1); // remove plural 's' for singular type name
-            await this.manager.services.component.registerFromDir(dir, componentType, this);
-            break;
-          }
-        }
+  public async loadComponents(includes: string[] = []) {
+    const basePath = this.path;
+    const directories = readdirSync(basePath).filter((name: string) => {
+      const fullPath = join(basePath, name);
+      return statSync(fullPath).isDirectory();
+    });
+
+    const componentHandlers: Record<string, (dir: string) => Promise<void>> = {
+      commands: (dir) => this.manager.services.command.registerFromDir(dir, this),
+      events: (dir) => this.manager.services.event.registerFromDir(dir, this),
+      expansions: (dir) => this.manager.services.expansion.registerFromDir(dir, this),
+      leaderboards: (dir) => this.manager.services.leaderboard.registerFromDir(dir, this),
+      actions: (dir) => this.manager.services.engine.action.registerFromDir(dir, this),
+      conditions: (dir) => this.manager.services.engine.condition.registerFromDir(dir, this),
+      buttons: (dir) => this.manager.services.component.registerFromDir(dir, 'button', this),
+      selectMenus: (dir) => this.manager.services.component.registerFromDir(dir, 'selectMenu', this),
+      modals: (dir) => this.manager.services.component.registerFromDir(dir, 'modal', this),
+    };
+  
+    for (const dirName of directories) {
+      const dir = join(basePath, dirName);
+      if (!sync(`${dir}/*`).length) continue;
+
+      if (includes.length && !includes.includes(dirName)) continue;
+
+      const handler = componentHandlers[dirName];
+      if (handler) {
+        await handler(dir);
       }
     }
   }

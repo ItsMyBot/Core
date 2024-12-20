@@ -4,6 +4,7 @@ import { ActionData } from 'core/services/engine/actions/actionData.js';
 import Utils from '@utils';
 
 export default class SendMessageAction extends Action {
+  id = "sendMessage";
 
   async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
     const channelConfig = await Utils.applyVariables(script.args.getStringOrNull("channel"), variables, context)

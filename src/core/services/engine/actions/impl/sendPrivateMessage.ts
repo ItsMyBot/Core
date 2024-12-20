@@ -4,6 +4,7 @@ import { ActionData } from 'core/services/engine/actions/actionData.js';
 import Utils from '@utils';
 
 export default class SendPrivateMessageAction extends Action {
+  id = "sendPrivateMessage";
 
   public parameters() {
     return ["member"];

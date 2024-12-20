@@ -1,10 +1,12 @@
 import { Manager, Leaderboard, Command, Plugin } from '@itsmybot';
-import {Collection } from 'discord.js';
+import { Collection } from 'discord.js';
 import { CommandBuilder } from '@builders';
-
-import { MessagesLeaderboard } from './impl/messages.js';
-import { Pagination } from '@utils';
+import Utils, { Pagination } from '@utils';
 import { PaginationType, CommandInteraction, Service } from '@contracts';
+import { sync } from 'glob';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
 
 export default class LeaderboardService extends Service{
   leaderboards: Collection<string, Leaderboard<Plugin | undefined>>;
@@ -16,14 +18,25 @@ export default class LeaderboardService extends Service{
 
   async initialize() {
     this.manager.logger.info("Leaderboard services initialized.");
-    this.registerLeaderboard('messages', new MessagesLeaderboard(this.manager));
+    await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
   }
 
-  registerLeaderboard(identifier: string, leaderboard: Leaderboard<Plugin | undefined>) {
-    if (this.leaderboards.has(identifier)) {
-      return this.manager.logger.error(`An leaderboard with the identifier ${identifier} is already registered.`);
+  async registerFromDir(leaderboardsDir: string, plugin: Plugin | undefined = undefined) {
+    const leaderboardFiles = sync(join(leaderboardsDir, '**', '*.js'));
+
+    for (const filePath of leaderboardFiles) {
+      const leaderboardPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;
+      const { default: leaderboard } = await import(leaderboardPath);
+
+      this.registerLeaderboard(new leaderboard(this.manager, plugin));
+    };
+  }
+
+  registerLeaderboard(leaderboard: Leaderboard<Plugin | undefined>) {
+    if (this.leaderboards.has(leaderboard.name)) {
+      return this.manager.logger.error(`An leaderboard with the identifier ${leaderboard.name} is already registered.`);
     }
-    this.leaderboards.set(identifier, leaderboard);
+    this.leaderboards.set(leaderboard.name, leaderboard);
   }
 
   unregisterLeaderboard(identifier: string) {
@@ -65,7 +78,7 @@ export default class LeaderboardService extends Service{
 
     new Pagination(interaction, leaderboardData.map(item => { return { message: item } }), this.manager.configs.lang.getSubsection('leaderboard'))
       .setType(PaginationType.Button)
-      .setVariables([{ searchFor: "%leaderboard_name%", replaceWith: leaderboard.name }])
+      .setVariables([{ searchFor: "%leaderboard_name%", replaceWith: Utils.capitalizeFirst(leaderboard.name) }])
       .setItemsPerPage(10)
       .send();
   }

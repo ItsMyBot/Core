@@ -191,5 +191,9 @@ export default {
     if (!channel) return;
 
     channel.send(message)
+  },
+
+  capitalizeFirst(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 };

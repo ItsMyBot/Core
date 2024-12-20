@@ -1,7 +1,9 @@
 import { Condition, ConditionData } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 
-export class ContentCondition extends Condition {
+export default class ContentCondition extends Condition {
+  id = "content";
+
   isMet(condition: ConditionData, context: Context, variables: Variable[]) {
     const arg = condition.args.getStringsOrNull("text")
     if (!arg) return condition.missingArg("text");

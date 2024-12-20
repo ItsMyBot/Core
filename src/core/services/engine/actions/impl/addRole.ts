@@ -5,6 +5,8 @@ import Utils from '@utils';
 import { Role } from 'discord.js';
 
 export default class AddRoleAction extends Action {
+  id = "addRole";
+
   async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
     const rolesToAdd = script.args.getStringsOrNull("role")
 

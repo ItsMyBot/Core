@@ -2,7 +2,8 @@ import { Context } from '@contracts';
 import { Expansion } from '../expansion.js';
 import Utils from '@utils';
 
-export class OwnerExpansion extends Expansion {
+export default class OwnerExpansion extends Expansion {
+  name = 'owner';
 
   async onRequest(context: Context, placeholder: string) {
 

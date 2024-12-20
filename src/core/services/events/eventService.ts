@@ -1,5 +1,6 @@
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { sync } from 'glob';
+import { fileURLToPath } from 'url';
 import { Manager, Event, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
 import { Service } from '@contracts';
@@ -10,13 +11,12 @@ export default class EventService extends Service {
 
   constructor(manager: Manager) {
     super(manager);
-    this.eventsDir = manager.managerOptions.dir.coreEvents;
     this.events = manager.events;
   }
 
   async initialize() {
     this.manager.logger.info("Event service initialized.");
-    await this.registerFromDir(this.eventsDir);
+    await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
   }
 
   async registerFromDir(eventsDir: string, plugin: Plugin | undefined = undefined) {

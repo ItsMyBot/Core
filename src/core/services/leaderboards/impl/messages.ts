@@ -3,13 +3,11 @@ import { Op } from 'sequelize';
 import { User } from '@itsmybot';
 import Utils from '@utils';
 
-export class MessagesLeaderboard extends Leaderboard {
-
-  name = "Messages"
+export default class MessagesLeaderboard extends Leaderboard {
+  name = "messages"
   description = "Messages leaderboard."
 
   async getData() {
-
     const data = await User.findAll({
       order: [['messages', 'DESC']],
       where: {

@@ -2,7 +2,9 @@ import { Condition, ConditionData } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 import Utils from '@utils';
 
-export class HasRoleCondition extends Condition {
+export default class HasRoleCondition extends Condition {
+  id = "hasRole";
+
   isMet(condition: ConditionData, context: Context, variables: Variable[]) {
     if (!context.member) return condition.missingContext("member");
     const role = condition.args.getStringOrNull("role");

@@ -20,8 +20,6 @@ export interface ManagerOptions {
     base: string,
     configs: string,
     plugins: string,
-    coreCommands: string,
-    coreEvents: string,
     scripts: string,
     customCommands: string,
     logs: string

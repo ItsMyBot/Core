@@ -3,7 +3,9 @@ import { Config } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 import Utils from '@utils';
 
-export class MemberMutator extends Mutator {
+export default class MemberMutator extends Mutator {
+  id = "member";
+
   async apply(args: Config, context: Context, variables: Variable[]) {
     const member = await Utils.applyVariables(args.getStringOrNull("member"), variables, context)
     if (!member) {

@@ -4,6 +4,8 @@ import { ActionData } from 'core/services/engine/actions/actionData.js';
 import Utils from '@utils';
 
 export default class RemoveReactionAction extends Action {
+  id = "removeReaction";
+
   async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
     if (!context.message) return script.missingContext("message", context);
 

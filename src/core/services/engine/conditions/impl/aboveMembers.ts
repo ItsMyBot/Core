@@ -2,7 +2,9 @@ import { ConditionData } from '@itsmybot';
 import { Condition } from '../condition.js';
 import { Context, Variable } from '@contracts';
 
-export class AboveMembersCondition extends Condition {
+export default class AboveMembersCondition extends Condition {
+  id = "aboveMembers";
+
   isMet(condition: ConditionData, context: Context, variables: Variable[]) {
     if (!context.guild) return condition.missingContext("guild");
     const amount = condition.args.getNumberOrNull("amount");

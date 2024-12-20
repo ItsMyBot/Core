@@ -2,7 +2,8 @@ import { Context } from '@contracts';
 import { Expansion } from '../expansion.js';
 import Utils from '@utils';
 
-export class PerformanceExpansion extends Expansion {
+export default class PerformanceExpansion extends Expansion {
+  name = 'performance';
 
   async onRequest(context: Context, placeholder: string) {
     switch (placeholder) {
