@@ -6,7 +6,7 @@ import { setupMessage } from './setup/setupMessage.js';
 import { setupComponent } from './setup/setupComponent.js';
 import { setupButton } from './setup/setupButton.js';
 import { setupModal } from './setup/setupModal.js';
-import { userVariables, botVariables, channelVariables, guildVariables, roleVariables, timeVariables } from './variables.js';
+import { userVariables, channelVariables, roleVariables, timeVariables } from './variables.js';
 
 export { Logger } from './logger/index.js';
 export { Cooldown } from './cooldown.js';
@@ -56,11 +56,9 @@ export default {
 
   async applyVariables(value: string | undefined, variables: Variable[], context?: Context) {
     if (!value) return ""
-    variables.push(...this.botVariables(manager.client.user));
 
     if (context?.user) variables.push(...this.userVariables(context.user));
     if (context?.channel) variables.push(...this.channelVariables(context.channel));
-    if (context?.guild) variables.push(...this.guildVariables(context.guild));
     if (context?.role) variables.push(...this.roleVariables(context.role));
     if (context?.content) variables.push({ searchFor: "%content%", replaceWith: context.content })
     if (context?.message) variables.push(
