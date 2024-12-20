@@ -1,4 +1,4 @@
-import { channelMention, roleMention, userMention, time, Role, Guild, Channel, ClientUser } from 'discord.js';
+import { channelMention, roleMention, userMention, time, Role, Guild, Channel, ClientUser, ChannelType } from 'discord.js';
 import { User } from '@itsmybot';
 
 export const timeVariables = (timestamp: number, prefix = "time") => {
@@ -115,6 +115,18 @@ export const guildVariables = (guild: Guild) => {
     searchFor: "%guild_create_date%",
     replaceWith: time(Math.round(guild.createdTimestamp / 1000), "D"),
   }, {
+    searchFor: "%guild_afk_channel%",
+    replaceWith: guild.afkChannelId ? channelMention(guild.afkChannelId) : "None",
+  }, {
+    searchFor: "%guild_afk_timeout%",
+    replaceWith: guild.afkTimeout.toString(),
+  }, {
+    searchFor: "%guild_verification_level%",
+    replaceWith: guild.verificationLevel.toString(),
+  }, {
+    searchFor: "%guild_create_date%",
+    replaceWith: time(Math.round(guild.createdTimestamp / 1000), "D"),
+  }, {
     searchFor: "%guild_members%",
     replaceWith: guild.members.cache.filter((m) => !m.user.bot).size.toString(),
   }, {
@@ -127,11 +139,26 @@ export const guildVariables = (guild: Guild) => {
     searchFor: "%guild_roles%",
     replaceWith: guild.roles.cache.size.toString(),
   }, {
+    searchFor: "%guild_roles_list%",
+    replaceWith: guild.roles.cache.map((r) => roleMention(r.id)).join(", "),
+  }, {
     searchFor: "%guild_channels%",
     replaceWith: guild.channels.cache.size.toString(),
+  },{
+    searchFor: "%guild_voice_channels%",
+    replaceWith: guild.channels.cache.filter((c) => c.type === ChannelType.GuildVoice).size.toString(),
+  },{
+    searchFor: "%guild_text_channels%",
+    replaceWith: guild.channels.cache.filter((c) => c.type === ChannelType.GuildText).size.toString(),
   }, {
     searchFor: "%guild_emojis%",
     replaceWith: guild.emojis.cache.size.toString(),
+  }, {
+    searchFor: "%guild_regular_emojis%",
+    replaceWith: guild.emojis.cache.filter((e) => !e.animated).size.toString(),
+  }, {
+    searchFor: "%guild_animated_emojis%",
+    replaceWith: guild.emojis.cache.filter((e) => !e.animated).size.toString(),
   }, {
     searchFor: "%guild_stickers%",
     replaceWith: guild.stickers.cache.size.toString(),
