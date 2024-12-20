@@ -2,6 +2,8 @@ import { Collection } from 'discord.js';
 import { MathExpansion } from './impl/math.js';
 import { OwnerExpansion } from './impl/owner.js';
 import { PerformanceExpansion } from './impl/performance.js';
+import { BotExpansion } from './impl/bot.js';
+import { GuildExpansion } from './impl/guild.js';
 import { Manager, Expansion, Plugin } from '@itsmybot';
 import { Context, Service } from '@contracts';
 
@@ -18,6 +20,8 @@ export default class ExpansionService extends Service{
     this.registerExpansion("math", new MathExpansion(this.manager));
     this.registerExpansion("owner", new OwnerExpansion(this.manager));
     this.registerExpansion("performance", new PerformanceExpansion(this.manager));
+    this.registerExpansion("bot", new BotExpansion(this.manager));
+    this.registerExpansion("guild", new GuildExpansion(this.manager));
   }
 
   registerExpansion(identifier: string, expansion: Expansion<Plugin | undefined>) {

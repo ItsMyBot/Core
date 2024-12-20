@@ -39,9 +39,7 @@ export default {
   setupModal,
 
   userVariables,
-  botVariables,
   channelVariables,
-  guildVariables,
   roleVariables,
   timeVariables,
 
