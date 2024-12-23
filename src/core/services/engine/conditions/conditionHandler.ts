@@ -19,7 +19,7 @@ export class ConditionHandler {
   }
 
   async registerFromDir(conditionsDir: string, plugin: Plugin | undefined = undefined) {
-    const conditionFiles = sync(join(conditionsDir, '**', '*.js'));
+    const conditionFiles = sync(join(conditionsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of conditionFiles) {
       const conditionPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;

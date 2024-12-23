@@ -45,7 +45,7 @@ export default class ComponentService extends Service {
   }
 
   async registerFromDir(componentDir: string, type: string, plugin: Plugin | undefined = undefined) {
-    const componentFiles = sync(join(componentDir, '**', '*.js'));
+    const componentFiles = sync(join(componentDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of componentFiles) {
       const componentPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;

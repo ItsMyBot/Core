@@ -19,7 +19,7 @@ export default class ExpansionService extends Service{
   }
 
   async registerFromDir(expansionsDir: string, plugin: Plugin | undefined = undefined) {
-    const expansionFiles = sync(join(expansionsDir, '**', '*.js'));
+    const expansionFiles = sync(join(expansionsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of expansionFiles) {
       const expansionPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;

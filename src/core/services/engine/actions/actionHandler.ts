@@ -19,7 +19,7 @@ export class ActionHandler {
   }
 
   async registerFromDir(actionsDir: string, plugin: Plugin | undefined = undefined) {
-    const actionFiles = sync(join(actionsDir, '**', '*.js'));
+    const actionFiles = sync(join(actionsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of actionFiles) {
       const actionPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;

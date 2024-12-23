@@ -7,7 +7,6 @@ import { Manager, Command, Plugin } from '@itsmybot';
 import { Service } from '@contracts';
 
 export default class CommandService extends Service {
-  commandsDir: string
   commands: Collection<string, Command<Plugin | undefined>>
 
   constructor(manager: Manager) {
@@ -29,7 +28,7 @@ export default class CommandService extends Service {
   }
 
   async registerFromDir(commandsDir: string, plugin: Plugin | null = null) {
-    const commandFiles = sync(join(commandsDir, '**', '*.js'));
+    const commandFiles = sync(join(commandsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of commandFiles) {
       const commandPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;

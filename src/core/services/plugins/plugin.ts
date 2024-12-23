@@ -83,7 +83,7 @@ export abstract class Plugin {
   }
 
   private async loadDatabaseModels() {
-    for (const model of sync(join(this.path, '/**/*.model.js'))) {
+    for (const model of sync(join(this.path, '/**/*.model.js').replace(/\\/g, '/'))) {
       const { default: Model } = await import(model);
 
       this.manager.database.addModels([Model]);
