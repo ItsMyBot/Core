@@ -59,8 +59,6 @@ const manager = new Manager({
         base: processFolder,
         configs: join(processFolder, 'configs'),
         plugins: join(processFolder, 'build', 'plugins'),
-        coreCommands: join(processFolder, 'build', 'core', 'services', 'commands', 'impl'),
-        coreEvents: join(processFolder, 'build', 'core', 'services', 'events', 'impl'),
         scripts: join(processFolder, 'scripts'),
         customCommands: join(processFolder, 'custom-commands'),
         logs: join(processFolder, 'logs'),

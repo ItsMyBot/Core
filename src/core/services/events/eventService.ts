@@ -6,7 +6,6 @@ import { Collection } from 'discord.js';
 import { Service } from '@contracts';
 
 export default class EventService extends Service {
-  eventsDir: string;
   events: Collection<string, EventExecutor>;
 
   constructor(manager: Manager) {
@@ -20,7 +19,7 @@ export default class EventService extends Service {
   }
 
   async registerFromDir(eventsDir: string, plugin: Plugin | undefined = undefined) {
-    const eventFiles = sync(join(eventsDir, '**', '*.js'));
+    const eventFiles = sync(join(eventsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of eventFiles) {
       const eventPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;

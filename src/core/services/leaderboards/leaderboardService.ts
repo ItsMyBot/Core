@@ -22,7 +22,7 @@ export default class LeaderboardService extends Service{
   }
 
   async registerFromDir(leaderboardsDir: string, plugin: Plugin | undefined = undefined) {
-    const leaderboardFiles = sync(join(leaderboardsDir, '**', '*.js'));
+    const leaderboardFiles = sync(join(leaderboardsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of leaderboardFiles) {
       const leaderboardPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;

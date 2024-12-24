@@ -19,7 +19,7 @@ export class MutatorHandler {
   }
 
   async registerFromDir(mutatorsDir: string, plugin: Plugin | undefined = undefined) {
-    const mutatorFiles = sync(join(mutatorsDir, '**', '*.js'));
+    const mutatorFiles = sync(join(mutatorsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of mutatorFiles) {
       const mutatorPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;
