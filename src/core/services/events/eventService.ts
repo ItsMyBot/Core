@@ -19,7 +19,7 @@ export default class EventService extends Service {
   }
 
   async registerFromDir(eventsDir: string, plugin: Plugin | undefined = undefined) {
-    const eventFiles = sync(join(eventsDir, '**', '*.js').replace(/\\/g, '/')));
+    const eventFiles = sync(join(eventsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of eventFiles) {
       const eventPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;
