@@ -65,6 +65,16 @@ export default class GuildExpansion extends Expansion {
         return context.guild.members.cache.filter((m) => m.presence?.status == "dnd" && !m.user.bot).size.toString();
       case 'offline_members':
         return context.guild.members.cache.filter((m) => m.presence?.status == "offline" && !m.user.bot).size.toString();
+        case 'categories':
+          return context.guild.channels.cache.filter((c) => c.type === ChannelType.GuildCategory).size.toString();
+        case 'announcement_channels':
+          return context.guild.channels.cache.filter((c) => c.type === ChannelType.GuildAnnouncement).size.toString();
+        case 'stage_channels':
+          return context.guild.channels.cache.filter((c) => c.type === ChannelType.GuildStageVoice).size.toString();
+        case 'forum_channels':
+          return context.guild.channels.cache.filter((c) => c.type === ChannelType.GuildForum).size.toString();
+        case 'media_channels':
+          return context.guild.channels.cache.filter((c) => c.type === ChannelType.GuildMedia).size.toString();
     }
   }
 }
