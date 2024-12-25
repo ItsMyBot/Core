@@ -40,7 +40,7 @@ export default class GuildExpansion extends Expansion {
       case 'roles_list':
         return context.guild.roles.cache.map((r) => roleMention(r.id)).join(", ");
       case 'channels':
-        return context.guild.channels.cache.size.toString();
+        return context.guild.channels.cache.filter((c) => c.type !== ChannelType.GuildCategory).size.toString();
       case 'voice_channels':
         return context.guild.channels.cache.filter((c) => c.type === ChannelType.GuildVoice).size.toString();
       case 'text_channels':
