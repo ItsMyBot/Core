@@ -8,7 +8,7 @@ export { Context } from './context.js';
 export { Events, EventType } from './events.js';
 export { ClientOptions, ManagerOptions, Services, ManagerConfigs } from './manager.js';
 
-export { IsPermissionFlag, IsActivityType, IsTextInputStyle, IsChannelType, IsCommandOptionType } from './decorators/validator.js';
+export { IsPermissionFlag, IsActivityType, IsTextInputStyle, IsChannelType, IsCommandOptionType, IsBooleanOrString } from './decorators/validator.js';
 
 export { BaseConfig } from './config/baseConfig.js';
 export { BaseConfigSection } from './config/baseConfigSection.js';

@@ -64,3 +64,14 @@ export class IsChannelType implements ValidatorConstraintInterface {
     return 'This is not a command option type.';
   }
 }
+
+@ValidatorConstraint({ name: 'isBooleanOrString', async: false })
+export class IsBooleanOrString implements ValidatorConstraintInterface {
+  validate(value: any, args: ValidationArguments) {
+    return typeof value === 'boolean' || typeof value === 'string';
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return 'This is not a valid type. Please use either a boolean or a string.';
+  }
+}
