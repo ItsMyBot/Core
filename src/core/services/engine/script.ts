@@ -14,7 +14,7 @@ export class Script extends BaseScript {
     }
 
     for (const [trigger, actions] of this.triggers) {
-      this.engine.event.on(trigger, async (context: Context, variables: Variable[]) => {
+      this.manager.services.engine.event.on(trigger, async (context: Context, variables: Variable[]) => {
         if (!await this.meetsConditions(context, [])) return;
 
         actions.forEach(action => action.run(context, variables));

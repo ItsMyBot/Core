@@ -6,6 +6,9 @@ import { Collection } from 'discord.js';
 import { Manager, Command, Plugin } from '@itsmybot';
 import { Service } from '@contracts';
 
+/**
+ * Service to manage commands in the bot.
+ */
 export default class CommandService extends Service {
   commands: Collection<string, Command<Plugin | undefined>>
 

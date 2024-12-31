@@ -1,9 +1,6 @@
 import { Collection, ApplicationCommandOptionType, ChannelType } from 'discord.js';
 import Utils from '@utils';
 
-import { ActionHandler } from './actions/actionHandler.js';
-import { ConditionHandler } from './conditions/conditionHandler.js';
-
 import { Manager, Script, CustomCommand, Command, User } from '@itsmybot';
 import { Logger } from '@utils';
 import { BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction, Service } from '@contracts';
@@ -11,9 +8,11 @@ import { BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction, Se
 import ScriptConfig from '../../resources/engine/script.js';
 import CustomCommandConfig from '../../resources/engine/customCommand.js';
 import { CommandBuilder } from '@builders';
-import { MutatorHandler } from './mutators/mutatorHandler.js';
 import EngineEventEmitter from './eventEmitter.js';
 
+/**
+ * Service that manages all the scripts and custom commands.
+ */
 export default class EngineService extends Service {
   scriptDir: string
   scripts: Collection<string, Script> = new Collection();
@@ -23,24 +22,13 @@ export default class EngineService extends Service {
   
   event = new EngineEventEmitter()
 
-  action: ActionHandler
-  condition: ConditionHandler
-  mutator: MutatorHandler
-
   constructor(manager: Manager) {
     super(manager);
     this.scriptDir = manager.managerOptions.dir.scripts;
     this.customCommandDir = manager.managerOptions.dir.customCommands;
-
-    this.action = new ActionHandler(manager);
-    this.condition = new ConditionHandler(manager);
-    this.mutator = new MutatorHandler(manager);
   }
 
   async initialize() {
-    await this.action.initialize();
-    await this.condition.initialize();
-    await this.mutator.initialize();
     await this.loadScripts();
     this.manager.logger.info('Script engine initialized.');
   }
@@ -113,14 +101,14 @@ export default class EngineService extends Service {
   registerScript(id: string, script: BaseConfig, logger: Logger) {
     if (this.scripts.has(id)) return logger.warn(`Script ${id} is already registered`);
 
-    const scriptClass = new Script(this, script, logger);
+    const scriptClass = new Script(this.manager, script, logger);
     scriptClass.loadTriggers();
 
     this.scripts.set(id, scriptClass);
   }
 
   registerCustomCommand(id: string, customCommand: BaseConfig) {
-    const customCommandClass = new CustomCommand(this, customCommand, this.manager.logger);
+    const customCommandClass = new CustomCommand(this.manager, customCommand, this.manager.logger);
 
     class CustomCommandBase extends Command {
       build() {

@@ -1,6 +1,5 @@
-import EngineService from './engineService.js';
 import { Logger } from '@utils';
-import { Config, ActionData, ConditionData } from '@itsmybot';
+import { Config, ActionData, ConditionData, Manager } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 
 export class BaseScript {
@@ -8,17 +7,17 @@ export class BaseScript {
   conditions: ConditionData[];
   actions: ActionData[];
   logger: Logger;
-  engine: EngineService;
+  manager: Manager;
 
-  constructor(engine: EngineService, data: Config, logger: Logger, ) {
+  constructor(manager: Manager, data: Config, logger: Logger, ) {
     this.logger = logger;
-    this.engine = engine
+    this.manager = manager
     this.data = data;
-    this.conditions = data.has("conditions") ? this.engine.condition.buildConditions(data.getSubsections("conditions")) : [];
-    this.actions = data.has("actions") ? data.getSubsections("actions").map((actionData: Config) => new ActionData(engine, actionData, logger, )) : [];
+    this.conditions = data.has("conditions") ? manager.services.condition.buildConditions(data.getSubsections("conditions")) : [];
+    this.actions = data.has("actions") ? data.getSubsections("actions").map((actionData: Config) => new ActionData(manager, actionData, logger, )) : [];
   }
 
   async meetsConditions(context: Context, variables: Variable[]): Promise<boolean> {
-    return this.engine.condition.meetsConditions(this.conditions, context, variables);
+    return this.manager.services.condition.meetsConditions(this.conditions, context, variables);
   }
 }

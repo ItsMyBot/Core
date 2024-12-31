@@ -5,6 +5,10 @@ import { sync } from 'glob';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+/**
+ * Service to manage expansions in the bot.
+ * Expansions are used to add custom placeholders to the bot.
+ */
 export default class ExpansionService extends Service{
   expansions: Collection<string, Expansion<Plugin | undefined>>;
 

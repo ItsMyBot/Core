@@ -1,6 +1,6 @@
 import { Context, Variable } from '@contracts';
 import { Action } from '../action.js';
-import { ActionData } from 'core/services/engine/actions/actionData.js';
+import { ActionData } from '@itsmybot';
 import Utils from '@utils';
 
 export default class StartThreadAction extends Action {

@@ -5,6 +5,9 @@ import { Manager, Event, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
 import { Service } from '@contracts';
 
+/**
+ * Service to manage events in the bot.
+ */
 export default class EventService extends Service {
   events: Collection<string, EventExecutor>;
 

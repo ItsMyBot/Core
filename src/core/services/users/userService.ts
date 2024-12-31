@@ -2,6 +2,10 @@ import { Service } from '@contracts';
 import { Manager, User } from '@itsmybot';
 import { GuildMember } from 'discord.js';
 
+/**
+ * Service to manage users in the bot.
+ * Users are used to store information about Discord users.
+ */
 export default class UserService extends Service {
   constructor(manager: Manager) {
     super(manager);
