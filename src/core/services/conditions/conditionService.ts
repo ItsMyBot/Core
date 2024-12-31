@@ -1,21 +1,25 @@
 import { Collection } from 'discord.js';
 import { Condition, Plugin, ConditionData, Manager } from '@itsmybot';
-import { Context, Variable, Config } from '@contracts';
+import { Context, Variable, Config, Service } from '@contracts';
 import { sync } from 'glob';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-export class ConditionHandler {
-  manager: Manager;
+/**
+ * Service to manage conditions in the bot.
+ * Conditions are used to check if a condition is met in the scripting system in the engine.
+ */
+export default class ConditionService extends Service {
   conditions: Collection<string, Condition<Plugin | undefined>>;
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.conditions = new Collection();
   }
 
   async initialize() {
     await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
+    this.manager.logger.info("Condition service initialized.");
   }
 
   async registerFromDir(conditionsDir: string, plugin: Plugin | undefined = undefined) {
@@ -36,7 +40,7 @@ export class ConditionHandler {
   }
 
   buildConditions(conditions: Config[], notMetAction: boolean = true): ConditionData[] {
-    return conditions.map(condition => new ConditionData(this.manager.services.engine, condition, notMetAction));
+    return conditions.map(condition => new ConditionData(this.manager, condition, notMetAction));
   }
 
   async meetsConditions(conditions: ConditionData[], context: Context, variables: Variable[]): Promise<boolean> {

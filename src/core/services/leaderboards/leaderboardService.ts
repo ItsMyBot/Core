@@ -7,7 +7,9 @@ import { sync } from 'glob';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-
+/**
+ * Service to manage leaderboards in the bot.
+ */
 export default class LeaderboardService extends Service{
   leaderboards: Collection<string, Leaderboard<Plugin | undefined>>;
 

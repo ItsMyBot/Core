@@ -4,6 +4,10 @@ import { Component, Manager, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
 import { Service } from '@contracts';
 
+/**
+ * Service to manage components in the bot.
+ * Components are used to create buttons, select menus, and modals.
+ */
 export default class ComponentService extends Service {
   buttons: Collection<string, Component<Plugin | undefined>>;
   selectMenus: Collection<string, Component<Plugin | undefined>>;

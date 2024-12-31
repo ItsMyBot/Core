@@ -11,9 +11,9 @@ export default class ClientReadyEvent extends Event {
   async execute(client: Client) {
     this.manager.services.command.deployCommands();
 
-    this.logger.info(`Engine Actions registered: ${this.manager.services.engine.action.actions.size}`);
-    this.logger.info(`Engine Conditions registered: ${this.manager.services.engine.condition.conditions.size}`);
-    this.logger.info(`Engine Mutators registered: ${this.manager.services.engine.mutator.mutators.size}`);
+    this.logger.info(`Actions registered: ${this.manager.services.action.actions.size}`);
+    this.logger.info(`Conditions registered: ${this.manager.services.condition.conditions.size}`);
+    this.logger.info(`Mutators registered: ${this.manager.services.mutator.mutators.size}`);
     this.logger.info(`Commands registered: ${this.manager.commands.size}`);
     this.logger.info(`Events registered: ${this.manager.events.size}`);
     this.logger.info(`Plugins registered: ${this.manager.plugins.size}`);

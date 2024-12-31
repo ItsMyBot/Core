@@ -1,6 +1,6 @@
 import { Context, Variable } from '@contracts';
 import { Action } from '../action.js';
-import { ActionData } from 'core/services/engine/actions/actionData.js';
+import { ActionData } from '@itsmybot';
 
 export default class DeleteMessageAction extends Action {
   id = "deleteMessage";
