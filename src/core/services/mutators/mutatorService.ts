@@ -1,21 +1,25 @@
 import { Collection } from 'discord.js';
 import { Config, Manager, Mutator, Plugin } from '@itsmybot';
-import { Context, Variable } from '@contracts';
+import { Context, Variable, Service } from '@contracts';
 import { sync } from 'glob';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-export class MutatorHandler {
-  manager: Manager;
+/**
+ * Service to manage mutators in the bot.
+ * Mutators are used to edit the base context used in the scripting system in the engine.
+ */
+export default class MutatorService extends Service {
   mutators: Collection<string, Mutator<Plugin | undefined>>;
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.mutators = new Collection();
   }
 
   async initialize() {
     await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
+    this.manager.logger.info("Mutator service initialized.");
   }
 
   async registerFromDir(mutatorsDir: string, plugin: Plugin | undefined = undefined) {

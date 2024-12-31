@@ -1,21 +1,26 @@
 import { Collection } from 'discord.js';
 import { Action, ActionData, Manager, Plugin } from '@itsmybot';
-import { Context, Variable } from '@contracts';
+import { Context, Service, Variable } from '@contracts';
 import { sync } from 'glob';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-export class ActionHandler {
-  manager: Manager;
+/**
+ * Service to manage actions in the bot.
+ * Actions are used to perform actions in the bot with the scripting system in the engine.
+ */
+export default class ActionService extends Service{
   actions: Collection<string, Action<Plugin | undefined>>;
 
   constructor(manager: Manager) {
-    this.manager = manager;
+    super(manager);
     this.actions = new Collection();
+
   }
 
   async initialize() {
     await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
+    this.manager.logger.info("Action service initialized.");
   }
 
   async registerFromDir(actionsDir: string, plugin: Plugin | undefined = undefined) {

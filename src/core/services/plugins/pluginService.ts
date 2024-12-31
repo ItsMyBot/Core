@@ -8,6 +8,9 @@ import { Logger } from '@utils';
 import PluginModel from './plugin.model.js';
 import { Service } from '@contracts';
 
+/**
+ * Service to manage plugins in the bot.
+ */
 export default class PluginService extends Service {
   pluginsDir: string;
   plugins: Collection<string, Plugin>;

@@ -1,6 +1,5 @@
 import { Logger } from '@utils';
-import { Config, BaseScript } from '@itsmybot';
-import EngineService from '../engineService';
+import { Config, BaseScript, Manager } from '@itsmybot';
 import { Context, Variable } from '@contracts';
 import Utils from '@utils';
 import manager from '@itsmybot';
@@ -16,13 +15,13 @@ export class ActionData extends BaseScript {
   public executionCounter: number = 0;
   public lastExecutionTime: number = 0;
 
-  constructor(engine: EngineService, data: Config, logger: Logger, ) {
-    super(engine, data, logger);
+  constructor(manager: Manager, data: Config, logger: Logger, ) {
+    super(manager, data, logger);
     this.id = data.getStringOrNull("id");
     this.args = data.getSubsectionOrNull("args") || data.empty();
     this.triggers = data.getStringsOrNull("triggers");
     this.mutators = data.getSubsectionsOrNull("mutators");
-    this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionData(engine, actionData, logger)) : [];
+    this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionData(manager, actionData, logger)) : [];
   }
 
   async run(context: Context, variables: Variable[] = []) {
@@ -40,7 +39,7 @@ export class ActionData extends BaseScript {
 
   executeActions(context: Context, variables: Variable[]) {
     if (!this.actions.length) {
-      this.engine.action.triggerAction(this, context, variables);
+      this.manager.services.action.triggerAction(this, context, variables);
     } else {
       this.actions.forEach(subAction => subAction.run(context, variables));
     }
@@ -52,7 +51,7 @@ export class ActionData extends BaseScript {
     if (!this.mutators) return context
 
     for (const mutator of this.mutators) {
-      context = await this.engine.mutator.applyMutator(mutator, context, variables)
+      context = await this.manager.services.mutator.applyMutator(mutator, context, variables)
     }
 
     return context
