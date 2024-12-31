@@ -6,7 +6,7 @@ import { setupMessage } from './setup/setupMessage.js';
 import { setupComponent } from './setup/setupComponent.js';
 import { setupButton } from './setup/setupButton.js';
 import { setupModal } from './setup/setupModal.js';
-import { userVariables, botVariables, channelVariables, guildVariables, roleVariables, timeVariables } from './variables.js';
+import { userVariables, channelVariables, roleVariables, timeVariables } from './variables.js';
 
 export { Logger } from './logger/index.js';
 export { Cooldown } from './cooldown.js';
@@ -19,48 +19,44 @@ import { Context, Variable, MessageOutput } from '@contracts';
 
 const discordEpoch = 1420070400000;
 
-export default {
-  permissionFlags,
-  buttonStyle,
-  activityType,
-  textInputStyle,
-  presenceStatus,
-  commandOptionType,
-  channelType,
+export default class Utils {
+  static permissionFlags = permissionFlags;
+  static buttonStyle = buttonStyle;
+  static activityType = activityType;
+  static textInputStyle = textInputStyle;
+  static presenceStatus = presenceStatus;
+  static commandOptionType = commandOptionType;
+  static channelType = channelType;
 
-  findRole,
-  findChannel,
-  findTextChannel,
+  static findRole = findRole;
+  static findChannel = findChannel;
+  static findTextChannel = findTextChannel;
 
-  setupEmbed,
-  setupMessage,
-  setupComponent,
-  setupButton,
-  setupModal,
+  static setupEmbed = setupEmbed;
+  static setupMessage = setupMessage;
+  static setupComponent = setupComponent;
+  static setupButton = setupButton;
+  static setupModal = setupModal;
 
-  userVariables,
-  botVariables,
-  channelVariables,
-  guildVariables,
-  roleVariables,
-  timeVariables,
+  static userVariables = userVariables;
+  static channelVariables = channelVariables;
+  static roleVariables = roleVariables;
+  static timeVariables = timeVariables;
 
-  async fileExists(filePath: string) {
+  static async fileExists(filePath: string) {
     try {
       await fs.access(filePath);
       return true;
     } catch {
       return false;
     }
-  },
+  }
 
-  async applyVariables(value: string | undefined, variables: Variable[], context?: Context) {
+  static async applyVariables(value: string | undefined, variables: Variable[], context?: Context) {
     if (!value) return ""
-    variables.push(...this.botVariables(manager.client.user));
 
     if (context?.user) variables.push(...this.userVariables(context.user));
     if (context?.channel) variables.push(...this.channelVariables(context.channel));
-    if (context?.guild) variables.push(...this.guildVariables(context.guild));
     if (context?.role) variables.push(...this.roleVariables(context.role));
     if (context?.content) variables.push({ searchFor: "%content%", replaceWith: context.content })
     if (context?.message) variables.push(
@@ -73,26 +69,35 @@ export default {
     });
 
     return manager.services.expansion.resolvePlaceholders(value, context);
-  },
+  }
 
-  async wait(ms: number) {
+  static async wait(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  },
+  }
 
-  isValidURL(url: string) {
+  static isValidURL(url: string) {
     try {
       new URL(url);
       return true;
     } catch {
       return false;
     }
-  },
+  }
 
-  getRandom<T>(array: T[]): T {
+  static getRandom<T>(array: T[]): T {
     return array[Math.floor(Math.random() * array.length)]
-  },
+  }
 
-  async hasRole(member: GuildMember, identifiers: string, inherited = false) {
+  static removeHiddenLines(text: string) {
+    let texts = text.split('\n');
+
+    texts = texts.filter((line) => !line.startsWith('show=false '));
+    texts = texts.map((line) => line.replace('show=true ', ''));
+
+    return texts.join('\n');
+  }
+
+  static async hasRole(member: GuildMember, identifiers: string, inherited = false) {
     const searchIdentifiers = Array.isArray(identifiers) ? identifiers : [identifiers];
 
     for (const identifier of searchIdentifiers) {
@@ -113,22 +118,22 @@ export default {
     }
 
     return false;
-  },
+  }
 
-  generateSnowflake() {
+  static generateSnowflake() {
     let timestamp = Date.now();
     timestamp -= discordEpoch;
 
     return (BigInt(timestamp) << 22n).toString();
-  },
+  }
 
-  getDateFromSnowflake(snowflake: string | number | bigint) {
+  static getDateFromSnowflake(snowflake: string | number | bigint) {
     const binary = BigInt(snowflake).toString(2);
     const timestamp = parseInt(binary.substring(0, binary.length - 22), 2) + discordEpoch;
     return new Date(timestamp);
-  },
+  }
 
-  formatTime(seconds: number) {
+  static formatTime(seconds: number) {
     const timeUnits: { [key: string]: number } = {
       month: 30 * 24 * 60 * 60,
       day: 24 * 60 * 60,
@@ -137,7 +142,7 @@ export default {
     };
 
     let remainingSeconds = seconds;
-    let result = [];
+    const result = [];
 
     for (const unit in timeUnits) {
       if (remainingSeconds >= timeUnits[unit]) {
@@ -157,9 +162,9 @@ export default {
       }
       return `${value}${unit.charAt(0)}`;
     }).join(' ');
-  },
+  }
 
-  parseTime(time: string): number {
+  static parseTime(time: string): number {
     const timeUnits: { [key: string]: number } = {
       d: 24 * 60 * 60,
       h: 60 * 60,
@@ -177,8 +182,9 @@ export default {
     }
 
     return result * 1000;
-  },
-  async logToDiscord(id: string, message: MessageOutput) {
+  }
+
+  static async logToDiscord(id: string, message: MessageOutput) {
     const log = manager.configs.config.getSubsections('log-channels').find(log => log.getString("id") === id);
     if (!log) return;
 
@@ -186,5 +192,9 @@ export default {
     if (!channel) return;
 
     channel.send(message)
+  }
+
+  static capitalizeFirst(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 };

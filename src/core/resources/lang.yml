@@ -44,6 +44,12 @@ leaderboard:
       footer: '%current_page%/%total_pages%'
 
 plugin:
+  information: |
+      ### %status% %name% v%version%
+      show=%has_description% - %description%
+      - Authors: %authors%
+      show=%has_website% - %website%
+
   list:
     content: |
       Find below the list of plugins available:

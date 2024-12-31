@@ -48,6 +48,10 @@ class MessageEmbedFieldValidator {
   @IsOptional()
   @IsBoolean()
   inline: boolean
+
+  @IsOptional()
+  @IsString()
+  show: string
 }
 
 

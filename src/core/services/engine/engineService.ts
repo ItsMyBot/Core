@@ -1,9 +1,6 @@
 import { Collection, ApplicationCommandOptionType, ChannelType } from 'discord.js';
 import Utils from '@utils';
 
-import { ActionHandler } from './actions/actionHandler.js';
-import { ConditionHandler } from './conditions/conditionHandler.js';
-
 import { Manager, Script, CustomCommand, Command, User } from '@itsmybot';
 import { Logger } from '@utils';
 import { BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction, Service } from '@contracts';
@@ -11,9 +8,11 @@ import { BaseConfigSection, BaseConfig, Config, Variable, CommandInteraction, Se
 import ScriptConfig from '../../resources/engine/script.js';
 import CustomCommandConfig from '../../resources/engine/customCommand.js';
 import { CommandBuilder } from '@builders';
-import { MutatorHandler } from './mutators/mutatorHandler.js';
 import EngineEventEmitter from './eventEmitter.js';
 
+/**
+ * Service that manages all the scripts and custom commands.
+ */
 export default class EngineService extends Service {
   scriptDir: string
   scripts: Collection<string, Script> = new Collection();
@@ -23,28 +22,15 @@ export default class EngineService extends Service {
   
   event = new EngineEventEmitter()
 
-  action: ActionHandler
-  condition: ConditionHandler
-  mutator: MutatorHandler
-
   constructor(manager: Manager) {
     super(manager);
     this.scriptDir = manager.managerOptions.dir.scripts;
     this.customCommandDir = manager.managerOptions.dir.customCommands;
-
-    this.action = new ActionHandler(manager);
-    this.condition = new ConditionHandler(manager);
-    this.mutator = new MutatorHandler(manager);
   }
 
   async initialize() {
-    this.manager.logger.info('Script engine initialized.');
-    
-    this.action.initialize();
-    this.condition.initialize();
-    this.mutator.initialize();
-
     await this.loadScripts();
+    this.manager.logger.info('Script engine initialized.');
   }
 
   async loadScripts() {
@@ -78,17 +64,19 @@ export default class EngineService extends Service {
 
     for (const option of interaction.options.data) {
       switch (true) {
-        case option.member != null || option.member != undefined:
+        case option.member != null || option.member != undefined: {
           const targetUserM = await this.manager.services.user.findOrCreate(option.member)
           if (!targetUserM) break;
           variables.push(...Utils.userVariables(targetUserM, `option_${option.name}`))
           break;
-
-        case option.user != undefined:
+        }
+          
+        case option.user != undefined: {
           const targetUser = await this.manager.services.user.findOrNull(option.user.id)
           if (!targetUser) break;
           variables.push(...Utils.userVariables(targetUser, `option_${option.name}`))
           break;
+        }
 
         case option.role != null || option.role != undefined:
           variables.push(...Utils.roleVariables(option.role, `option_${option.name}`))
@@ -113,14 +101,14 @@ export default class EngineService extends Service {
   registerScript(id: string, script: BaseConfig, logger: Logger) {
     if (this.scripts.has(id)) return logger.warn(`Script ${id} is already registered`);
 
-    const scriptClass = new Script(this, script, logger);
+    const scriptClass = new Script(this.manager, script, logger);
     scriptClass.loadTriggers();
 
     this.scripts.set(id, scriptClass);
   }
 
   registerCustomCommand(id: string, customCommand: BaseConfig) {
-    const customCommandClass = new CustomCommand(this, customCommand, this.manager.logger);
+    const customCommandClass = new CustomCommand(this.manager, customCommand, this.manager.logger);
 
     class CustomCommandBase extends Command {
       build() {

@@ -1,24 +1,21 @@
 import { Leaderboard } from '../leaderboard.js';
-import { Sequelize, Op } from 'sequelize';
+import { Op } from 'sequelize';
 import { User } from '@itsmybot';
 import Utils from '@utils';
 
-export class MessagesLeaderboard extends Leaderboard {
-
-  name = "Messages"
+export default class MessagesLeaderboard extends Leaderboard {
+  name = "messages"
   description = "Messages leaderboard."
 
   async getData() {
-
-    let data = await User.findAll({
-      order: Sequelize.col('messages'),
+    const data = await User.findAll({
+      order: [['messages', 'DESC']],
       where: {
         messages: {
           [Op.gt]: 0
         }
       }
-    })
-    data.reverse()
+    });
 
     const messageFormat = this.manager.configs.lang.getString("leaderboard.messages-format")
 

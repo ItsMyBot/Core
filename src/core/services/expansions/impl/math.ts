@@ -1,7 +1,8 @@
 import { Context } from '@contracts';
 import { Expansion } from '../expansion.js';
 
-export class MathExpansion extends Expansion {
+export default class MathExpansion extends Expansion {
+  name = 'math';
 
   async onRequest(context: Context, placeholder: string) {
 

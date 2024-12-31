@@ -6,13 +6,13 @@ import { readFileSync } from 'fs';
 import { Manager } from './manager.js';
 import { Logger } from '@utils';
 
-export { Action } from './services/engine/actions/action.js';
-export { ConditionData } from './services/engine/conditions/conditionData.js';
-export { Condition } from './services/engine/conditions/condition.js';
-export { Mutator } from './services/engine/mutators/mutator.js'
+export { Action } from './services/actions/action.js';
+export { ConditionData } from './services/conditions/conditionData.js';
+export { Condition } from './services/conditions/condition.js';
+export { Mutator } from './services/mutators/mutator.js'
 export { BaseScript } from './services/engine/baseScript.js';
 export { Script } from './services/engine/script.js';
-export { ActionData } from './services/engine/actions/actionData.js';
+export { ActionData } from './services/actions/actionData.js';
 export { Plugin } from './services/plugins/plugin.js';
 export { Expansion } from './services/expansions/expansion.js';
 export { User } from './services/users/user.model.js';
@@ -59,8 +59,6 @@ const manager = new Manager({
         base: processFolder,
         configs: join(processFolder, 'configs'),
         plugins: join(processFolder, 'build', 'plugins'),
-        coreCommands: join(processFolder, 'build', 'core', 'services', 'commands', 'impl'),
-        coreEvents: join(processFolder, 'build', 'core', 'services', 'events', 'impl'),
         scripts: join(processFolder, 'scripts'),
         customCommands: join(processFolder, 'custom-commands'),
         logs: join(processFolder, 'logs'),

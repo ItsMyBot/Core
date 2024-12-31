@@ -15,23 +15,26 @@ export async function setupEmbed(settings: EmbedSettings) {
   const context = settings.context;
   const config = settings.config;
 
-  let author = config.getStringOrNull("author", true);
-  let authorIcon = config.getStringOrNull("author-icon", true);
-  let authorUrl = config.getStringOrNull("author-url", true);
-  let url = config.getStringOrNull("url", true);
-  let title = config.getStringOrNull("title", true);
+  const author = config.getStringOrNull("author", true);
+  const authorIcon = config.getStringOrNull("author-icon", true);
+  const authorUrl = config.getStringOrNull("author-url", true);
+  const url = config.getStringOrNull("url", true);
+  const title = config.getStringOrNull("title", true);
   let description = config.getStringOrNull("description", true);
   const fields = config.getSubsectionsOrNull("fields");
-  let footer = config.getStringOrNull("footer", true);
-  let footerIcon = config.getStringOrNull("footer-icon", true);
-  let thumbnail = config.getStringOrNull("thumbnail", true);
-  let image = config.getStringOrNull("image", true);
-  let timestamp = config.getStringOrNull("timestamp");
-  let color = config.getStringOrNull("color", true) || manager.configs.config.getString("default-color");
+  const footer = config.getStringOrNull("footer", true);
+  const footerIcon = config.getStringOrNull("footer-icon", true);
+  const thumbnail = config.getStringOrNull("thumbnail", true);
+  const image = config.getStringOrNull("image", true);
+  const timestamp = config.getStringOrNull("timestamp");
+  const color = config.getStringOrNull("color", true) || manager.configs.config.getString("default-color");
+
+  description = await Utils.applyVariables(description, variables, context);
+  if (description) description = Utils.removeHiddenLines(description);
 
   const embed = new EmbedBuilder()
     .setTitle(await Utils.applyVariables(title, variables, context) || null)
-    .setDescription(await Utils.applyVariables(description, variables, context) || null)
+    .setDescription(description || null)
     .setAuthor({
       name: await Utils.applyVariables(author, variables, context) || null!,
       iconURL: await Utils.applyVariables(authorIcon, variables, context) || undefined,
@@ -47,12 +50,15 @@ export async function setupEmbed(settings: EmbedSettings) {
     .setColor(await Utils.applyVariables(color, variables, context) as ColorResolvable || null)
     .setURL(await Utils.applyVariables(url, variables, context) || null);
 
-  if (Array.isArray(fields) && fields.length) {
+  if (Array.isArray(fields)) {
     for (const field of fields) {
+      const show = await Utils.applyVariables(field.getStringOrNull('show'), variables, context);
+      
+      if (show === "false") continue;
 
       embed.addFields({
         name: await Utils.applyVariables(field.getString("name"), variables, context),
-        value: await Utils.applyVariables(field.getString("value"), variables, context),
+        value: Utils.removeHiddenLines(await Utils.applyVariables(field.getString("value"), variables, context)),
         inline: field.getBoolOrNull("inline") || false,
       });
     }

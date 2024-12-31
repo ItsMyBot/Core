@@ -27,10 +27,10 @@ export async function setupComponent(settings: ComponentSettings) {
     }
 
     case "select-menu": {
-      let placeholder = component.getStringOrNull("placeholder");
-      let minSelect = component.getNumberOrNull("min-values") || 0;
-      let maxSelect = component.getNumberOrNull("max-values") || 1;
-      let options = component.getSubsectionsOrNull("options");
+      const placeholder = component.getStringOrNull("placeholder");
+      const minSelect = component.getNumberOrNull("min-values") || 0;
+      const maxSelect = component.getNumberOrNull("max-values") || 1;
+      const options = component.getSubsectionsOrNull("options");
 
       if (customId) {
         const selectMenu = new StringSelectMenuBuilder()
@@ -44,13 +44,13 @@ export async function setupComponent(settings: ComponentSettings) {
 
         if (options && options[0]) {
           for (const option of options) {
-            let label = option.getStringOrNull("label");
-            let value = option.getStringOrNull("value");
-            let emoji = option.getStringOrNull("emoji");
-            let defaultOption = option.getBoolOrNull("default") || false;
-            let description = option.getStringOrNull("description");
+            const label = option.getStringOrNull("label");
+            const value = option.getStringOrNull("value");
+            const emoji = option.getStringOrNull("emoji");
+            const defaultOption = option.getBoolOrNull("default") || false;
+            const description = option.getStringOrNull("description");
 
-            let data = {
+            const data = {
               label: label ?? await Utils.applyVariables(label, variables, context),
               value: value ?? await Utils.applyVariables(value, variables, context),
               emoji: emoji ? await Utils.applyVariables(emoji, variables, context) : undefined,

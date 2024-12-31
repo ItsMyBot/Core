@@ -51,8 +51,8 @@ export class CommandValidator {
   description: string
 
   @IsOptional()
-  subcommands: any
+  subcommands: unknown
 
   @IsOptional()
-  options: any
+  options: unknown
 }

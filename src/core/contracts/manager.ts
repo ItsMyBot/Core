@@ -7,6 +7,9 @@ import ExpansionService from 'core/services/expansions/expansionService'
 import PluginService from 'core/services/plugins/pluginService'
 import UserService from 'core/services/users/userService'
 import LeaderboardService from 'core/services/leaderboards/leaderboardService'
+import ConditionService from 'core/services/conditions/conditionService'
+import ActionService from 'core/services/actions/actionService'
+import MutatorService from 'core/services/mutators/mutatorService'
 import { BaseConfig } from './config/baseConfig'
 
 export interface ClientOptions {
@@ -20,8 +23,6 @@ export interface ManagerOptions {
     base: string,
     configs: string,
     plugins: string,
-    coreCommands: string,
-    coreEvents: string,
     scripts: string,
     customCommands: string,
     logs: string
@@ -32,6 +33,9 @@ export interface Services {
   event: EventService,
   user: UserService,
   command: CommandService,
+  condition: ConditionService,
+  action: ActionService,
+  mutator: MutatorService,
   engine: EngineService,
   plugin: PluginService,
   expansion: ExpansionService,

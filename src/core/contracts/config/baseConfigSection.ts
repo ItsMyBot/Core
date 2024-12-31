@@ -16,7 +16,7 @@ export class BaseConfigSection {
   private relConfigFolderPath: string;
   private relDefaultFolderPath: string;
 
-  constructor(ConfigClass: any, logger: Logger, configFolderPath: string, defaultFolderPath: string) {
+  constructor(ConfigClass: unknown, logger: Logger, configFolderPath: string, defaultFolderPath: string) {
     this.configClass = ConfigClass
     this.logger = logger
 

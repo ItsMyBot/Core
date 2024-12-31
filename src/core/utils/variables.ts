@@ -1,4 +1,4 @@
-import { channelMention, roleMention, userMention, time, Role, Guild, Channel, ClientUser } from 'discord.js';
+import { channelMention, roleMention, time, Role, Channel } from 'discord.js';
 import { User } from '@itsmybot';
 
 export const timeVariables = (timestamp: number, prefix = "time") => {
@@ -92,82 +92,5 @@ export const roleVariables = (role: Role, prefix = "role") => {
   }, {
     searchFor: `%${prefix}_mention%`,
     replaceWith: roleMention(role.id),
-  }]
-}
-
-export const guildVariables = (guild: Guild) => {
-  return [{
-    searchFor: "%guild_id%",
-    replaceWith: guild.id
-  }, {
-    searchFor: "%guild_name%",
-    replaceWith: guild.name,
-  }, {
-    searchFor: "%guild_icon%",
-    replaceWith: guild.iconURL({ forceStatic: false }) || "https://cdn.discordapp.com/embed/avatars/0.png",
-  }, {
-    searchFor: "%guild_boosts%",
-    replaceWith: guild.premiumSubscriptionCount?.toString() || "0",
-  }, {
-    searchFor: "%guild_level%",
-    replaceWith: guild.premiumTier.toString(),
-  }, {
-    searchFor: "%guild_create_date%",
-    replaceWith: time(Math.round(guild.createdTimestamp / 1000), "D"),
-  }, {
-    searchFor: "%guild_members%",
-    replaceWith: guild.members.cache.filter((m) => !m.user.bot).size.toString(),
-  }, {
-    searchFor: "%guild_bots%",
-    replaceWith: guild.members.cache.filter((m) => m.user.bot).size.toString(),
-  }, {
-    searchFor: "%guild_users%",
-    replaceWith: guild.memberCount.toString(),
-  }, {
-    searchFor: "%guild_roles%",
-    replaceWith: guild.roles.cache.size.toString(),
-  }, {
-    searchFor: "%guild_channels%",
-    replaceWith: guild.channels.cache.size.toString(),
-  }, {
-    searchFor: "%guild_emojis%",
-    replaceWith: guild.emojis.cache.size.toString(),
-  }, {
-    searchFor: "%guild_stickers%",
-    replaceWith: guild.stickers.cache.size.toString(),
-  }, {
-    searchFor: "%guild_online_users%",
-    replaceWith: guild.members.cache.filter((m) => m.presence?.status !== "offline").size.toString(),
-  }, {
-    searchFor: "%guild_online_bots%",
-    replaceWith: guild.members.cache.filter((m) => m.presence?.status !== "offline" && m.user.bot).size.toString(),
-  }, {
-    searchFor: "%guild_online_members%",
-    replaceWith: guild.members.cache.filter((m) => m.presence?.status == "online" && !m.user.bot).size.toString(),
-  }, {
-    searchFor: "%guild_idle_members%",
-    replaceWith: guild.members.cache.filter((m) => m.presence?.status == "idle" && !m.user.bot).size.toString(),
-  }, {
-    searchFor: "%guild_dnd_members%",
-    replaceWith: guild.members.cache.filter((m) => m.presence?.status == "dnd" && !m.user.bot).size.toString(),
-  }, {
-    searchFor: "%guild_offline_members%",
-    replaceWith: guild.members.cache.filter((m) => m.presence?.status == "offline" && !m.user.bot).size.toString(),
-  }]
-}
-
-export const botVariables = (bot: ClientUser) => {
-  return [{
-    searchFor: `%bot_id%`,
-    replaceWith: bot.id ?? "Unknown",
-  }, {
-    searchFor: `%bot_username%`,
-    replaceWith: bot.username ?? "Unknown",
-  }, {
-    searchFor: `%bot_mention%`,
-    replaceWith: userMention(bot.id),
-  }, {
-    searchFor: `%bot_pfp%`,
-    replaceWith: bot.displayAvatarURL({ forceStatic: false }),
   }]
 }

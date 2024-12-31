@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsString, IsInt, IsIn, IsArray, IsBoolean, IsOptional, ValidateNested, IsDefined, ArrayMaxSize, IsNumber, Validate, MaxLength } from 'class-validator';
-import { IsTextInputStyle } from '../decorators/validator.js';
+import { IsBooleanOrString, IsTextInputStyle } from '../decorators/validator.js';
 
 class OptionsValidator {
   @IsOptional()
@@ -82,9 +82,8 @@ export class ButtonValidator {
   'custom-id': string | string[]
 
   @IsOptional()
-  @IsBoolean()
-  @IsBoolean({ each: true })
-  disabled: boolean | boolean[]
+  @Validate(IsBooleanOrString)
+  disabled: boolean | string
 
   @IsOptional()
   @IsString()
@@ -103,8 +102,8 @@ export class ButtonValidator {
   url: string | string[]
 
   @IsOptional()
-  @IsString()
-  show: string
+  @Validate(IsBooleanOrString)
+  show: string | boolean
 }
 
 export class ComponentValidator extends ButtonValidator {

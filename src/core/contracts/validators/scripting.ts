@@ -1,7 +1,7 @@
 
 import { Type } from 'class-transformer';
-import { IsString, IsInt, ValidateNested, Validate, IsOptional, IsDefined, Max, Min, IsPositive, IsArray, IsBoolean, IsNumber } from 'class-validator';
-import { MessageValidator, IsStringOrStrings } from '@contracts';
+import { IsString, IsInt, ValidateNested, IsOptional, IsDefined, Max, Min, IsPositive, IsArray, IsBoolean, IsNumber } from 'class-validator';
+import { MessageValidator } from '@contracts';
 
 class ConditionArgumentValidator {
   @IsOptional()
@@ -15,7 +15,7 @@ class ConditionArgumentValidator {
   'not-met-actions': ActionValidator[]
 
   @IsOptional()
-  @Validate(IsStringOrStrings)
+  @IsString({ each: true })
   text: string[] | string
 
   @IsOptional()
@@ -60,7 +60,7 @@ export class MutatorValidator {
   id: string
 
   @IsDefined()
-  args: any
+  args: unknown
 }
 
 class ActionArgumentValidator extends MessageValidator {
@@ -75,8 +75,8 @@ class ActionArgumentValidator extends MessageValidator {
   channel: string
 
   @IsOptional()
-  @Validate(IsStringOrStrings)
-  role: string
+  @IsString({ each: true })
+  role: string | string[]
 
   @IsOptional()
   @IsString()

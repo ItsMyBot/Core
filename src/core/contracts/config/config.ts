@@ -14,7 +14,7 @@ export class Config {
     this.fileName = fileName;
   }
 
-  public init(values: any) {
+  public init(values: unknown) {
     this.values.clear();
 
     const normalizedValues = this.normalizeToConfig(values);
@@ -35,7 +35,7 @@ export class Config {
     return new Config(this.logger, this.fileName, this.currentPath);
   }
 
-  private getOrNull(path: string): any {
+  private getOrNull(path: string): unknown {
     const nearestPath = path.split('.')[0];
 
     if (path.includes('.')) {
@@ -49,7 +49,7 @@ export class Config {
     return this.values.get(nearestPath);
   }
 
-  private get(path: string): any {
+  private get(path: string): unknown {
     const value = this.getOrNull(path);
     if (value === null || value === undefined) {
       const totalPath = this.currentPath ? `${this.currentPath}.${path}` : path;
@@ -208,7 +208,7 @@ export class Config {
     return undefined;
   }
 
-  public set(path: string, obj: any) {
+  public set(path: string, obj: unknown) {
     const pathParts = path.split('.');
     const nearestPath = pathParts[0];
     const updatedPath = this.currentPath ? `${this.currentPath}.${nearestPath}` : nearestPath;
@@ -229,10 +229,10 @@ export class Config {
     }
   }
 
-  private normalizeToConfig(obj: any): Map<string, any> {
+  private normalizeToConfig(obj: unknown): Map<string, any> {
     const normalized = new Map();
 
-    for (const [key, value] of Object.entries(obj)) {
+    for (const [key, value] of Object.entries(obj as { [key: string]: unknown })) {
       if (key == null || value == null) continue;
 
       const stringKey = key.toString();
@@ -242,7 +242,7 @@ export class Config {
     return normalized;
   }
 
-  private constrainConfigTypes(value: any, path: string = '') {
+  private constrainConfigTypes(value: unknown, path: string = '') {
     const updatedPath = this.currentPath ? `${this.currentPath}.${path}` : path;
 
     if (Array.isArray(value)) {
@@ -272,7 +272,7 @@ export class Config {
   }
 
   public toJSON() {
-    const obj: any = {};
+    const obj: { [key: string]: unknown } = {};
     for (const [key, value] of this.values) {
       if (value instanceof Config) {
         obj[key] = value.toJSON();
@@ -285,31 +285,31 @@ export class Config {
 }
 
 class TypeCheckers {
-  static isString(value: any): value is string {
+  static isString(value: unknown): value is string {
     return typeof value === 'string';
   }
 
-  static isStringArray(value: any): value is string[] {
+  static isStringArray(value: unknown): value is string[] {
     return Array.isArray(value) && value.every(item => this.isString(item));
   }
 
-  static isNumber(value: any): value is number {
+  static isNumber(value: unknown): value is number {
     return typeof value === 'number';
   }
 
-  static isNumberArray(value: any): value is number[] {
+  static isNumberArray(value: unknown): value is number[] {
     return Array.isArray(value) && value.every(item => this.isNumber(item));
   }
 
-  static isBoolean(value: any): value is boolean {
+  static isBoolean(value: unknown): value is boolean {
     return typeof value === 'boolean';
   }
 
-  static isConfig(value: any): value is Config {
+  static isConfig(value: unknown): value is Config {
     return value instanceof Config;
   }
 
-  static isConfigArray(value: any): value is Config[] {
+  static isConfigArray(value: unknown): value is Config[] {
     return Array.isArray(value) && value.every(item => this.isConfig(item));
   }
 }

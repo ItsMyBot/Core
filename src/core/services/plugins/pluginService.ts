@@ -8,6 +8,9 @@ import { Logger } from '@utils';
 import PluginModel from './plugin.model.js';
 import { Service } from '@contracts';
 
+/**
+ * Service to manage plugins in the bot.
+ */
 export default class PluginService extends Service {
   pluginsDir: string;
   plugins: Collection<string, Plugin>;
@@ -27,6 +30,8 @@ export default class PluginService extends Service {
 
     const pluginFolders = sync("*/", { cwd: this.pluginsDir, dot: false });
     for (const pluginFolder of pluginFolders) {
+      if (pluginFolder.startsWith("_")) continue;
+
       const logger = new Logger(pluginFolder);
       try {
         await this.loadPlugin(pluginFolder);

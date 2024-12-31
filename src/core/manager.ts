@@ -2,7 +2,7 @@ import { Client, Collection } from 'discord.js';
 import { existsSync, mkdirSync } from 'fs';
 import { Logger } from '@utils';
 import { Command, Component, Expansion, Leaderboard, Plugin } from '@itsmybot'
-import { ClientOptions, ManagerOptions, Services, ManagerConfigs, BaseConfig, Service } from '@contracts';
+import { ClientOptions, ManagerOptions, Services, ManagerConfigs, BaseConfig } from '@contracts';
 import { Sequelize } from 'sequelize-typescript';
 
 import EventService, { EventExecutor } from './services/events/eventService.js';
@@ -13,6 +13,9 @@ import PluginService from './services/plugins/pluginService.js';
 import ExpansionService from './services/expansions/expansionService.js';
 import ComponentService from './services/components/componentService.js';
 import LeaderboardService from './services/leaderboards/leaderboardService.js';
+import ConditionService from './services/conditions/conditionService.js';
+import ActionService from './services/actions/actionService.js';
+import MutatorService from './services/mutators/mutatorService.js';
 import DefaultConfig from 'core/resources/config.js';
 import CommandConfig from 'core/resources/commands.js';
 import LangConfig from 'core/resources/lang.js';
@@ -55,14 +58,21 @@ export class Manager {
 
     await this.initializeDatabase();
 
-    this.services.engine = await this.createService(EngineService);
-    this.services.expansion = await this.createService(ExpansionService);
-    this.services.user = await this.createService(UserService);
-    this.services.event = await this.createService(EventService);
-    this.services.command = await this.createService(CommandService);
-    this.services.component = await this.createService(ComponentService);
-    this.services.leaderboard = await this.createService(LeaderboardService);
-    this.services.plugin = await this.createService(PluginService);
+    this.services = {
+      condition: new ConditionService(this),
+      action: new ActionService(this),
+      mutator: new MutatorService(this),
+      engine: new EngineService(this),
+      expansion: new ExpansionService(this),
+      user: new UserService(this),
+      event: new EventService(this),
+      command: new CommandService(this),
+      component: new ComponentService(this),
+      leaderboard: new LeaderboardService(this),
+      plugin: new PluginService(this)
+    }
+
+    await this.initializeServices();
 
     await this.services.engine.loadCustomCommands();
     this.services.leaderboard.registerLeaderboards();
@@ -83,7 +93,7 @@ export class Manager {
     });
   }
 
-  private async initializeConfig(ConfigClass: any, filePath: string) {
+  private async initializeConfig(ConfigClass: unknown, filePath: string) {
     return await new BaseConfig({
       logger: this.logger,
       configFilePath: `configs/${filePath}`,
@@ -123,9 +133,9 @@ export class Manager {
     }
   }
 
-  private async createService<T extends Service>(ServiceType: new (manager: Manager) => T): Promise<T> {
-    const service = new ServiceType(this);
-    await service.initialize();
-    return service;
+  private async initializeServices() {
+    for (const service of Object.values(this.services)) {
+      await service.initialize();
+    }
   }
 }

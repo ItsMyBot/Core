@@ -1,22 +1,24 @@
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { sync } from 'glob';
+import { fileURLToPath } from 'url';
 
 import { Collection } from 'discord.js';
 import { Manager, Command, Plugin } from '@itsmybot';
 import { Service } from '@contracts';
 
+/**
+ * Service to manage commands in the bot.
+ */
 export default class CommandService extends Service {
-  commandsDir: string
   commands: Collection<string, Command<Plugin | undefined>>
 
   constructor(manager: Manager) {
     super(manager)
-    this.commandsDir = manager.managerOptions.dir.coreCommands;
     this.commands = manager.commands;
   }
 
   async initialize() {
-    await this.registerFromDir(this.commandsDir);
+    await this.registerFromDir(join(dirname(fileURLToPath(import.meta.url)), 'impl'))
     this.manager.logger.info("Command service initialized.");
   }
 
@@ -29,7 +31,7 @@ export default class CommandService extends Service {
   }
 
   async registerFromDir(commandsDir: string, plugin: Plugin | null = null) {
-    const commandFiles = sync(join(commandsDir, '**', '*.js'));
+    const commandFiles = sync(join(commandsDir, '**', '*.js').replace(/\\/g, '/'));
 
     for (const filePath of commandFiles) {
       const commandPath = new URL('file://' + filePath.replace(/\\/g, '/')).href;

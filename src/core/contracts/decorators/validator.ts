@@ -65,17 +65,13 @@ export class IsChannelType implements ValidatorConstraintInterface {
   }
 }
 
-@ValidatorConstraint({ name: 'isStringOrStrings', async: false })
-export class IsStringOrStrings implements ValidatorConstraintInterface {
-  validate(value: string | string[], args: ValidationArguments) {
-    if (Array.isArray(value)) {
-      return value.every(val => typeof val === 'string');
-    }
-
-    return typeof value === 'string';
+@ValidatorConstraint({ name: 'isBooleanOrString', async: false })
+export class IsBooleanOrString implements ValidatorConstraintInterface {
+  validate(value: any, args: ValidationArguments) {
+    return typeof value === 'boolean' || typeof value === 'string';
   }
 
   defaultMessage(args: ValidationArguments) {
-    return 'This is not a string or an array of strings.';
+    return 'This is not a valid type. Please use either a boolean or a string.';
   }
 }
