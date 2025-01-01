@@ -35,7 +35,7 @@ export default class UserService extends Service {
       id: member.id,
       username: member.user.username,
       displayName: member.user.displayName,
-      avatar: member.user.avatarURL(),
+      avatar: member.displayAvatarURL(),
       createdAt: Math.round(member.user.createdTimestamp / 1000),
       joinedAt: member.joinedTimestamp ? Math.round(member.joinedTimestamp / 1000) : undefined,
       roles: member.roles.cache
@@ -50,7 +50,7 @@ export default class UserService extends Service {
     const userData = {
       username: member.user.username,
       displayName: member.user.displayName,
-      avatar: member.user.avatarURL() || user.avatar,
+      avatar: member.displayAvatarURL(),
       joinedAt: member.joinedTimestamp ? Math.round(member.joinedTimestamp / 1000) : user.joinedAt,
       roles: member.roles.cache
         .filter(r => r.id != member.guild.roles.everyone.id)

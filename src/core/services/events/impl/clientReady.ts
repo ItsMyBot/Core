@@ -13,7 +13,6 @@ export default class ClientReadyEvent extends Event {
 
     this.logger.info(`Actions registered: ${this.manager.services.action.actions.size}`);
     this.logger.info(`Conditions registered: ${this.manager.services.condition.conditions.size}`);
-    this.logger.info(`Mutators registered: ${this.manager.services.mutator.mutators.size}`);
     this.logger.info(`Commands registered: ${this.manager.commands.size}`);
     this.logger.info(`Events registered: ${this.manager.events.size}`);
     this.logger.info(`Plugins registered: ${this.manager.plugins.size}`);

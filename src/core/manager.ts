@@ -15,7 +15,6 @@ import ComponentService from './services/components/componentService.js';
 import LeaderboardService from './services/leaderboards/leaderboardService.js';
 import ConditionService from './services/conditions/conditionService.js';
 import ActionService from './services/actions/actionService.js';
-import MutatorService from './services/mutators/mutatorService.js';
 import DefaultConfig from 'core/resources/config.js';
 import CommandConfig from 'core/resources/commands.js';
 import LangConfig from 'core/resources/lang.js';
@@ -61,7 +60,6 @@ export class Manager {
     this.services = {
       condition: new ConditionService(this),
       action: new ActionService(this),
-      mutator: new MutatorService(this),
       engine: new EngineService(this),
       expansion: new ExpansionService(this),
       user: new UserService(this),
@@ -139,3 +137,5 @@ export class Manager {
     }
   }
 }
+
+

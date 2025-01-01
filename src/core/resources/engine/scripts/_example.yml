@@ -13,8 +13,9 @@ actions:
     actions:
       - id: sendMessage
         args:
-          channel: "1184880155026534500"
           content: "Hello %user_mention%, you have been invited by %invitetracker_inviter%"
+        mutators:
+          channel: "1184880155026534500"
       - id: addRole
         args:
           role: "1184880155026534500"
@@ -26,7 +27,6 @@ actions:
     actions:
       - id: sendMessage
         args:
-          channel: "1184880155026534500"
           content: 
             - "Question 1"
             - "Question 2"
@@ -35,6 +35,8 @@ actions:
             - "Question 5"
             - "Question 6"
             - "Question 7"
+        mutators:
+          channel: "1184880155026534500"
 
 
 

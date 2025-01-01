@@ -9,7 +9,6 @@ import { Logger } from '@utils';
 export { Action } from './services/actions/action.js';
 export { ConditionData } from './services/conditions/conditionData.js';
 export { Condition } from './services/conditions/condition.js';
-export { Mutator } from './services/mutators/mutator.js'
 export { BaseScript } from './services/engine/baseScript.js';
 export { Script } from './services/engine/script.js';
 export { ActionData } from './services/actions/actionData.js';

@@ -2,7 +2,6 @@ import Utils from '@utils';
 import { CommandBuilder } from '@builders';
 import { Command, User } from '@itsmybot';
 import { Context, CommandInteraction } from '@contracts';
-
 export default class ParseCommand extends Command {
 
   build() {
