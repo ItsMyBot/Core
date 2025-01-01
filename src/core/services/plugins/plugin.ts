@@ -64,7 +64,6 @@ export abstract class Plugin {
       leaderboards: (dir) => this.manager.services.leaderboard.registerFromDir(dir, this),
       actions: (dir) => this.manager.services.action.registerFromDir(dir, this),
       conditions: (dir) => this.manager.services.condition.registerFromDir(dir, this),
-      mutatos: (dir) => this.manager.services.mutator.registerFromDir(dir, this),
       buttons: (dir) => this.manager.services.component.registerFromDir(dir, 'button', this),
       selectMenus: (dir) => this.manager.services.component.registerFromDir(dir, 'selectMenu', this),
       modals: (dir) => this.manager.services.component.registerFromDir(dir, 'modal', this),

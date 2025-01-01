@@ -10,7 +10,7 @@ export class ActionData extends BaseScript {
   private fileName: string;
   private path: string;
   public triggers?: string[];
-  public mutators?: Config[];
+  public mutators?: Config;
   public triggerActions: ActionData[];
   public executionCounter: number = 0;
   public lastExecutionTime: number = 0;
@@ -20,7 +20,7 @@ export class ActionData extends BaseScript {
     this.id = data.getStringOrNull("id");
     this.args = data.getSubsectionOrNull("args") || data.empty();
     this.triggers = data.getStringsOrNull("triggers");
-    this.mutators = data.getSubsectionsOrNull("mutators");
+    this.mutators = data.getSubsectionOrNull("mutators");
     this.triggerActions = data.has("args.actions") ? data.getSubsections("args.actions").map((actionData: Config) => new ActionData(manager, actionData, logger)) : [];
   }
 
@@ -50,12 +50,56 @@ export class ActionData extends BaseScript {
   async applyMutators(context: Context, variables: Variable[]) {
     if (!this.mutators) return context
 
-    for (const mutator of this.mutators) {
-      context = await this.manager.services.mutator.applyMutator(mutator, context, variables)
+    for (const [mutator, value] of this.mutators.values) {
+      const parsedValue = await Utils.applyVariables(value, variables, context)
+
+      switch (mutator) {
+        case "content":
+          context.content = parsedValue
+          break; 
+
+        case "member":
+          const newMember = await context.member?.guild.members.fetch(parsedValue)
+          if (!newMember) continue
+
+          const newUserMember = await this.manager.services.user.findOrCreate(newMember)
+          context.user = newUserMember
+          context.member = newMember
+          break;
+
+        case 'user':
+          const newUser = await this.manager.services.user.findOrNull(parsedValue)
+          if (!newUser) continue
+
+          context.user = newUser
+          break;
+        
+        case 'channel':
+          const newChannel = await Utils.findChannel(parsedValue, context.guild)
+          if (!newChannel) continue
+
+          context.channel = newChannel
+          break;
+        
+        case 'guild':
+          const newGuild = await this.manager.client.guilds.fetch(parsedValue)
+          if (!newGuild) continue
+
+          context.guild = newGuild
+          break;
+        
+        case 'role':
+          const newRole = await Utils.findRole(parsedValue, context.guild)
+          if (!newRole) continue
+
+          context.role = newRole
+          break;
+      }
     }
 
     return context
   }
+
 
   async shouldExecute(context: Context, variables: Variable[]) {
     const meetsConditions = await this.meetsConditions(context, variables);

@@ -5,7 +5,6 @@ export default class MathExpansion extends Expansion {
   name = 'math';
 
   async onRequest(context: Context, placeholder: string) {
-
     if (/^[0-9+\-*/.() ]+$/.test(placeholder)) {
       try {
         const result = eval(placeholder);

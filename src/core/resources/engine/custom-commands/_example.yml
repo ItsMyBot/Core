@@ -29,9 +29,7 @@ actions:
         delay: 3
         content: "Role %option_role_mention% added to %user_mention%"
     mutators:
-      - id: member
-        args:
-          member: "%option_user_id%"
+      member: "%option_user_id%"
 
 conditions:
   - id: hasRole

@@ -7,12 +7,9 @@ export default class SendMessageAction extends Action {
   id = "sendMessage";
 
   async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
-    const channelConfig = await Utils.applyVariables(script.args.getStringOrNull("channel"), variables, context)
+    if (!context.channel || !context.channel.isTextBased() || context.channel.isDMBased()) return script.missingArg("channel", context);
 
-    const channel = channelConfig ? await Utils.findTextChannel(channelConfig) : context.channel;
-    if (!channel || !channel.isTextBased() || channel.isDMBased()) return script.missingArg("channel", context);
-
-    const message = await channel.send(await Utils.setupMessage({ config: script.args, context, variables }));
+    const message = await context.channel.send(await Utils.setupMessage({ config: script.args, context, variables }));
 
     const newContext: Context = {
       ...context,
