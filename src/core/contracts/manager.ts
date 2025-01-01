@@ -9,7 +9,6 @@ import UserService from 'core/services/users/userService'
 import LeaderboardService from 'core/services/leaderboards/leaderboardService'
 import ConditionService from 'core/services/conditions/conditionService'
 import ActionService from 'core/services/actions/actionService'
-import MutatorService from 'core/services/mutators/mutatorService'
 import { BaseConfig } from './config/baseConfig'
 
 export interface ClientOptions {
@@ -30,16 +29,35 @@ export interface ManagerOptions {
 }
 
 export interface Services {
+
+  /** Service to manage events in the bot. */
   event: EventService,
+
+  /** Service to manage users in the bot. Users are used to store information about Discord users. */
   user: UserService,
+
+  /** Service to manage commands in the bot. */
   command: CommandService,
+
+  /** Service to manage conditions in the bot. Conditions are used to check if a condition is met in the scripting system in the engine. */
   condition: ConditionService,
+
+  /** Service to manage actions in the bot. Actions are used to perform actions in the bot with the scripting system in the engine. */
   action: ActionService,
-  mutator: MutatorService,
+
+  /**  that manages all the scripts and custom commands. */
   engine: EngineService,
+
+  /** Service to manage plugins in the bot. */
   plugin: PluginService,
+
+  /** Service to manage expansions in the bot. Expansions are used to add custom placeholders to the bot. */
   expansion: ExpansionService,
+
+  /** Service to manage components in the bot. Components are used to create buttons, select menus, and modals. */
   component: ComponentService,
+
+  /** Service to manage leaderboards in the bot. */
   leaderboard: LeaderboardService
 }
 
