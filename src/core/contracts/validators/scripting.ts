@@ -55,7 +55,7 @@ export class ConditionValidator {
 }
 
 export class MutatorValidator {
-  @IsDefined()
+  @IsOptional()
   @IsString()
   content: string
 
