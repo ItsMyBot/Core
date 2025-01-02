@@ -105,16 +105,11 @@ export default class Utils {
 
       if (search === '@everyone') return true;
 
-      const hasSpecificRole = member.roles.cache.some(r => r.name.toLowerCase() === search || r.id === search);
-      if (hasSpecificRole) return true;
+      const role = await this.findRole(search, member.guild);
+      if (!role) continue;
+      if (member.roles.cache.has(role.id)) return true;
 
-      if (inherited) {
-        const targetRole = member.guild.roles.cache.find(r => r.name.toLowerCase() === search || r.id === search);
-        if (targetRole) {
-          const hasHigherRole = member.roles.cache.some(r => r.position > targetRole.position);
-          if (hasHigherRole) return true;
-        }
-      }
+      if (inherited && member.roles.highest.comparePositionTo(role) > 0) return true;
     }
 
     return false;
@@ -185,6 +180,8 @@ export default class Utils {
   }
 
   static async logToDiscord(id: string, message: MessageOutput) {
+    if (id === 'none') return;
+
     const log = manager.configs.config.getSubsections('log-channels').find(log => log.getString("id") === id);
     if (!log) return;
 

@@ -2,7 +2,7 @@ import { Message } from 'discord.js';
 import { Event } from '@itsmybot';
 import { Context, Events } from '@contracts'
 
-export default class MessageCreateEvent extends Event {
+export default class MessageUpdateEvent extends Event {
   name = Events.MessageUpdate;
 
   async execute(oldMessage: Message<true>, message: Message<true>) {
@@ -17,11 +17,11 @@ export default class MessageCreateEvent extends Event {
       user: user,
       guild: message.guild,
       channel: message.channel,
-      content: message.content || message.embeds[0]?.description || message.embeds[0]?.title || message.embeds ? 'Embed' : undefined,
+      content: message.content || message.embeds[0]?.description || message.embeds[0]?.title || (message.embeds.length ? 'Embed' : undefined),
     };
 
     const variables = [
-      { searchFor: '%old_content%', replaceWith: oldMessage.content || oldMessage.embeds[0]?.description || oldMessage.embeds[0]?.title || oldMessage.embeds ? 'Embed' : undefined }
+      { searchFor: '%old_content%', replaceWith: oldMessage.content || oldMessage.embeds[0]?.description || oldMessage.embeds[0]?.title || (oldMessage.embeds.length ? 'Embed' : undefined) }
     ]
 
     this.manager.services.engine.event.emit('messageUpdate', context, variables);
