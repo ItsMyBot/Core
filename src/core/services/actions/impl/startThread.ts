@@ -10,7 +10,7 @@ export default class StartThreadAction extends Action {
     if (!context.message) return script.missingContext("message", context);
 
     const args = {
-      name: await Utils.applyVariables(script.args.getString("name"), variables, context) || "Thread",
+      name: await Utils.applyVariables(script.args.getString("value"), variables, context) || "Thread",
       autoArchiveDuration: script.args.getNumberOrNull("duration") || 60
     } 
 

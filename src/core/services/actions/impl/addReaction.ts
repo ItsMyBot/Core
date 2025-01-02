@@ -7,11 +7,12 @@ export default class AddReactionAction extends Action {
   id = "addReaction";
 
   async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
+    const value = script.args.getStringOrNull("value");
 
     if (!context.message) return script.missingContext("message", context);
-    if (!script.args.getStringOrNull("emoji")) return script.missingArg("emoji", context);
+    if (!value) return script.missingArg("value", context);
 
-    const emoji = await Utils.applyVariables(script.args.getString("emoji"), variables, context)
+    const emoji = await Utils.applyVariables(value, variables, context)
     context.message.react(emoji);
   }
 }

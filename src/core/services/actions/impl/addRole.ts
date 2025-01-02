@@ -8,11 +8,11 @@ export default class AddRoleAction extends Action {
   id = "addRole";
 
   async onTrigger(script: ActionData, context: Context, variables: Variable[]) {
-    const rolesToAdd = script.args.getStringsOrNull("role")
+    const rolesToAdd = script.args.getStringsOrNull("value")
 
     if (!context.member) return script.missingContext("member", context);
     if (!context.guild) return script.missingContext("guild", context);
-    if (!rolesToAdd) return script.missingArg("role", context);
+    if (!rolesToAdd) return script.missingArg("value", context);
 
     let roles = await Promise.all(
       rolesToAdd.map(async roleName =>
