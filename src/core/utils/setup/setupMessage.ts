@@ -1,4 +1,4 @@
-import { ActionRowBuilder } from 'discord.js';
+import { ActionRowBuilder, MessageFlags } from 'discord.js';
 import { Config } from '@itsmybot';
 import Utils from '@utils';
 import { Context, Variable, MessageOutput } from '@contracts';
@@ -7,7 +7,7 @@ interface MessageSettings {
   config: Config,
   variables?: Variable[],
   context: Context,
-  fetchReply?: boolean,
+  withResponse?: boolean,
   allowedMentions?: any,
   ephemeral?: boolean
   components?: any[],
@@ -19,12 +19,12 @@ export async function setupMessage(settings: MessageSettings): Promise<MessageOu
   const message: MessageOutput = {
     content: undefined,
     embeds: [],
-    ephemeral: false,
     components: [],
     files: [],
-    fetchReply: settings.fetchReply || false,
+    withResponse: settings.withResponse || false,
     allowedMentions: settings.allowedMentions || undefined,
-    poll: undefined
+    poll: undefined,
+    flags: []
   };
 
   const variables = settings.variables || [];
@@ -52,7 +52,7 @@ export async function setupMessage(settings: MessageSettings): Promise<MessageOu
 
   const ephemeral = settings.config.getBoolOrNull("ephemeral") || settings.ephemeral || false;
   if (ephemeral) {
-    message.ephemeral = ephemeral;
+    message.flags.push(MessageFlags.Ephemeral);
   }
 
   const components = [];

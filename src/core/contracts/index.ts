@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from 'discord.js';
+import { BitFieldResolvable, ChatInputCommandInteraction } from 'discord.js';
 import { Manager, Plugin } from '@itsmybot';
 import { Logger } from '@utils';
 import { APIActionRowComponent, APIEmbed, APIMessageActionRowComponent, Attachment, AttachmentBuilder, BufferResolvable, MessageMentionOptions, PollData } from 'discord.js';
@@ -38,10 +38,10 @@ export interface MessageOutput {
   components: APIActionRowComponent<APIMessageActionRowComponent>[],
   content: string | undefined,
   embeds: APIEmbed[],
-  ephemeral?: boolean,
-  fetchReply?: boolean,
+  withResponse?: boolean,
   files: (Attachment | AttachmentBuilder | Stream | BufferResolvable)[],
   poll?: PollData
+  flags: BitFieldResolvable<any, any>
 }
 
 
