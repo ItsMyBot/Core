@@ -16,7 +16,7 @@ class ConditionArgumentValidator {
 
   @IsOptional()
   @IsString({ each: true })
-  text: string[] | string
+  value: string[] | string
 
   @IsOptional()
   @IsNumber()
@@ -25,10 +25,6 @@ class ConditionArgumentValidator {
   @IsOptional()
   @IsBoolean()
   inherit: boolean
-
-  @IsOptional()
-  @IsString()
-  role: string
 
   @IsOptional()
   @IsString()
@@ -88,16 +84,8 @@ class ActionArgumentValidator extends MessageValidator {
   actions: ActionValidator[]
 
   @IsOptional()
-  @IsString()
-  channel: string
-
-  @IsOptional()
   @IsString({ each: true })
-  role: string | string[]
-
-  @IsOptional()
-  @IsString()
-  emoji: string
+  value: string | string[]
 
   @IsOptional()
   @IsInt()
@@ -121,17 +109,9 @@ class ActionArgumentValidator extends MessageValidator {
   chance: number
 
   @IsOptional()
-  @IsString()
-  name: string
-
-  @IsOptional()
   @IsInt()
   @IsPositive()
   duration: number
-
-  @IsOptional()
-  @IsString()
-  form: string
 }
 
 export class ActionValidator {

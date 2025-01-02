@@ -23,7 +23,7 @@ actions:
   - actions:
     - id: addRole
       args:
-        role: "%option_role_id%"
+        value: "%option_role_id%"
     - id: reply
       args:
         delay: 3
@@ -34,4 +34,4 @@ actions:
 conditions:
   - id: hasRole
     args:
-      role: "118488015502"
+      value: "118488015502"
