@@ -3,9 +3,9 @@ import { Event } from '@itsmybot';
 import { Context, Events } from '@contracts'
 
 export default class MessageCreateEvent extends Event {
-  name = Events.MessageCreate;
+  name = Events.MessageUpdate;
 
-  async execute(message: Message<true>) {
+  async execute(oldMessage: Message<true>, message: Message<true>) {
     if (!message.guild || message.guild.id !== this.manager.primaryGuildId) return;
     const user = message.member ? await this.manager.services.user.findOrCreate(message.member) : await this.manager.services.user.findOrNull(message.author.id);
 
@@ -20,8 +20,10 @@ export default class MessageCreateEvent extends Event {
       content: message.content || message.embeds[0]?.description || message.embeds[0]?.title || message.embeds ? 'Embed' : undefined,
     };
 
-    await user.increment('messages');
+    const variables = [
+      { searchFor: '%old_content%', replaceWith: oldMessage.content || oldMessage.embeds[0]?.description || oldMessage.embeds[0]?.title || oldMessage.embeds ? 'Embed' : undefined }
+    ]
 
-    this.manager.services.engine.event.emit('messageCreate', context);
+    this.manager.services.engine.event.emit('messageUpdate', context, variables);
   }
 };
