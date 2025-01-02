@@ -17,10 +17,12 @@ export default class MessageCreateEvent extends Event {
       user: user,
       guild: message.guild,
       channel: message.channel,
-      content: message.content || message.embeds[0]?.description || message.embeds[0]?.title || message.embeds ? 'Embed' : undefined,
+      content: message.content || message.embeds[0]?.description || message.embeds[0]?.title || (message.embeds.length ? 'Embed' : undefined),
     };
 
     await user.increment('messages');
+
+    console.log(context);
 
     this.manager.services.engine.event.emit('messageCreate', context);
   }
