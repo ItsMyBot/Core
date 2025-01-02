@@ -12,7 +12,7 @@ export default class MemberExpansion extends Expansion {
             case 'display_name':
                 return context.member.displayName;
             case 'server_avatar': // Avatar defined by server profile
-                return context.member.avatarURL({ forceStatic: true }) || context.member.user.displayAvatarURL();
+                return context.member.displayAvatarURL() || context.member.user.displayAvatarURL();
             case 'global_avatar':
                 return context.member.user.displayAvatarURL();
             case 'timed_out_until_date':
