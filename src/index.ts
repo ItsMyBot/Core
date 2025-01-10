@@ -3,24 +3,24 @@ import 'reflect-metadata';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { join } from 'path';
 import { readFileSync } from 'fs';
-import { Manager } from './manager.js';
+import { Manager } from './core/manager.js';
 import { Logger } from '@utils';
 
-export { Action } from './services/actions/action.js';
-export { ConditionData } from './services/conditions/conditionData.js';
-export { Condition } from './services/conditions/condition.js';
-export { BaseScript } from './services/engine/baseScript.js';
-export { Script } from './services/engine/script.js';
-export { ActionData } from './services/actions/actionData.js';
-export { Plugin } from './services/plugins/plugin.js';
-export { Expansion } from './services/expansions/expansion.js';
-export { User } from './services/users/user.model.js';
-export { Event } from './services/events/event.js';
-export { Config } from './contracts/config/config.js'
-export { Command } from './services/commands/command.js';
-export { Component } from './services/components/component.js';
-export { Leaderboard } from './services/leaderboards/leaderboard.js';
-export { CustomCommand } from './services/engine/customCommand.js';
+export { Action } from './core/services/actions/action.js';
+export { ConditionData } from './core/services/conditions/conditionData.js';
+export { Condition } from './core/services/conditions/condition.js';
+export { BaseScript } from './core/services/engine/baseScript.js';
+export { Script } from './core/services/engine/script.js';
+export { ActionData } from './core/services/actions/actionData.js';
+export { Plugin } from './core/services/plugins/plugin.js';
+export { Expansion } from './core/services/expansions/expansion.js';
+export { User } from './core/services/users/user.model.js';
+export { Event } from './core/services/events/event.js';
+export { Config } from './core/contracts/config/config.js'
+export { Command } from './core/services/commands/command.js';
+export { Component } from './core/services/components/component.js';
+export { Leaderboard } from './core/services/leaderboards/leaderboard.js';
+export { CustomCommand } from './core/services/engine/customCommand.js';
 export { Manager };
 
 const logger = new Logger();

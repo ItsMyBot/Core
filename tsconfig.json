@@ -20,7 +20,7 @@
         "./core/utils/index.js"
       ],
       "@itsmybot": [
-        "./core/index.js"
+        "./index.js"
       ],
       "@builders": [
         "./core/builders/index.js"
