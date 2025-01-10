@@ -1,6 +1,6 @@
 {
   "name": "itsmybot",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "",
   "main": "build/core/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "build:copy": "cpy \"src/**/*.yml\" \"build/\" --parents",
     "build:success": "echo '[ItsMyBot] Build completed successfully!'",
     "build": "npm run build:clean && npm run build:itsmybot && npm run build:copy && npm run build:success",
-    "start": "node ./build/core/index.js"
+    "start": "node ./build/index.js"
   },
   "type": "module",
   "repository": {
