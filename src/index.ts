@@ -33,7 +33,6 @@ const packageJSON = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
 const manager = new Manager({
         intents: [
             GatewayIntentBits.Guilds,
-            GatewayIntentBits.GuildEmojisAndStickers,
             GatewayIntentBits.DirectMessages,
             GatewayIntentBits.MessageContent,
             GatewayIntentBits.GuildInvites,

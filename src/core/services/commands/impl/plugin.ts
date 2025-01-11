@@ -1,5 +1,5 @@
 import { hyperlink, hideLinkEmbed, AutocompleteInteraction } from 'discord.js';
-import { CommandInteraction } from "@contracts";
+import { CommandInteraction } from '@contracts';
 import Utils from '@utils';
 import { CommandBuilder } from '@builders';
 import { Pagination } from '@utils';

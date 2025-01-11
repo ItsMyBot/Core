@@ -1,5 +1,5 @@
-import { Context, Variable } from "@contracts";
-import { EventEmitter } from "events";
+import { Context, Variable } from '@contracts';
+import { EventEmitter } from 'events';
 
 type Listener = (context: Context, variable: Variable[]) => void;
 

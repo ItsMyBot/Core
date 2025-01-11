@@ -1,7 +1,7 @@
 import { ComponentBuilder } from '@builders';
-import TicketsPlugin from "..";
-import { User, Component } from "@itsmybot";
-import { ButtonInteraction } from "discord.js";
+import TicketsPlugin from '..';
+import { User, Component } from '@itsmybot';
+import { ButtonInteraction } from 'discord.js';
 
 export default class ExampleButton extends Component<TicketsPlugin> {
   customId = 'example_id';

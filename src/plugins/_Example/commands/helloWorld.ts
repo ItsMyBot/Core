@@ -1,5 +1,5 @@
 import { CommandBuilder } from '@builders';
-import { CommandInteraction } from "@contracts";
+import { CommandInteraction } from '@contracts';
 import { Command, User } from '@itsmybot';
 import ExamplePlugin from '..';
 import { AutocompleteInteraction } from 'discord.js';

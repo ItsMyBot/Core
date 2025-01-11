@@ -1,5 +1,5 @@
-import { Context } from "@contracts";
-import { Expansion } from "../expansion.js";
+import { Context } from '@contracts';
+import { Expansion } from '../expansion.js';
 
 export default class MemberExpansion extends Expansion {
     name = 'member';

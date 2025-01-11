@@ -1,5 +1,5 @@
 import { IsDefined, ValidateNested } from 'class-validator';
-import { Type } from "class-transformer";
+import { Type } from 'class-transformer';
 import { MessageValidator } from '@contracts';
 
 export default class DefaultConfig {
