@@ -1,6 +1,6 @@
-import { VoiceState } from "discord.js";
-import { Events } from "@contracts";
-import { Event } from "@itsmybot";
+import { VoiceState } from 'discord.js';
+import { Events } from '@contracts';
+import { Event } from '@itsmybot';
 
 export default class VoiceStateUpdateEvent extends Event {
     name = Events.VoiceStateUpdate;

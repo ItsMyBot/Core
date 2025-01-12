@@ -1,6 +1,6 @@
 import { Manager, Plugin, User } from '@itsmybot';
 import { AutocompleteInteraction, ContextMenuCommandInteraction } from 'discord.js';
-import { CommandInteraction, Base } from "@contracts";
+import { CommandInteraction, Base } from '@contracts';
 
 export abstract class Command<T extends Plugin | undefined = undefined>  extends Base<T> {
   public data: any;
