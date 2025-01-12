@@ -83,16 +83,15 @@ export abstract class Plugin {
   }
 
   private async loadDatabaseModels() {
-    for (const model of sync(join(this.path, '/**/*.model.js').replace(/\\/g, '/'))) {
-      const { default: Model } = await import(model);
+    const models = sync(join(this.path, 'models', '*.js').replace(/\\/g, '/'));
+
+    for (const model of models) {
+      const modelUrl = new URL('file://' + model.replace(/\\/g, '/')).href;
+      const { default: Model } = await import(modelUrl);
 
       this.manager.database.addModels([Model]);
       await Model.sync({ alter: true });
     }
-  }
-
-  setEnabled(enabled: boolean) {
-    this.enabled = enabled;
   }
 
   async createConfig(configFilePath: string, config?: unknown, update: boolean = false): Promise<BaseConfig> {
