@@ -1,6 +1,7 @@
 
 import { join } from 'path';
 import { sync } from 'glob';
+import { promises as fs } from 'fs';
 
 import { Manager, Plugin } from '@itsmybot';
 import { Collection } from 'discord.js';
@@ -36,7 +37,7 @@ export default class PluginService extends Service {
       try {
         await this.loadPlugin(pluginFolder);
       } catch (error: any) {
-        logger.error("Error loading:", error.stack);
+        logger.error("Error loading:", error);
       }
     }
 
@@ -45,7 +46,9 @@ export default class PluginService extends Service {
 
   async loadPlugin(name: string) {
     const pluginClassPath = join(this.pluginsDir, name, 'index.js');
-    if (!sync(pluginClassPath).length) {
+    try {
+      await fs.access(pluginClassPath);
+    } catch {
       throw new Error(`Plugin ${name} is missing the index.js file.`);
     }
 

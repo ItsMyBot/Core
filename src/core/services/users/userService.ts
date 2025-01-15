@@ -10,10 +10,10 @@ export default class UserService extends Service {
   constructor(manager: Manager) {
     super(manager);
     this.manager.database.addModels([User]);
-    User.sync({ alter: true });
   }
 
   async initialize() {
+    await User.sync({ alter: true });
     this.manager.logger.info("User service initialized.");
   }
 
