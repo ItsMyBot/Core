@@ -26,8 +26,19 @@ export class Logger {
 
   public error(...text: any[]) {
     const timestamp = this.getCurrentTimestamp();
-    const message = `[${timestamp}] ${chalk.bold(chalk.hex("#FF380B")("[ERROR]"))}: [${this.prefix}] ${text.join('\n')}`;
-
+    const messageParts: string[] = [];
+  
+    for (const item of text) {
+      if (item instanceof Error) {
+        messageParts.push(item.message);
+        if (item.stack) messageParts.push(item.stack);
+      } else {
+        messageParts.push(item);
+      }
+    }
+  
+    const message = `[${timestamp}] ${chalk.bold(chalk.hex("#FF380B")("[ERROR]"))}: [${this.prefix}] ${messageParts.join('\n')}`;
+  
     stdout.write(message + '\n');
     logManager.log(message);
   }

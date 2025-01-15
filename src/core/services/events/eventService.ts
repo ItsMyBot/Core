@@ -38,8 +38,8 @@ export default class EventService extends Service {
         this.events.set(event.name, new EventExecutor(event.once || false));
       }
       this.events.get(event.name)?.addEvent(event);
-    } catch (e: any) {
-      event.logger.error(`Error initializing event '${Event.name}'`, e.stack);
+    } catch (error: any) {
+      event.logger.error(`Error initializing event '${Event.name}'`, error);
     }
   }
 
@@ -79,9 +79,9 @@ export class EventExecutor {
       const event = this.events[i];
       try {
         await event.execute(...args);
-      } catch (e: any) {
-        if (e === 'stop') break;
-        event.logger.error('Error executing event', e.stack);
+      } catch (error: any) {
+        if (error === 'stop') break;
+        event.logger.error('Error executing event', error);
       }
       i++;
     }
