@@ -66,11 +66,11 @@ const manager = new Manager({
 manager.initialize();
 
 process.on("uncaughtException", (error, origin) => {
-    logger.error(error, error.stack);
+    logger.error(error);
 });
 
 process.on("unhandledRejection", async (reason: any, promise) => {
-    logger.error(reason, reason?.stack ? reason.stack : "No stack trace");
+    logger.error(reason);
 });
 
 export default manager;

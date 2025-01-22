@@ -58,7 +58,7 @@ export default class CommandService extends Service {
         };
       }
     } catch (error: any) {
-      command.logger.error(`Error initializing command '${command.data.name}'`, error.stack);
+      command.logger.error(`Error initializing command '${command.data.name}'`, error);
     }
   }
 
@@ -75,7 +75,7 @@ export default class CommandService extends Service {
       const publicCommands = enabledCommands.filter(cmd => cmd.public === true);
       if (publicCommands) await this.manager.client.application?.commands.set(publicCommands);
     } catch (error: any) {
-      this.manager.logger.error(`Error syncing commands to Discord: ${error.message}`, error.stack);
+      this.manager.logger.error(`Error syncing commands to Discord: ${error.message}`, error);
     }
   }
 }

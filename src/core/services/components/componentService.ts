@@ -74,8 +74,8 @@ export default class ComponentService extends Service {
       if (this.buttons.has(button.customId)) throw new Error("Button already exists.");
 
       this.buttons.set(button.customId, button);
-    } catch (e: any) {
-      button.logger.error(`Error initializing button '${button.customId}'`, e.stack);
+    } catch (error: any) {
+      button.logger.error(`Error initializing button '${button.customId}'`, error);
     }
   }
 
@@ -84,8 +84,8 @@ export default class ComponentService extends Service {
       if (this.selectMenus.has(selectMenu.customId)) throw new Error("SelectMenu already exists.");
 
       this.selectMenus.set(selectMenu.customId, selectMenu);
-    } catch (e: any) {
-      selectMenu.logger.error(`Error initializing selectMenu '${selectMenu.customId}'`, e.stack);
+    } catch (error: any) {
+      selectMenu.logger.error(`Error initializing selectMenu '${selectMenu.customId}'`, error);
     }
   }
 
@@ -94,8 +94,8 @@ export default class ComponentService extends Service {
       if (this.modals.has(modal.customId)) throw new Error("Modal already exists.");
 
       this.modals.set(modal.customId, modal);
-    } catch (e: any) {
-      modal.logger.error(`Error initializing modal '${modal.customId}'`, e.stack);
+    } catch (error: any) {
+      modal.logger.error(`Error initializing modal '${modal.customId}'`, error);
     }
   }
 }
