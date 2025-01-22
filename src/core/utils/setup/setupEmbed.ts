@@ -26,7 +26,7 @@ export async function setupEmbed(settings: EmbedSettings) {
   const footerIcon = config.getStringOrNull("footer-icon", true);
   const thumbnail = config.getStringOrNull("thumbnail", true);
   const image = config.getStringOrNull("image", true);
-  const timestamp = config.getStringOrNull("timestamp");
+  const timestamp = config.getBoolOrNull("timestamp");
   const color = config.getStringOrNull("color", true) || manager.configs.config.getString("default-color");
 
   description = await Utils.applyVariables(description, variables, context);
