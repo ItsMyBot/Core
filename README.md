@@ -2,13 +2,7 @@
 
 ItsMyBot is a self-hosted modular Discord bot. Developed with TypeScript and Node.js, it is designed to be easily modifiable through a plugin system. The core of the bot has limited functionalities to allow room for plugins. It is frequently updated to enhance its features and fix bugs. Feel free to join our Discord server to share your suggestions and report any issues.
 
-[Documentation](https://docs.itsme.to/itsmybot) - [Support](https://discord.gg/XBdgHfYHKM) - [Purchase](https://builtbybit.com/resources/51606/) - [Official Plugins](https://builtbybit.com/itsmybot)
-
-## Introduction
-
-You can choose to host it yourself; you will find all the necessary information in the documentation. Alternatively, you can purchase hosting directly from our site, which includes premium support, installation, updates, and much more.
-
-[Setup Documentation](https://docs.itsme.to/itsmybot/setup) - [Purchase Hosting](https://www.itsmybot.xyz/category/hosting)
+[Documentation](https://docs.itsme.to/itsmybot) - [Support](https://discord.gg/itsme-to) - [Purchase](https://builtbybit.com/resources/24369/) - [Official Plugins](https://builtbybit.com/itsmybot)
 
 ## Features
 Here you can find all the main features of the bot's core.
@@ -21,6 +15,8 @@ Here you can find all the main features of the bot's core.
 - **Fully Customizable**: You can customize the bot to your liking via configuration files.
 - **Comprehensive Placeholder System**: Similar to PlaceholderAPI, you can add custom placeholders in any of the bot's messages.
 - **Ready for Your Own Plugins**: The entire bot is designed to allow you to easily add your own plugins.
+- **Configuration Reload**: The bot's configurations can now be reloaded on demand.
+- **Automatic Configuration Update**: If any information is missing in the configuration, it updates automatically.
 
 ## Developer License
 If you wish to develop and distribute paid plugins for ItsMyBot, you must obtain a Commercial Developer License. This license grants you the rights to create, sell, and distribute your plugins within the ItsMyBot ecosystem.
@@ -31,4 +27,4 @@ If you wish to develop and distribute paid plugins for ItsMyBot, you must obtain
 - **Feature Requests**: Request new features that you need for your plugin development.
 - **Community Exposure**: Get featured in our plugin marketplace, reaching a broader audience.
 
-For more information or to apply for a Commercial Developer License, please join our [discord](https://discord.gg/XBdgHfYHKM).
+For more information or to apply for a Commercial Developer License, please join our [discord](https://discord.gg/itsme-to).
